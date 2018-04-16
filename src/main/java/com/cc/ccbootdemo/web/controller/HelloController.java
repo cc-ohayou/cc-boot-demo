@@ -1,4 +1,4 @@
-package com.cc.ccbootdemo;
+package com.cc.ccbootdemo.web.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

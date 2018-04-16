@@ -1,4 +1,4 @@
-package com.cc.web.listener;
+package com.cc.ccbootdemo.web.listener;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringApplicationRunListener;
