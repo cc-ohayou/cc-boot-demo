@@ -14,6 +14,8 @@ public class DemoProperty {
     private  String name;
     @Value("${com.ccbootdemo.title2}")
     private  String title;
+    @Value("${com.ccbootdemo.blog.value}")
+    private  String value;
 
     public String getName() {
         return name;
@@ -21,6 +23,14 @@ public class DemoProperty {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 
     public String getTitle() {
