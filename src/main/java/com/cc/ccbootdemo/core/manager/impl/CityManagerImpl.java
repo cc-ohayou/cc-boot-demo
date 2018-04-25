@@ -1,7 +1,7 @@
 package com.cc.ccbootdemo.core.manager.impl;
 
 import com.cc.ccbootdemo.core.manager.CityManager;
-import com.cc.ccbootdemo.core.mapper.CityMapper;
+import com.cc.ccbootdemo.core.mapper.cluster.CityMapper;
 import com.cc.ccbootdemo.facade.domain.dataobject.City;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;

@@ -1,7 +1,6 @@
-package com.cc.ccbootdemo.core.mapper;
+package com.cc.ccbootdemo.core.mapper.cluster;
 
 import com.cc.ccbootdemo.facade.domain.dataobject.City;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

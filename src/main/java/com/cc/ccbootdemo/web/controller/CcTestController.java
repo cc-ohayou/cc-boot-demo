@@ -1,7 +1,9 @@
 package com.cc.ccbootdemo.web.controller;
 
 import com.cc.ccbootdemo.core.service.CityService;
+import com.cc.ccbootdemo.core.service.UserService;
 import com.cc.ccbootdemo.facade.domain.dataobject.City;
+import com.cc.ccbootdemo.facade.domain.dataobject.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,11 +23,20 @@ public class CcTestController {
     private  City city=new City();
     @Resource
     CityService cityService;
+    @Resource
+    UserService userService;
     @ResponseBody
     @RequestMapping(value="/city/list")
     public List<City> getCityList(City city){
-        System.out.println(city);
         return cityService.getCityList(city);
+    }
+
+    @ResponseBody
+    @RequestMapping(value="/user/list")
+    public String getUserList(Model model,User user){
+        model.addAttribute("userList", userService.getUserList(user));
+
+        return "userList";
     }
 
     @RequestMapping(value = "/api/city", method = RequestMethod.GET)
