@@ -11,4 +11,5 @@ import java.util.List;
 public interface CityService {
 
     List<City> getCityList(City params);
+    void addCity(City params);
 }

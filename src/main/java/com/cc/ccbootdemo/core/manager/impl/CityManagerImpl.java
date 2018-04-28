@@ -24,4 +24,9 @@ public class CityManagerImpl implements CityManager {
         }
         return cityMapper.findByName(name);
     }
+
+    @Override
+    public void addCity(City params) {
+        cityMapper.insert(params);
+    }
 }

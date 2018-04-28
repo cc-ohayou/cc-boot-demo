@@ -21,4 +21,9 @@ public class CityServiceImpl implements CityService {
     public List<City> getCityList(City params) {
         return cityManager.getCityList(params.getCityName());
     }
+
+    @Override
+    public void addCity(City params) {
+        cityManager.addCity(params);
+    }
 }

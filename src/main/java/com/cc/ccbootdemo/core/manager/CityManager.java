@@ -10,4 +10,6 @@ import java.util.List;
  */
 public interface CityManager {
     List<City> getCityList(String params);
+
+    void addCity(City params);
 }
