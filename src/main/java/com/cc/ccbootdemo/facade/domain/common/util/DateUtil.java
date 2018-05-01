@@ -1,8 +1,7 @@
 package com.cc.ccbootdemo.facade.domain.common.util;
 
-import com.ddy.phoenix.facade.domain.common.constants.ExceptionCode;
-import com.ddy.phoenix.facade.domain.common.exception.BizException;
-import org.apache.commons.lang3.time.DateFormatUtils;
+
+import com.cc.ccbootdemo.facade.domain.common.exception.BizException;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -110,28 +109,7 @@ public class DateUtil {
         return c.get(6);
     }
 
-    /**
-     * 连连用
-     * @return
-     */
-    public static String getDateTimeForLL() {
-        return formatDate(new Date(), "yyyyMMddHHmmss");
-    }
 
-    /**
-     * 得到日期字符串 默认格式（yyyy-MM-dd） pattern可以为："yyyy-MM-dd" "HH:mm:ss" "E"
-     *
-     * @param pattern 时间格式
-     */
-    public static String formatDate(Date date, Object... pattern) {
-        String formatDate = null;
-        if (pattern != null && pattern.length > 0) {
-            formatDate = DateFormatUtils.format(date, pattern[0].toString());
-        } else {
-            formatDate = DateFormatUtils.format(date, "yyyy-MM-dd");
-        }
-        return formatDate;
-    }
 
     /**
      * @description 输出年月日时分秒
@@ -224,7 +202,7 @@ public class DateUtil {
      * @param weeks 第几周
      * @return 返回第几周的开始与结束日期
      */
-    public static Map<String, Object> getScopeForWeeks(int year, int month, int weeks) throws BizException {
+    public static Map<String, Object> getScopeForWeeks(int year, int month, int weeks) throws Exception {
         Map<String, Object> map = new HashMap<>();
         String time = year + "-" + getMonthToStr(month);
         Map<String, Object> result = getDateScope(time);
@@ -237,7 +215,7 @@ public class DateUtil {
          * 默认设置为当前 天数+1
          */
         if (weeks > resultWeeks) {
-            throw new BizException(ExceptionCode.BIZ_ERROR, "周数非法");
+            throw new Exception("周数非法");
            /* int days = resultDays + 1;
             String beginDate = year + "-" + getMonthToStr(month) + "-" + days;
             map.put("beginDate", beginDate);

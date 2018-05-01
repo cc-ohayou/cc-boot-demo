@@ -20,4 +20,9 @@ public class UserManagerImpl implements UserManager{
     public List<User> getAllUserList(User params) {
         return userMapper.getAllUserList();
     }
+
+    @Override
+    public int addUser(User params) {
+       return userMapper.insert(params);
+    }
 }

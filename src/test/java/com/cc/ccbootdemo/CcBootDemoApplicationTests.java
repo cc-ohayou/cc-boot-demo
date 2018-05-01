@@ -1,6 +1,8 @@
 package com.cc.ccbootdemo;
 
+import com.cc.ccbootdemo.core.common.properties.BaseProperties;
 import com.cc.ccbootdemo.core.common.properties.DemoProperty;
+import com.cc.ccbootdemo.core.common.properties.resource.BaseResourceProperties;
 import com.cc.ccbootdemo.web.controller.CcTestController;
 import com.cc.ccbootdemo.web.controller.HelloController;
 import com.cc.core.DemoPropertyCustomized;
@@ -46,6 +48,10 @@ public class CcBootDemoApplicationTests {
 
 	@Autowired
 	private WebApplicationContext context;
+	@Resource
+	BaseResourceProperties baseResourceProperties;
+	@Resource
+	BaseProperties baseProperties;
 
 	private MockMvc mvc;
 	private MockMvc ccMvc;
@@ -100,10 +106,13 @@ public class CcBootDemoApplicationTests {
 				.andDo(MockMvcResultHandlers.print()).andReturn().getResponse();
 		ServletOutputStream stream=response.getOutputStream();
 
-//		byte[] bufferArray=new byte[1024*1024];
+	}
+	@Test
+	public void testResourceInject(){
+		System.out.println(baseResourceProperties);
+		System.out.println(baseResourceProperties);
+		System.out.println(System.getenv("CC_RESOURCE_DIR"));
 
-		   stream.println();
-		   stream.close();
 	}
 
 }

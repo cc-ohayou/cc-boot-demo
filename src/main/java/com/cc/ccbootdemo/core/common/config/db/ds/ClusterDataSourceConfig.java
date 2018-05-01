@@ -1,19 +1,24 @@
 package com.cc.ccbootdemo.core.common.config.db.ds;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import com.cc.ccbootdemo.core.common.properties.resource.BaseResourceProperties;
+import com.cc.ccbootdemo.core.common.properties.resource.TestLoadResource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import tk.mybatis.spring.annotation.MapperScan;
 
 import javax.sql.DataSource;
 
 @Configuration
+@ConditionalOnBean(TestLoadResource.class)
 // 扫描 Mapper 接口并容器管理
 @MapperScan(basePackages = ClusterDataSourceConfig.PACKAGE, sqlSessionFactoryRef = "clusterSqlSessionFactory")
 public class ClusterDataSourceConfig {
@@ -22,25 +27,16 @@ public class ClusterDataSourceConfig {
     static final String PACKAGE = "com.cc.ccbootdemo.core.mapper.cluster";
     private static final String MAPPER_LOCATION = "classpath:mapper/cluster/*.xml";
 
-    @Value("${cluster.datasource.url}")
-    private String url;
 
-    @Value("${cluster.datasource.username}")
-    private String user;
-
-    @Value("${cluster.datasource.password}")
-    private String password;
-
-    @Value("${cluster.datasource.driverClassName}")
-    private String driverClass;
 
     @Bean(name = "clusterDataSource")
     public DataSource clusterDataSource() {
         DruidDataSource dataSource = new DruidDataSource();
-        dataSource.setDriverClassName(driverClass);
-        dataSource.setUrl(url);
-        dataSource.setUsername(user);
-        dataSource.setPassword(password);
+        dataSource.setDriverClassName(TestLoadResource.property.getProperty("clusterDriver"));
+        dataSource.setUrl(TestLoadResource.property.getProperty("clusterUrl"));
+        dataSource.setUsername(TestLoadResource.property.getProperty("clusterName"));
+        dataSource.setPassword(TestLoadResource.property.getProperty("clusterPwd"));
+
         return dataSource;
     }
 

@@ -10,5 +10,5 @@ import java.util.List;
  */
 public interface UserService {
     List<User> getUserList(User params);
-
+    void addUser(User params);
 }

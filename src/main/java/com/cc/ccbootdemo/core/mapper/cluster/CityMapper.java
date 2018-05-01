@@ -1,5 +1,6 @@
 package com.cc.ccbootdemo.core.mapper.cluster;
 
+import com.cc.util.MyMapper;
 import com.cc.ccbootdemo.facade.domain.dataobject.City;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
