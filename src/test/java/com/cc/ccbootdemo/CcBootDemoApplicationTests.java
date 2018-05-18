@@ -1,7 +1,8 @@
 package com.cc.ccbootdemo;
 
 import com.cc.ccbootdemo.core.common.properties.DemoProperty;
-import com.cc.ccbootdemo.web.controller.CcTestController;
+import com.cc.ccbootdemo.core.service.MailService;
+import com.cc.ccbootdemo.facade.domain.common.dataobject.mail.MailInfo;
 import com.cc.ccbootdemo.web.controller.HelloController;
 import com.cc.core.DemoPropertyCustomized;
 import org.junit.Before;
@@ -12,7 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -22,11 +22,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.annotation.Resource;
+import javax.mail.MessagingException;
 import javax.servlet.ServletOutputStream;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -46,7 +43,8 @@ public class CcBootDemoApplicationTests {
 
 	@Autowired
 	private WebApplicationContext context;
-
+    @Resource
+	MailService mailService;
 	private MockMvc mvc;
 	private MockMvc ccMvc;
 
@@ -104,6 +102,20 @@ public class CcBootDemoApplicationTests {
 
 		   stream.println();
 		   stream.close();
+	}
+    @Test
+	public void mailTest(){
+		String text=" MailTest.java * Created on 2008-1-23 下午04:56:38 * Description: Test for mail sending */ package cn.edu.ccnu.inc.test; import java.util.Properties; import org.springframework.mail.MailSender; import org.springframework.mail.SimpleMailMessage; import org.springframework.mail.javamail.JavaMailSenderImpl; import junit.framework.TestCase; /** * @author <a href=\"mailto:aliyunzixun@xxx.com\">Iven</a> */ public class MailTest extends TestCase { private static MailSender sender = null; private static SimpleMailMessage message = null; public void setUp() { sender = new JavaMailSenderImpl(); ((JavaMailSenderImpl)sender).setHost(\"smtp.163.com\"); ((JavaMailSenderImpl)sender).setUsername(\"username\"); ((JavaMailSenderImpl)sender).setPassword(\"password\"); Properties config = new Properties(); config.put(\"mail.smtp.auth\", \"true\"); ((JavaMailSenderImpl)sender).setJavaMailProperties(config); message = new SimpleMailMessage(); } public void testSend() { message.setTo(\"aliyunzixun@xxx.com\"); message.setSubject(\"Test my owen sending program\"); message.setFrom(\"aliyunzixun@xxx.com\"); message.setText(\"Test......\"); this.assertNotNull(sender); sender.send(message); } }";
+		MailInfo  info=new MailInfo();
+		info.setContent(text);
+		info.setFrom("13758080693@163.com");
+		info.setTo("840794748@qq.com");
+		info.setSubject("test mail send");
+		try {
+			mailService.sendMail(info);
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
