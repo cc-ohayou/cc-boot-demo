@@ -1,8 +1,11 @@
 package com.cc.ccbootdemo;
 
+import com.cc.ccbootdemo.core.common.properties.BaseProperties;
 import com.cc.ccbootdemo.core.common.properties.DemoProperty;
 import com.cc.ccbootdemo.core.service.MailService;
 import com.cc.ccbootdemo.facade.domain.common.dataobject.mail.MailInfo;
+import com.cc.ccbootdemo.core.common.properties.resource.BaseResourceProperties;
+import com.cc.ccbootdemo.web.controller.CcTestController;
 import com.cc.ccbootdemo.web.controller.HelloController;
 import com.cc.core.DemoPropertyCustomized;
 import org.junit.Before;
@@ -43,6 +46,11 @@ public class CcBootDemoApplicationTests {
 
 	@Autowired
 	private WebApplicationContext context;
+	@Resource
+	BaseResourceProperties baseResourceProperties;
+	@Resource
+	BaseProperties baseProperties;
+
     @Resource
 	MailService mailService;
 	private MockMvc mvc;
@@ -98,10 +106,13 @@ public class CcBootDemoApplicationTests {
 				.andDo(MockMvcResultHandlers.print()).andReturn().getResponse();
 		ServletOutputStream stream=response.getOutputStream();
 
-//		byte[] bufferArray=new byte[1024*1024];
+	}
+	@Test
+	public void testResourceInject(){
+		System.out.println(baseResourceProperties);
+		System.out.println(baseResourceProperties);
+		System.out.println(System.getenv("CC_RESOURCE_DIR"));
 
-		   stream.println();
-		   stream.close();
 	}
     @Test
 	public void mailTest(){

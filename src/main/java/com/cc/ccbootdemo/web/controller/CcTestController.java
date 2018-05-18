@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,8 +22,9 @@ import java.util.List;
  */
 @Controller
 @RequestMapping(value="/cc")
-public class CcTestController {
-    private  City city=new City();
+public class CcTestController extends BaseController{
+
+    private  City defaultCity=new City();
     private Logger logger= LoggerFactory.getLogger(CcTestController.class);
 
 
@@ -36,17 +38,17 @@ public class CcTestController {
         return cityService.getCityList(city);
     }
 
-    @RequestMapping(value="/user/list")
-    public String getUserList(Model model,User user){
+    @RequestMapping(value="/user")
+    public String getUserList(ModelMap model, User user){
         model.addAttribute("userList", userService.getUserList(user));
         //返回的userList指向对应名称的freemaker文件 若果不加responseBody注解
         //直接返回字符串找不到对应的ftl文件就会报错 使用@ResponseBody则会正常返回字符串
-        return "userList";
+        return USER_LIST_PATH_NAME;
     }
 
     @RequestMapping(value = "/api/city", method = RequestMethod.GET)
     public String findAllCity(Model model) {
-        List<City> cityList = cityService.getCityList(city);
+        List<City> cityList = cityService.getCityList(defaultCity);
         model.addAttribute("cityList", cityList);
         return "cityList";
     }
@@ -54,16 +56,30 @@ public class CcTestController {
     public String addCity(Model model,City city) {
         logger.info("city is "+city);
         if(city!=null){
-            city.setId(1001L);
+            try{
+                cityService.addCity(city);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
         }
-        try{
-            cityService.addCity(city);
-        }catch(Exception e){
-               e.printStackTrace();
-        }
+        city=defaultCity;
         List<City> cityList = cityService.getCityList(city);
         model.addAttribute("cityList", cityList);
         return "cityList";
+    }
+    @RequestMapping(value = "/add/user", method = RequestMethod.GET)
+    public String addUser(ModelMap model,User user) {
+        logger.info("user is "+user);
+        if(user!=null){
+            try{
+                userService.addUser(user);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        List<User> list = userService.getUserList(user);
+        model.addAttribute("userList", list);
+        return USER_LIST_PATH_NAME;
     }
 
 }

@@ -25,4 +25,9 @@ public class UserServiceImpl implements UserService{
         logger.info("params="+params);
         return userManager.getAllUserList(params);
     }
+
+    @Override
+    public void addUser(User params) {
+        userManager.addUser(params);
+    }
 }

@@ -10,4 +10,5 @@ import java.util.List;
  */
 public interface UserManager {
        List<User> getAllUserList(User params);
+       int addUser(User params);
 }
