@@ -1,25 +1,54 @@
 package com.cc.ccbootdemo.core.common.config.mail;
 
+import com.cc.ccbootdemo.core.common.properties.resource.TestLoadResource;
+import com.sun.mail.util.MailSSLSocketFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+
+import java.security.GeneralSecurityException;
+import java.util.Properties;
 
 /**
  * @AUTHOR CF
  * @DATE Created on 2018/5/18 18:14.
  */
 @Configuration
+@ConditionalOnBean(TestLoadResource.class)
 public class MailConfig {
     @Bean
-    public MailSender mailSender() {
+    public MailSender myMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("smtp.163.com");//指定用来发送Email的邮件服务器主机名
-        mailSender.setPort(25);//默认端口，标准的SMTP端口
-        mailSender.setUsername("13758080693@163.com");//用户名
-        mailSender.setPassword("qusiba.0.");//密码
+        //指定用来发送Email的邮件服务器主机名
+        mailSender.setHost(TestLoadResource.property.getProperty("mailHost"));
+        //默认端口，标准的SMTP端口 25 可不设置 使用网易邮箱时可不设置
+        mailSender.setUsername(TestLoadResource.property.getProperty("mailUser"));
+        mailSender.setPassword(TestLoadResource.property.getProperty("mailPass"));
         mailSender.setDefaultEncoding("Utf-8");
-
+        mailSender.setProtocol(TestLoadResource.property.getProperty("mailProtocol"));
+       if("yes".equals(TestLoadResource.property.getProperty("mailSSLSign"))){
+           setSSLConfig(mailSender);
+           mailSender.setPort(Integer.parseInt(TestLoadResource.property.getProperty("mailPort")));
+       }
         return mailSender;
     }
+
+    private void setSSLConfig(JavaMailSenderImpl mailSender) {
+        Properties  props=new Properties();
+        MailSSLSocketFactory sslSocketFactory = null;
+        try {
+            sslSocketFactory=new MailSSLSocketFactory();
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        }
+        assert sslSocketFactory != null;
+        sslSocketFactory.setTrustAllHosts(true);
+        props.put("mail.smtp.ssl.enable",true);
+        props.put("mail.smtp.ssl.socketFactory",sslSocketFactory);
+        mailSender.setJavaMailProperties(props);
+    }
+
+
 }

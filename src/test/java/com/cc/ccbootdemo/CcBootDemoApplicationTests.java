@@ -118,10 +118,12 @@ public class CcBootDemoApplicationTests {
 	public void mailTest(){
 		String text=" MailTest.java * Created on 2008-1-23 下午04:56:38 * Description: Test for mail sending */ package cn.edu.ccnu.inc.test; import java.util.Properties; import org.springframework.mail.MailSender; import org.springframework.mail.SimpleMailMessage; import org.springframework.mail.javamail.JavaMailSenderImpl; import junit.framework.TestCase; /** * @author <a href=\"mailto:aliyunzixun@xxx.com\">Iven</a> */ public class MailTest extends TestCase { private static MailSender sender = null; private static SimpleMailMessage message = null; public void setUp() { sender = new JavaMailSenderImpl(); ((JavaMailSenderImpl)sender).setHost(\"smtp.163.com\"); ((JavaMailSenderImpl)sender).setUsername(\"username\"); ((JavaMailSenderImpl)sender).setPassword(\"password\"); Properties config = new Properties(); config.put(\"mail.smtp.auth\", \"true\"); ((JavaMailSenderImpl)sender).setJavaMailProperties(config); message = new SimpleMailMessage(); } public void testSend() { message.setTo(\"aliyunzixun@xxx.com\"); message.setSubject(\"Test my owen sending program\"); message.setFrom(\"aliyunzixun@xxx.com\"); message.setText(\"Test......\"); this.assertNotNull(sender); sender.send(message); } }";
 		MailInfo  info=new MailInfo();
+		//13758080693@163.com
+		String[] toMailAddresses={"ohayousekai@sina.com","840794748@qq.com"};
 		info.setContent(text);
 		info.setFrom("13758080693@163.com");
-		info.setTo("840794748@qq.com");
-		info.setSubject("test mail send");
+		info.setTo(toMailAddresses);
+		info.setSubject("smtp test mail send");
 		try {
 			mailService.sendMail(info);
 		} catch (MessagingException e) {

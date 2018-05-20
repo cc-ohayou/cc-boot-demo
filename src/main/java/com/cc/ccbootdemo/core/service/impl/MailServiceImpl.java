@@ -19,24 +19,24 @@ import javax.mail.internet.MimeMessage;
 public class MailServiceImpl implements MailService{
 
     @Resource
-    private JavaMailSender mailSender;
+    private JavaMailSender myMailSender;
 
     @Override
     public void sendMail(MailInfo info) throws MessagingException {
-        SimpleMailMessage message = new SimpleMailMessage();//消息构造器
+        /*SimpleMailMessage message = new SimpleMailMessage();//消息构造器
         message.setFrom(info.getFrom());//发件人
         message.setTo(info.getTo());//收件人
         message.setSubject(info.getSubject());//主题
         message.setText(info.getContent());//正文
-        mailSender.send(message);
+        myMailSender.send(message);*/
 
-        MimeMessage mimeMessage = mailSender.createMimeMessage();
-        // 设置utf-8或GBK编码，否则邮件会有乱码
+        MimeMessage mimeMessage = myMailSender.createMimeMessage();
+        // 设置utf-8或GBK编码，否则邮件会有乱码 同时设置发送的格式
         MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
         messageHelper.setFrom(info.getFrom());
         messageHelper.setTo(info.getTo());
         messageHelper.setSubject(info.getSubject());
         messageHelper.setText(info.getContent(), true);
-        mailSender.send(mimeMessage);
+        myMailSender.send(mimeMessage);
     }
 }

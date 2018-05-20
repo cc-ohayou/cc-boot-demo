@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
  * @AUTHOR CF
  * @DATE Created on 2018/4/30/030 22:16.
  */
-//@Component
+@Component
 /*
 只能加载servletContext classpath下的资源配置文件
 @PropertySource({"classpath:com/hry/spring/configinject/config.properties",

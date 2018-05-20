@@ -85,4 +85,17 @@ public class AssertUtil {
         }
 
     }
+
+    public static void isNullParamStr(String str, String msg) throws ParamException {
+        if (str == null || "".equals(str.trim()) || "null".equals(str.trim())) {
+            throw new ParamException(PARAM_ERROR, msg);
+        }
+
+    }
+
+    public static void isNullParamObj(String obj, String msg) throws ParamException {
+        if (obj == null) {
+            throw new ParamException(PARAM_ERROR, msg);
+        }
+    }
 }

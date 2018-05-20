@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class MailInfo {
     private String  from;
-    private String  to;
+    private String[]  to;
     private String  subject;
     private String  content;
 }

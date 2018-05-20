@@ -60,4 +60,6 @@ public class RedisConstants {
     public static final String RATE_LIMIT_WHITE_IP = "ps-set-whiteips";
     public static final String RATE_LIMIT_BLACK_IP = "ps-set-blackips";
     public static final String IP_UA_LIMIT_URLS = "ps-str-ip-ua-limit-urls";
+
+    public static final String KEY_BIZ_TYPE = "TOOL_HASH_KEY_BIZ_TYPE";
 }
