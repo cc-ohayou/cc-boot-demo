@@ -12,19 +12,18 @@ public class RedisConstants {
 
 
 
-    /**
-     * 锁等待时间，防止线程饥饿
-     */
-    public static final int timeoutMsecs = 1* 1000;
-    /**
-     * 锁超时时间，防止线程在入锁以后，无限的执行等待
-     */
-    public static final int expireMsecs = 5 * 1000;
+//     锁等待时间，防止线程饥饿
+
+//    public static final int timeoutMsecs = 1* 1000;
+
+//     锁超时时间，防止线程在入锁以后，无限的执行等待
+
+//    public static final int expireMsecs = 5 * 1000;
 
     /**
      * 拦截校验相关配置redis key和常量
      */
-    public static final String RATE_LIMIT_SCRIPT = "if redis.call('exists',KEYS[1])==1 and tonumber(redis.call('get',KEYS[1]))>tonumber(ARGV[2]) then return 0 end local times = redis.call('incr',KEYS[1]) if times == 1 then redis.call('expire',KEYS[1],ARGV[1])   end if times>tonumber(ARGV[2]) then return 0 end return 1";
+//    public static final String RATE_LIMIT_SCRIPT = "if redis.call('exists',KEYS[1])==1 and tonumber(redis.call('get',KEYS[1]))>tonumber(ARGV[2]) then return 0 end local times = redis.call('incr',KEYS[1]) if times == 1 then redis.call('expire',KEYS[1],ARGV[1])   end if times>tonumber(ARGV[2]) then return 0 end return 1";
 
 
     public static final String IP = "PS-STR-IP-";

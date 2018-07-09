@@ -2,6 +2,7 @@ package com.cc.ccbootdemo.core.manager;
 
 
 import com.cc.ccbootdemo.facade.domain.ThreadLocals.BaseLockSign;
+import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPubSub;
 
 import java.util.List;
@@ -202,4 +203,9 @@ public interface RedisManager {
      */
     boolean ipUaInfoReachLimit(String uaInfo, String realIp, String url);
 
+    /**
+     * @description  查看key是否存在
+     * @author CF create on 2018/7/9 12:21
+     */
+    boolean exists(String key,Jedis jedis);
 }

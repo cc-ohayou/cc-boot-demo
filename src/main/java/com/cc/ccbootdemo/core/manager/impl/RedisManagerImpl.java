@@ -85,6 +85,8 @@ public class RedisManagerImpl extends RedisConstants implements RedisManager {
      */
     private int expireMsecs = 60 * 1000;
 
+    private static Map<Integer,Long> initMap=new ConcurrentHashMap<>();
+
     //   初始化Redis连接池
     static {
         initJedisPool();
@@ -126,15 +128,24 @@ public class RedisManagerImpl extends RedisConstants implements RedisManager {
                             "active=" + jedisPool.getNumActive() + jedisPool.getNumIdle());
                 }
                 jedisPool = null;
-                initJedisPool();// 防止意外情况资源耗尽 重新初始化jedisPool 这个只是一解燃眉之急而已 最终解决还是要在程序中注意及时释放连接实例
+                // 防止意外情况资源耗尽 重新初始化jedisPool 这个只是一解燃眉之急而已 最终解决还是要在程序中注意及时释放连接实例
+                initJedisPool();
             }
             count++;
-        } while (jedis == null && count < REDIS_RETRY_COUNT);//重试10次
+        } while (jedis == null && count < REDIS_RETRY_COUNT);
+        //重试10次
         return jedis;
     }
 
     //初始化Redis连接池
-    private static void initJedisPool() {
+    private static synchronized void initJedisPool() {
+        Long lastInitTime=initMap.get(101);
+        //10s内只允许初始化一次
+        if(lastInitTime!=null&&System.currentTimeMillis()-lastInitTime<=10000){
+            return;
+        }else{
+            initMap.put(101,System.currentTimeMillis());
+        }
         FileInputStream in = null;//System.getenv("CC_RESOURCE");
         try {
             in = new FileInputStream(new File(System.getenv("CC_RESOURCE_DIR") + "/cc_jedis.properties"));
@@ -669,6 +680,27 @@ public class RedisManagerImpl extends RedisConstants implements RedisManager {
         return false;
     }
 
+
+
+    @Override
+    public boolean exists(String keyStr, Jedis jedis) {
+        boolean closeFlag=false;
+        if(jedis==null){
+            jedis=getJedis();
+            closeFlag=true;
+        }
+        boolean exists=false;
+        try {
+            exists = jedis.exists(keyStr);
+        } catch (Exception e) {
+            logger.warn("redis exists failed, key =" + keyStr);
+        } finally {
+            if (jedis != null&&closeFlag) {
+                jedis.close();
+            }
+        }
+        return exists;
+    }
     /**
      * @description 简单校验ip ua信息是否为空和ip是否在白名单
      * @author CF create on 2018/3/26 15:58
@@ -803,8 +835,8 @@ public class RedisManagerImpl extends RedisConstants implements RedisManager {
 //        transTest(jedis);
 //        pipeLineTest(jedis);
         System.out.println(jedis.hget("cc", "cc"));
-       /* publishTest(jedis);
-        subscribeTest(jedis);*/
+        publishTest(jedis);
+        subscribeTest(jedis);
 
     }
 
