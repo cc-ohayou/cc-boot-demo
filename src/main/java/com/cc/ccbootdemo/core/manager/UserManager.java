@@ -1,8 +1,10 @@
 package com.cc.ccbootdemo.core.manager;
 
+import com.cc.ccbootdemo.facade.domain.bizobject.strgy.StrgyBiz;
 import com.cc.ccbootdemo.facade.domain.dataobject.User;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @AUTHOR CF
@@ -11,4 +13,6 @@ import java.util.List;
 public interface UserManager {
        List<User> getAllUserList(User params);
        int addUser(User params);
+
+    List<StrgyBiz> getStrgyList(Set<String> uids);
 }

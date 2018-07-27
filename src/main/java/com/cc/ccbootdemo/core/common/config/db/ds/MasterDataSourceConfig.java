@@ -4,6 +4,7 @@ import com.alibaba.druid.pool.DruidDataSource;
 import com.cc.ccbootdemo.core.common.properties.resource.TestLoadResource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import tk.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -38,6 +39,12 @@ public class MasterDataSourceConfig {
     @Value("${baseResourceProperties.masterDriver}")
     private String driverClass;
 */
+   //加载配置文件application.properties中的  mybatis.configuration属性,否则无法生效
+   @Bean
+   @ConfigurationProperties(prefix = "mybatis.configuration")
+   public org.apache.ibatis.session.Configuration  globalConfiguration(){
+       return  new org.apache.ibatis.session.Configuration();
+   }
     @Bean(name = "masterDataSource")
     @Primary
     public DataSource masterDataSource() {
@@ -46,6 +53,7 @@ public class MasterDataSourceConfig {
         dataSource.setUrl(TestLoadResource.property.getProperty("masterUrl"));
         dataSource.setUsername(TestLoadResource.property.getProperty("masterName"));
         dataSource.setPassword(TestLoadResource.property.getProperty("masterPwd"));
+
         return dataSource;
     }
 
@@ -57,12 +65,15 @@ public class MasterDataSourceConfig {
 
     @Bean(name = "masterSqlSessionFactory")
     @Primary
-    public SqlSessionFactory masterSqlSessionFactory(@Qualifier("masterDataSource") DataSource masterDataSource)
+    public SqlSessionFactory masterSqlSessionFactory(@Qualifier("masterDataSource") DataSource masterDataSource,
+                                                     org.apache.ibatis.session.Configuration config)
             throws Exception {
         final SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
         sessionFactory.setDataSource(masterDataSource);
         sessionFactory.setMapperLocations(new PathMatchingResourcePatternResolver()
                 .getResources(MasterDataSourceConfig.MAPPER_LOCATION));
+        //加载配置文件中的  mybatis.configuration属性
+        sessionFactory.setConfiguration(config);
         return sessionFactory.getObject();
     }
 }

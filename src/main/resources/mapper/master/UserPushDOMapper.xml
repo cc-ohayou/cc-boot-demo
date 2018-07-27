@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cc.ccbootdemo.core.mapper.master.UserPushDOMapper">
+    <resultMap id="BaseResultMap" type="com.cc.ccbootdemo.facade.domain.dataobject.UserPushDO">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="user_push_id" property="userPushId" jdbcType="VARCHAR"/>
+        <result column="user_id" property="userId" jdbcType="VARCHAR"/>
+        <result column="merchant_id" property="merchantId" jdbcType="VARCHAR"/>
+        <result column="client_id" property="clientId" jdbcType="VARCHAR"/>
+        <result column="available" property="available" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        user_push_id, user_id, merchant_id, client_id, available, create_time, update_time
+    </sql>
+    <select id="selectCids" parameterType="com.cc.ccbootdemo.facade.domain.bizobject.msg.PushMsgMap" resultType="string">
+    SELECT client_id from user_push
+        where user_id=#{targetUserId}
+        and merchant_id =#{merchantId} and available='1'
+  </select>
+
+
+    <select id="querySimplePushConfig" parameterType="string"
+            resultType="com.cc.ccbootdemo.facade.domain.dataobject.PushConfigDO">
+        select
+        app_id as appId,
+        app_secret as appSecret,
+        app_key as appKey
+        from push_config
+        where
+        merchant_id=#{parameter}
+    </select>
+    <!-- 更新用户推送信息-->
+    <update id="updateUserPushStatusByMidAndClientId" parameterType="map">
+        update
+        user_push
+        set available=#{available}
+        where
+        merchant_id=#{merchantId}
+        and client_id=#{clientId}  and user_id!=#{userId}
+
+    </update>
+</mapper>

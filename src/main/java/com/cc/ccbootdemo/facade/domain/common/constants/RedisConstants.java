@@ -61,4 +61,12 @@ public class RedisConstants {
     public static final String IP_UA_LIMIT_URLS = "ps-str-ip-ua-limit-urls";
 
     public static final String KEY_BIZ_TYPE = "TOOL_HASH_KEY_BIZ_TYPE";
+
+
+    public static final String PUSH_MSG_CRON = "demo-str-push-msg-cron";
+
+    public static final String SPECIAL_MEN_UID ="demo-set-special-men-uids" ;
+    public static final String SPECIAL_TARGET_MEN_UID ="demo-set-target-uids" ;
+    //上次查询时的推送时间
+    public static final String LAST_PUSH_TIME = "demo-str-last-push-time";
 }

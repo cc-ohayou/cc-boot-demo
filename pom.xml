@@ -185,8 +185,41 @@
 			<artifactId>guava</artifactId>
 			<version>16.0.1</version>
 		</dependency>
-
+		<!-- 个推依赖 -->
+		<!-- ============================== -->
+		<dependency>
+			<groupId>com.gexin.platform</groupId>
+			<artifactId>gexin-rp-sdk-http</artifactId>
+			<version>4.0.1.9</version>
+		</dependency>
+		<dependency>
+			<groupId>com.gexin.platform</groupId>
+			<artifactId>gexin-rp-sdk-base</artifactId>
+			<version>4.0.0.19</version>
+		</dependency>
+		<dependency>
+			<groupId>com.gexin.platform</groupId>
+			<artifactId>gexin-rp-sdk-template</artifactId>
+			<version>4.0.0.8</version>
+		</dependency>
+		<dependency>
+			<groupId>com.gexin.platform</groupId>
+			<artifactId>gexin-rp-fastjson</artifactId>
+			<version>1.0.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java</artifactId>
+			<version>3.2.0</version>
+		</dependency>
     </dependencies>
+
+
+	<repository>
+		<id>getui-nexus</id>
+		<url>http://mvn.gt.igexin.com/nexus/content/repositories/releases/</url>
+	</repository>
+
 
 	<build>
 		<plugins>
