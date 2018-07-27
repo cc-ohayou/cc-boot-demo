@@ -13,9 +13,9 @@
             <property name="caseSensitive" value="false"/>
         </plugin>
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://139.224.118.49:3306/cctest02"
+                        connectionURL="jdbc:mysql://localhost:3306/cctest02"
                         userId="root"
-                        password="ohayou007">
+                        password="123456">
         </jdbcConnection>
 
         <!--POJO 路径 TODO 每个开发需要手动配置-->
