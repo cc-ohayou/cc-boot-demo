@@ -41,7 +41,7 @@ public class RedisManagerImpl extends RedisConstants implements RedisManager {
      * redis lock模式  不为空则说明使用降级模式
      * 一旦lock被某一线程持有 其他线程直接返回false 不在进行重试操作 降低线程sleep重试的性能损耗
      */
-    public static final  String LOCK_MODEL="ps_str_lock_model";
+    public static final String LOCK_MODEL = "ps_str_lock_model";
 
 
     private static final int REDIS_RETRY_COUNT = 10;
@@ -71,8 +71,11 @@ public class RedisManagerImpl extends RedisConstants implements RedisManager {
     public final static boolean TEST_ON_BORROW = true;
 
     private static JedisPool jedisPool = null;
+
+    private static JedisSentinelPool jedisSentinelPool = null;
+
     private static RedisLog logger = new RedisLog();
-    private RateLimitCheckLog limitLog=new RateLimitCheckLog();
+    private RateLimitCheckLog limitLog = new RateLimitCheckLog();
 
     private static String rateLimitShaStr;
 
@@ -85,7 +88,7 @@ public class RedisManagerImpl extends RedisConstants implements RedisManager {
      */
     private int expireMsecs = 60 * 1000;
 
-    private static Map<Integer,Long> initMap=new ConcurrentHashMap<>();
+    private static Map<Integer, Long> initMap = new ConcurrentHashMap<>();
 
     //   初始化Redis连接池
     static {
@@ -93,6 +96,7 @@ public class RedisManagerImpl extends RedisConstants implements RedisManager {
         initSpecialScript();
 
     }
+
     private static void initSpecialScript() {
         Jedis jedis = getJedis();
         try {
@@ -105,6 +109,7 @@ public class RedisManagerImpl extends RedisConstants implements RedisManager {
             }
         }
     }
+
     /**
      * 获取Jedis实例
      */
@@ -136,6 +141,84 @@ public class RedisManagerImpl extends RedisConstants implements RedisManager {
         //重试10次
         return jedis;
     }
+
+    /**
+     * 获取Jedis实例
+     */
+    public static Jedis getJedisBySentinelPool() {
+        Jedis jedis = null;
+        int count = 0;
+        do {
+            try {
+                if (jedisSentinelPool == null) {
+                    initSentinelPool();
+                }
+                jedis = jedisSentinelPool.getResource();
+                logger.info("时间" + DateUtil.standardFormat.get().format(new Date()) + ",jedisSentinelPool中实例情况," +
+                        "active=" + jedisSentinelPool.getNumActive() + ",idle=" + jedisSentinelPool.getNumIdle()
+                        + ",waiters=" + jedisSentinelPool.getNumWaiters());
+            } catch (Exception e) {
+                logger.error("Redis Exception :", e);
+                logger.warn("时间" + DateUtil.standardFormat.get().format(new Date()) + ",jedisSentinelPool中实例情况," +
+                        "active=" + jedisSentinelPool.getNumActive() + ",idle=" + jedisSentinelPool.getNumIdle()
+                        + ",waiters=" + jedisPool.getNumWaiters());
+                if (jedisSentinelPool.getNumIdle() == 0 && jedisSentinelPool.getNumActive() == MAX_ACTIVE) {
+                    logger.warn("时间" + DateUtil.standardFormat.get().format(new Date()) + ",jedisSentinelPool中实例耗尽," +
+                            "active=" + jedisSentinelPool.getNumActive() + jedisSentinelPool.getNumIdle());
+                }
+                jedisSentinelPool = null;
+                // 防止意外情况资源耗尽 重新初始化jedisSentinelPool 这个只是一解燃眉之急而已
+                // 最终解决还是要在程序中注意及时释放连接实例
+                initSentinelPool();
+            }
+            count++;
+        } while (jedis == null && count < REDIS_RETRY_COUNT);
+        //重试10次
+        return jedis;
+    }
+
+    private static void initSentinelPool() {
+        FileInputStream in = null;//System.getenv("CC_RESOURCE");
+        try {
+            in = new FileInputStream(new File(System.getenv("CC_RESOURCE_DIR") + "/cc_jedis.properties"));
+            Properties prop = new Properties();
+            prop.load(in);
+            String sentinel01 = prop.getProperty("jedis.sentinel01").trim();
+            String sentinel02 = prop.getProperty("jedis.sentinel02").trim();
+            String sentinel03 = prop.getProperty("jedis.sentinel03").trim();
+            String pass = prop.getProperty("jedis.pass").trim();
+            String clusterName = prop.getProperty("jedis.clusterName").trim();
+            Set<String> sentinels = new HashSet<>();
+            sentinels.add(sentinel01);
+            sentinels.add(sentinel02);
+            sentinels.add(sentinel03);
+
+            try {
+                jedisSentinelPool = new JedisSentinelPool(clusterName, sentinels, pass);
+
+            } catch (Exception e) {
+                logger.error("####Redis sentinel getResource Exception :", e);
+            }
+
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            logger.error("Redis 连接配置文件 jedis.properties 加载失败！");
+        } finally {
+            if (null != in) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    logger.warn(e.getMessage(), e);
+                }
+            }
+        }
+
+
+    }
+
+
+
+
 
     //初始化Redis连接池
     private static synchronized void initJedisPool() {
@@ -834,9 +917,13 @@ public class RedisManagerImpl extends RedisConstants implements RedisManager {
 //        hsetTest(jedis);
 //        transTest(jedis);
 //        pipeLineTest(jedis);
-        System.out.println(jedis.hget("cc", "cc"));
-        publishTest(jedis);
-        subscribeTest(jedis);
+        System.out.println(jedis.get("cc"));
+//        publishTest(jedis);
+//        subscribeTest(jedis);
+
+        Jedis sentinelJedis = getJedisBySentinelPool();
+        System.out.println(sentinelJedis.get("cc"));
+
 
     }
 
