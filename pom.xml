@@ -15,7 +15,8 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.0.1.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
+		<!-- lookup parent from repository -->
 	</parent>
 
 	<properties>
@@ -26,6 +27,7 @@
 		<mysql-connector>6.0.6</mysql-connector>
 		<druid>1.1.9</druid>
 		<tk.mybatis.version>3.4.3</tk.mybatis.version>
+		<commons-lang3.version>3.4</commons-lang3.version>
 
 	</properties>
 
@@ -212,14 +214,27 @@
 			<artifactId>protobuf-java</artifactId>
 			<version>3.2.0</version>
 		</dependency>
+
+
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.38</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${commons-lang3.version}</version>
+		</dependency>
     </dependencies>
 
-
+<repositories>
 	<repository>
 		<id>getui-nexus</id>
 		<url>http://mvn.gt.igexin.com/nexus/content/repositories/releases/</url>
 	</repository>
-
+</repositories>
 
 	<build>
 		<plugins>

@@ -82,4 +82,9 @@ public class CcTestController extends BaseController{
         return USER_LIST_PATH_NAME;
     }
 
+    @RequestMapping(value = "/get/userList", method = RequestMethod.GET)
+    public List<User> getUser(User user) {
+        return userService.getUserList(user);
+    }
+
 }

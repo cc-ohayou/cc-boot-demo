@@ -92,7 +92,8 @@ public class RedisManagerImpl extends RedisConstants implements RedisManager {
 
     //   初始化Redis连接池
     static {
-        initJedisPool();
+//        initJedisPool();
+        initSentinelPool();
         initSpecialScript();
 
     }
@@ -114,7 +115,7 @@ public class RedisManagerImpl extends RedisConstants implements RedisManager {
      * 获取Jedis实例
      */
     public static Jedis getJedis() {
-        Jedis jedis = null;
+        /*Jedis jedis = null;
         int count = 0;
         do {
             try {
@@ -139,7 +140,8 @@ public class RedisManagerImpl extends RedisConstants implements RedisManager {
             count++;
         } while (jedis == null && count < REDIS_RETRY_COUNT);
         //重试10次
-        return jedis;
+        return jedis;*/
+        return getJedisBySentinelPool();
     }
 
     /**
