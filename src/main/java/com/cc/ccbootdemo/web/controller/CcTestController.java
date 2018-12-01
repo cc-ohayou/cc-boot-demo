@@ -2,6 +2,7 @@ package com.cc.ccbootdemo.web.controller;
 
 import com.cc.ccbootdemo.core.service.CityService;
 import com.cc.ccbootdemo.core.service.UserService;
+import com.cc.ccbootdemo.facade.domain.common.exception.ParamException;
 import com.cc.ccbootdemo.facade.domain.dataobject.City;
 import com.cc.ccbootdemo.facade.domain.dataobject.User;
 import org.slf4j.Logger;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.jar.Pack200;
 
 /**
  * @AUTHOR CF
@@ -85,6 +87,13 @@ public class CcTestController extends BaseController{
     @RequestMapping(value = "/get/userList", method = RequestMethod.GET)
     public List<User> getUser(User user) {
         return userService.getUserList(user);
+    }
+
+    @RequestMapping(value = "/exce/test", method = RequestMethod.GET)
+    public Object exception(User user) {
+        User u=null;
+        throw new ParamException("test custom exception ");
+//        return u.getCity();
     }
 
 }

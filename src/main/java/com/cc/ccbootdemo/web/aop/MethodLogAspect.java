@@ -1,5 +1,7 @@
 package com.cc.ccbootdemo.web.aop;
 
+import com.cc.ccbootdemo.facade.domain.common.exception.BusinessException;
+import com.cc.ccbootdemo.facade.domain.common.exception.ParamException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -69,19 +71,34 @@ public abstract class MethodLogAspect {
         Object[] args = joinPoint.getArgs();
         long startTime = System.nanoTime();
         Object result = null;
-        result = joinPoint.proceed(args);
-        long endTime = System.nanoTime();
+
         try {
-            String logString = extractLog(joinPointObject, result, args, methodName, startTime, endTime);
-            Logger customLogger = getLogger();
-            if (customLogger == null) {
-                customLogger = logger;
-            }
-            customLogger.info(logString);
-        } catch (Exception exception) {
-            logger.error("MethodLogAspect.around", exception);
+            result = joinPoint.proceed(args);
+            recordlog(joinPointObject, methodName, args, startTime, result, System.nanoTime());
+        } catch (ParamException e) {
+            logger.warn("MethodLogAspect.around",e);
+            recordlog(joinPointObject, methodName, args, startTime, result, System.nanoTime());
+            throw new ParamException(e.getMessage());
+        }catch (BusinessException e) {
+            logger.warn("MethodLogAspect.around", e);
+            recordlog(joinPointObject, methodName, args, startTime, result, System.nanoTime());
+            throw new BusinessException(e.getMessage());
+        }catch (Exception e) {
+            logger.error("MethodLogAspect.around", e);
+            recordlog(joinPointObject, methodName, args, startTime, result, System.nanoTime());
+            throw new Exception(e);
         }
+
         return result;
+    }
+
+    private void recordlog(MethodSignature joinPointObject, String methodName, Object[] args, long startTime, Object result, long endTime) {
+        String logString = extractLog(joinPointObject, result, args, methodName, startTime, endTime);
+        Logger customLogger = getLogger();
+        if (customLogger == null) {
+            customLogger = logger;
+        }
+        customLogger.info(logString);
     }
 
     protected abstract Logger getLogger();
