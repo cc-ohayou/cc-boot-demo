@@ -57,9 +57,9 @@ public class JedisSentinelUtil {
 
     static {
         sentinelSet=new HashSet<>();
-        sentinelSet.add("118.31.73.19:26380");
-        sentinelSet.add("118.31.73.19:26381");
-        sentinelSet.add("118.31.73.19:26379");
+        sentinelSet.add("127.0.0.1:26380");
+        sentinelSet.add("127.0.0.1:26381");
+        sentinelSet.add("127.0.0.1:26379");
         poolConfig=new GenericObjectPoolConfig();
         poolConfig.setMaxTotal(MAX_ACTIVE);
         ///表示当borrow一个jedis实例时，最大的等待时间，如果超过等待时间，则直接抛出超时异常
