@@ -5,7 +5,6 @@ import com.cc.ccbootdemo.facade.domain.common.exception.BusinessException;
 import com.cc.ccbootdemo.facade.domain.common.exception.ParamException;
 import com.cc.ccbootdemo.web.aop.ApiResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -33,6 +32,7 @@ public class ExceptionInterceptor implements HandlerInterceptor {
             String value = request.getHeader(key);
             headerInfoMap.put(key, value);
         }
+        System.err.println(Thread.currentThread().getName());
         /*headerInfoMap.put("ip", HttpUtil.getIpAddress(request));
 
         HeaderInfo info=new HeaderInfo();
@@ -79,6 +79,7 @@ public class ExceptionInterceptor implements HandlerInterceptor {
             }
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(apiResponse);
+            response.reset();
             response.setContentType("application/json;charset=UTF-8");
             response.setHeader("Pragma", "No-cache");
             response.setHeader("Cache-Control", "no-cache");

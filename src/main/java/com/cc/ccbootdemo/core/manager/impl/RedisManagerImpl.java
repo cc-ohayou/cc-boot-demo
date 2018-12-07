@@ -145,7 +145,7 @@ public class RedisManagerImpl extends RedisConstants implements RedisManager {
     }
 
     /**
-     * 获取Jedis实例
+     * 获取Jedis实例 哨兵模式
      */
     public static Jedis getJedisBySentinelPool() {
         Jedis jedis = null;
@@ -222,7 +222,7 @@ public class RedisManagerImpl extends RedisConstants implements RedisManager {
 
 
 
-    //初始化Redis连接池
+    //初始化Redis连接池 适用于单点
     private static synchronized void initJedisPool() {
         Long lastInitTime=initMap.get(101);
         //10s内只允许初始化一次

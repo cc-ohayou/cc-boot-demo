@@ -3,6 +3,7 @@ package com.cc.ccbootdemo.web.controller;
 import com.cc.ccbootdemo.core.service.CityService;
 import com.cc.ccbootdemo.core.service.UserService;
 import com.cc.ccbootdemo.facade.domain.common.exception.ParamException;
+import com.cc.ccbootdemo.facade.domain.common.param.MQProducerParam;
 import com.cc.ccbootdemo.facade.domain.dataobject.City;
 import com.cc.ccbootdemo.facade.domain.dataobject.User;
 import org.slf4j.Logger;
@@ -11,12 +12,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.jar.Pack200;
 
 /**
  * @AUTHOR CF
@@ -34,6 +33,7 @@ public class CcTestController extends BaseController{
     CityService cityService;
     @Resource
     UserService userService;
+
     @ResponseBody
     @RequestMapping(value="/city/list")
     public List<City> getCityList(City city){
@@ -48,52 +48,50 @@ public class CcTestController extends BaseController{
         return USER_LIST_PATH_NAME;
     }
 
-    @RequestMapping(value = "/api/city", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/city")
     public String findAllCity(Model model) {
         List<City> cityList = cityService.getCityList(defaultCity);
         model.addAttribute("cityList", cityList);
         return "cityList";
     }
-    @RequestMapping(value = "/add/city", method = RequestMethod.GET)
+    @RequestMapping(value = "/add/city")
     public String addCity(Model model,City city) {
         logger.info("city is "+city);
         if(city!=null){
-            try{
                 cityService.addCity(city);
-            }catch(Exception e){
-                e.printStackTrace();
-            }
         }
         city=defaultCity;
         List<City> cityList = cityService.getCityList(city);
         model.addAttribute("cityList", cityList);
         return "cityList";
     }
-    @RequestMapping(value = "/add/user", method = RequestMethod.GET)
+    @RequestMapping(value = "/add/user")
     public String addUser(ModelMap model,User user) {
         logger.info("user is "+user);
-        if(user!=null){
-            try{
-                userService.addUser(user);
-            }catch(Exception e){
-                e.printStackTrace();
-            }
+        if(user!=null) {
+            userService.addUser(user);
         }
         List<User> list = userService.getUserList(user);
         model.addAttribute("userList", list);
         return USER_LIST_PATH_NAME;
     }
 
-    @RequestMapping(value = "/get/userList", method = RequestMethod.GET)
+    @RequestMapping(value = "/get/userList")
     public List<User> getUser(User user) {
         return userService.getUserList(user);
     }
 
-    @RequestMapping(value = "/exce/test", method = RequestMethod.GET)
+    @RequestMapping(value = "/exce/test")
     public Object exception(User user) {
         User u=null;
         throw new ParamException("test custom exception ");
 //        return u.getCity();
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/rocketmq/produce")
+    public Object exception(MQProducerParam param) {
+           userService.produce(param);
+        return "OK";
+    }
 }

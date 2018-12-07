@@ -1,10 +1,13 @@
 package com.cc.ccbootdemo.core.service.impl;
 
+import com.cc.ccbootdemo.core.manager.MqManager;
 import com.cc.ccbootdemo.core.manager.RedisManager;
 import com.cc.ccbootdemo.core.manager.UserManager;
 import com.cc.ccbootdemo.core.service.UserService;
 import com.cc.ccbootdemo.facade.domain.bizobject.strgy.StrgyBiz;
 import com.cc.ccbootdemo.facade.domain.common.constants.RedisConstants;
+import com.cc.ccbootdemo.facade.domain.common.param.MQProducerParam;
+import com.cc.ccbootdemo.facade.domain.common.util.AssertUtil;
 import com.cc.ccbootdemo.facade.domain.dataobject.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +27,8 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService{
     UserManager userManager;
     @Resource
     RedisManager  redisManager;
+    @Resource
+    MqManager mqManager;
 
 
     @Override
@@ -51,5 +56,13 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService{
             pushGeTuiMsg(new ArrayList<>(targetUids),strgys.get(i).toString(),"000");
         }
 
+    }
+
+    @Override
+    public String produce(MQProducerParam param) {
+        AssertUtil.isNullParamStr(param.getTopic(),"发送消息主题不可为空");
+        AssertUtil.isNullParamStr(param.getTags(),"发送消息tag格式不可为空");
+        AssertUtil.isNullParamStr(param.getMessage(),"发送消息内容不可为空");
+        return mqManager.produceMsg(param);
     }
 }
