@@ -90,7 +90,7 @@ public class CcTestController extends BaseController{
 
     @ResponseBody
     @RequestMapping(value = "/rocketmq/produce")
-    public Object exception(MQProducerParam param) {
+    public Object produceRQMsg(MQProducerParam param) {
            userService.produce(param);
         return "OK";
     }
