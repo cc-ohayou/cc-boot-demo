@@ -43,6 +43,13 @@ public class MasterDataSourceConfig {
    @Bean
    @ConfigurationProperties(prefix = "mybatis.configuration")
    public org.apache.ibatis.session.Configuration  globalConfiguration(){
+       org.apache.ibatis.session.Configuration conf= new org.apache.ibatis.session.Configuration();
+       //启用缓存
+       conf.setCacheEnabled(true);
+       //驼峰命名
+       conf.setMapUnderscoreToCamelCase(true);
+       //允许JDBC支持生成主键，如果设置为true的话，这个键强制被使用
+       conf.setUseGeneratedKeys(true);
        return  new org.apache.ibatis.session.Configuration();
    }
     @Bean(name = "masterDataSource")
