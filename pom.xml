@@ -6,7 +6,8 @@
 	<groupId>com.cc</groupId>
 	<artifactId>cc-boot-demo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<!--<packaging>jar</packaging>-->
+	<packaging>war</packaging>
 
 	<name>cc-boot-demo</name>
 	<description>Demo project for Spring Boot</description>
@@ -47,6 +48,12 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		<!-- Spring Boot aop 依赖 -->
 		<dependency>
@@ -121,6 +128,12 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>${mysql-connector}</version>
 		</dependency>
+		<!-- druid数据源依赖-->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+			<version>${druid}</version>
+		</dependency>
 		<!-- Spring Boot logback日志 依赖 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -154,12 +167,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-freemarker</artifactId>
 		</dependency>
-        <!-- druid数据源依赖-->
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>druid</artifactId>
-			<version>${druid}</version>
-		</dependency>
+
 <!--  jedis依赖-->
 		<dependency>
 			<groupId>redis.clients</groupId>
@@ -246,6 +254,11 @@
 		</dependency>
 
 
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-jasper</artifactId>
+			<scope>provided</scope>
+		</dependency>
 
     </dependencies>
 
