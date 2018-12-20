@@ -49,6 +49,10 @@ public final class SettingsHolder {
      */
     public static  String getProperty(SettingsEnum key ) {
 
+        if(properties.isEmpty()){
+            SettingsEnum.initDefaultSettingHolderValue();
+        }
+
         return properties.get(key.getValue());
     }
 

@@ -4,6 +4,7 @@ import com.alibaba.rocketmq.client.consumer.DefaultMQPushConsumer;
 import com.alibaba.rocketmq.client.exception.MQClientException;
 import com.cc.ccbootdemo.core.common.settings.SettingsEnum;
 import com.cc.ccbootdemo.core.common.settings.SettingsHolder;
+import com.cc.ccbootdemo.core.common.settings.SettingsPubSubRelInit;
 import com.cc.ccbootdemo.facade.domain.common.exception.BusinessException;
 import com.cc.ccbootdemo.facade.domain.common.util.AssertUtil;
 import org.slf4j.Logger;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Component;
  * @DATE Created on 2018/12/7 14:46.
  */
 @SpringBootConfiguration
+@ConditionalOnBean(SettingsPubSubRelInit.class)
 @Component
 public class RocketMqConsumerConfig {
     public static final Logger logger = LoggerFactory.getLogger(RocketMqConsumerConfig.class);

@@ -37,6 +37,7 @@ public class TestLoadResource   implements EnvironmentAware{
         if (globalDir == null) {
             globalDir = System.getenv(ENV_DIR);
         }
+        logger.info("globalDir="+globalDir);
         FileSystemResource resourceJdbc = new FileSystemResource(globalDir + "/cc_jdbc.properties");
         FileSystemResource resourceRedis = new FileSystemResource(globalDir + "/cc_jedis.properties");
         try {

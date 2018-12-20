@@ -6,8 +6,10 @@ import com.alibaba.rocketmq.client.consumer.listener.MessageListenerConcurrently
 import com.alibaba.rocketmq.common.message.MessageExt;
 import com.cc.ccbootdemo.core.common.settings.SettingsEnum;
 import com.cc.ccbootdemo.core.common.settings.SettingsHolder;
+import com.cc.ccbootdemo.core.common.settings.SettingsPubSubRelInit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -19,6 +21,7 @@ import java.util.List;
  * @DATE Created on 2018/12/7 14:47.
  */
 @Component
+@ConditionalOnBean(SettingsPubSubRelInit.class)
 public class MQConsumeMsgListenerProcessor implements MessageListenerConcurrently {
     private static final Logger logger = LoggerFactory.getLogger(MQConsumeMsgListenerProcessor.class);
 

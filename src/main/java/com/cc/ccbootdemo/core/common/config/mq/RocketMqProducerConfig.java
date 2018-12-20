@@ -3,12 +3,14 @@ package com.cc.ccbootdemo.core.common.config.mq;
 import com.alibaba.rocketmq.client.producer.DefaultMQProducer;
 import com.cc.ccbootdemo.core.common.settings.SettingsEnum;
 import com.cc.ccbootdemo.core.common.settings.SettingsHolder;
+import com.cc.ccbootdemo.core.common.settings.SettingsPubSubRelInit;
 import com.cc.ccbootdemo.facade.domain.common.exception.BusinessException;
 import com.cc.ccbootdemo.facade.domain.common.util.AssertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Component;
  * @AUTHOR CF
  * @DATE Created on 2018/12/7 11:05.
  */
+@ConditionalOnBean(SettingsPubSubRelInit.class)
 @SpringBootConfiguration
 @Component
 public class RocketMqProducerConfig {
