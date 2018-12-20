@@ -94,4 +94,11 @@ public class CcTestController extends BaseController{
            userService.produce(param);
         return "OK";
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/getDownloadUrl")
+    public String getDownloadUrl() {
+        return userService.getDownloadUrl();
+    }
+
 }

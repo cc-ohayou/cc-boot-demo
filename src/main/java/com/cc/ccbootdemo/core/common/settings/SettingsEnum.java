@@ -17,7 +17,7 @@ public enum SettingsEnum {
     ROCKETMQ_SEND_TIMEOUT("rocketmq-send-timeout","发送消息超时时间 单位ms","1000"),
     ROCKETMQ_PRUDUCER_NAME_SERVER("rocketmq-producer-name-server","生产者mq服务地址","127.0.0.1:9876"),
     ROCKETMQ_CONSUMER_NAME_SERVER("rocketmq-consumer-name-server","消费者mq服务地址","127.0.0.1:9876"),
-    ;
+    DOWNLOAD_URL_APK("cc-str-apk-download-url","apk下载地址","https://pkg.biligame.com/games/bh3_2.8.0_1_20181211_201637_b8c9b8.apk" );
     private String value;
     private String label;
     //默认值必须以线上的作为标准 即便redis挂掉也不要影响正常使用

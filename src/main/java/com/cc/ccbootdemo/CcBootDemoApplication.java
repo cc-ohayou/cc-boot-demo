@@ -2,14 +2,12 @@ package com.cc.ccbootdemo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.cc.core", "com.cc.ccbootdemo"})
 //@MapperScan(basePackages = "com.cc.ccbootdemo.core.mapper")
-public class CcBootDemoApplication extends SpringBootServletInitializer {
+public class CcBootDemoApplication {
 
 //kallen_common_334a85aed93a6b81b14c9b830b396c2b.unity3d
 	//kallen_c3_jk_a1e54e772907864a453493e1938f0863.unity3d
@@ -22,10 +20,10 @@ public class CcBootDemoApplication extends SpringBootServletInitializer {
 	}
 
 
-	@Override
+/*	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
 		// 注意这里要指向原先用main方法执行的Application启动类 EtfTaskApplication
 		return builder.sources(CcBootDemoApplication.class);
-	}
+	}*/
 
 }

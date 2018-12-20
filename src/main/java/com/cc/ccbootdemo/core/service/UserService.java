@@ -20,4 +20,6 @@ public interface UserService {
      * @author CF create on 2018/12/7 17:02
      */
     String  produce(MQProducerParam param);
+
+    String getDownloadUrl();
 }

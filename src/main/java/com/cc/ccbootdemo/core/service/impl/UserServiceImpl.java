@@ -1,5 +1,7 @@
 package com.cc.ccbootdemo.core.service.impl;
 
+import com.cc.ccbootdemo.core.common.settings.SettingsEnum;
+import com.cc.ccbootdemo.core.common.settings.SettingsHolder;
 import com.cc.ccbootdemo.core.manager.MqManager;
 import com.cc.ccbootdemo.core.manager.RedisManager;
 import com.cc.ccbootdemo.core.manager.UserManager;
@@ -64,5 +66,10 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService{
         AssertUtil.isNullParamStr(param.getTags(),"发送消息tag格式不可为空");
         AssertUtil.isNullParamStr(param.getMessage(),"发送消息内容不可为空");
         return mqManager.produceMsg(param);
+    }
+
+    @Override
+    public String getDownloadUrl() {
+        return SettingsHolder.getProperty(SettingsEnum.DOWNLOAD_URL_APK);
     }
 }
