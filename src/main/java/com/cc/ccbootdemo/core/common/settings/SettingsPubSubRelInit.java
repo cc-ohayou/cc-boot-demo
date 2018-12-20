@@ -1,5 +1,6 @@
 package com.cc.ccbootdemo.core.common.settings;
 
+import com.cc.ccbootdemo.core.common.properties.resource.TestLoadResource;
 import com.cc.ccbootdemo.core.manager.RedisManager;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -39,6 +40,8 @@ public class SettingsPubSubRelInit {
         }
         hasInitAlready=true;
         try{
+            TestLoadResource.loadProperties();
+
             String [] patterns= RedisChannel.getAllPsNeedSubChannels();
             Map<String,String> settings=redisManager.hgetAll(SettingsHolder.GLOBAL_SETTINGS);
 

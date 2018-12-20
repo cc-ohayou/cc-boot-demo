@@ -20,9 +20,12 @@ import java.util.Properties;
  */
 @Configuration
 public class TestLoadResource   implements EnvironmentAware{
-    private Logger logger= LoggerFactory.getLogger(TestLoadResource.class);
+    private static Logger logger= LoggerFactory.getLogger(TestLoadResource.class);
     public static String globalDir;
-    public static Properties property;
+    public static Properties propertyJdbc;
+    public static Properties propertyRedis;
+    public static final String ENV_DIR="CC_RESOURCE_DIR";
+
     @Bean
     public TestLoadResource getResource(){
         TestLoadResource res=new TestLoadResource();
@@ -30,21 +33,35 @@ public class TestLoadResource   implements EnvironmentAware{
     }
 
 
-    private  void loadProperties() {
-           FileSystemResource resource=new FileSystemResource(globalDir+"/cc_jdbc.properties");
-        try {
-            Properties p=PropertiesLoaderUtils.loadProperties(resource);
-            property=p;
-        } catch (IOException e) {
-            logger.error("####error during init base property###",e);
-
+    public static  void loadProperties() {
+        if (globalDir == null) {
+            globalDir = System.getenv(ENV_DIR);
         }
+        FileSystemResource resourceJdbc = new FileSystemResource(globalDir + "/cc_jdbc.properties");
+        FileSystemResource resourceRedis = new FileSystemResource(globalDir + "/cc_jedis.properties");
+        try {
+            if (propertyJdbc.isEmpty()) {
+                propertyJdbc = PropertiesLoaderUtils.loadProperties(resourceJdbc);
+                if (propertyJdbc.isEmpty()) {
+                    logger.error("#### TestLoadResource loadProperties error propertyJdbc is empty");
+                }
+            }
+            if (propertyRedis.isEmpty()) {
+                propertyRedis = PropertiesLoaderUtils.loadProperties(resourceRedis);
+                if (propertyRedis.isEmpty()) {
+                    logger.error("#### TestLoadResource loadProperties error propertyRedis is empty");
+
+                }
+//                RedisManagerImpl.prop = propertyRedis;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
-
-
     @Override
     public void setEnvironment(Environment environment) {
-        globalDir=environment.getProperty("CC_RESOURCE_DIR");
+        globalDir=environment.getProperty(ENV_DIR);
         if(StringUtils.isEmpty(globalDir)){
             logger.error("####error during init globalDir property, probably not set###");
         }

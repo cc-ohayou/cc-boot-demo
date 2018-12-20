@@ -22,15 +22,15 @@ public class MailConfig {
     public MailSender myMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         //指定用来发送Email的邮件服务器主机名
-        mailSender.setHost(TestLoadResource.property.getProperty("mailHost"));
+        mailSender.setHost(TestLoadResource.propertyJdbc.getProperty("mailHost"));
         //默认端口，标准的SMTP端口 25 可不设置 使用网易邮箱时可不设置
-        mailSender.setUsername(TestLoadResource.property.getProperty("mailUser"));
-        mailSender.setPassword(TestLoadResource.property.getProperty("mailPass"));
+        mailSender.setUsername(TestLoadResource.propertyJdbc.getProperty("mailUser"));
+        mailSender.setPassword(TestLoadResource.propertyJdbc.getProperty("mailPass"));
         mailSender.setDefaultEncoding("Utf-8");
-        mailSender.setProtocol(TestLoadResource.property.getProperty("mailProtocol"));
-       if("yes".equals(TestLoadResource.property.getProperty("mailSSLSign"))){
+        mailSender.setProtocol(TestLoadResource.propertyJdbc.getProperty("mailProtocol"));
+       if("yes".equals(TestLoadResource.propertyJdbc.getProperty("mailSSLSign"))){
            setSSLConfig(mailSender);
-           mailSender.setPort(Integer.parseInt(TestLoadResource.property.getProperty("mailPort")));
+           mailSender.setPort(Integer.parseInt(TestLoadResource.propertyJdbc.getProperty("mailPort")));
        }
         return mailSender;
     }

@@ -15,6 +15,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import javax.sql.DataSource;
+import java.util.Properties;
 
 @Configuration
 @ConditionalOnBean(TestLoadResource.class)
@@ -56,10 +57,15 @@ public class MasterDataSourceConfig {
     @Primary
     public DataSource masterDataSource() {
         DruidDataSource dataSource = new DruidDataSource();
-        dataSource.setDriverClassName(TestLoadResource.property.getProperty("masterDriver"));
-        dataSource.setUrl(TestLoadResource.property.getProperty("masterUrl"));
-        dataSource.setUsername(TestLoadResource.property.getProperty("masterName"));
-        dataSource.setPassword(TestLoadResource.property.getProperty("masterPwd"));
+        Properties p = TestLoadResource.propertyJdbc;
+        if (p.isEmpty()) {
+            TestLoadResource.loadProperties();
+        }
+        p=TestLoadResource.propertyJdbc;
+        dataSource.setDriverClassName(p.getProperty("masterDriver"));
+        dataSource.setUrl(p.getProperty("masterUrl"));
+        dataSource.setUsername(p.getProperty("masterName"));
+        dataSource.setPassword(p.getProperty("masterPwd"));
 
         return dataSource;
     }

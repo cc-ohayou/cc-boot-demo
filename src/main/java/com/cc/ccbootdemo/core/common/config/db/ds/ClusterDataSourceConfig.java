@@ -13,6 +13,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import tk.mybatis.spring.annotation.MapperScan;
 
 import javax.sql.DataSource;
+import java.util.Properties;
 
 @Configuration
 @ConditionalOnBean(TestLoadResource.class)
@@ -29,10 +30,15 @@ public class ClusterDataSourceConfig {
     @Bean(name = "clusterDataSource")
     public DataSource clusterDataSource() {
         DruidDataSource dataSource = new DruidDataSource();
-        dataSource.setDriverClassName(TestLoadResource.property.getProperty("clusterDriver"));
-        dataSource.setUrl(TestLoadResource.property.getProperty("clusterUrl"));
-        dataSource.setUsername(TestLoadResource.property.getProperty("clusterName"));
-        dataSource.setPassword(TestLoadResource.property.getProperty("clusterPwd"));
+        Properties property = TestLoadResource.propertyJdbc;
+        if (property.isEmpty()) {
+            TestLoadResource.loadProperties();
+        }
+        property=TestLoadResource.propertyJdbc;
+        dataSource.setDriverClassName(property.getProperty("clusterDriver"));
+        dataSource.setUrl(property.getProperty("clusterUrl"));
+        dataSource.setUsername(property.getProperty("clusterName"));
+        dataSource.setPassword(property.getProperty("clusterPwd"));
 
         return dataSource;
     }

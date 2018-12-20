@@ -185,6 +185,8 @@ public class RedisManagerImpl extends RedisConstants implements RedisManager {
             in = new FileInputStream(new File(System.getenv("CC_RESOURCE_DIR") + "/cc_jedis.properties"));
             Properties prop = new Properties();
             prop.load(in);
+
+            logger.info("initSentinelPool properties="+prop);
             String sentinel01 = prop.getProperty("jedis.sentinel01").trim();
             String sentinel02 = prop.getProperty("jedis.sentinel02").trim();
             String sentinel03 = prop.getProperty("jedis.sentinel03").trim();
