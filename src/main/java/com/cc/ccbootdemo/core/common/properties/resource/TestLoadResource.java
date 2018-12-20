@@ -22,8 +22,8 @@ import java.util.Properties;
 public class TestLoadResource   implements EnvironmentAware{
     private static Logger logger= LoggerFactory.getLogger(TestLoadResource.class);
     public static String globalDir;
-    public static Properties propertyJdbc;
-    public static Properties propertyRedis;
+    public static Properties propertyJdbc=new Properties();
+    public static Properties propertyRedis = new Properties();
     public static final String ENV_DIR="CC_RESOURCE_DIR";
 
     @Bean
