@@ -34,6 +34,18 @@ public class SettingsPubSub extends JedisPubSub {
     public void onMessage(String channel, String message) {
         super.onMessage(channel, message);
         logInfo("onMessage received channel=" + channel + " message=" + message);
+        //根据频道不同进入不同的处理逻辑 后续逻辑越来越多的话可根据策略设计模式优化代码
+        boolean updateFlag=false;
+        String title=" 接收信息成功";
+        try{
+            if(RedisChannel.TEST_CHANNEL.getValue().equals(channel)){
+                updateFlag=doUpdateSettingWorkByKey(message);
+            }
+            logInfo(title+",udpateFlag="+updateFlag);
+        }catch(Exception e){
+            logWarn("###SettingsPubSub onPMessage failed",e);
+
+        }
     }
 
     @Override

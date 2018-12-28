@@ -1,6 +1,7 @@
 package com.cc.ccbootdemo.core.common.settings;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -9,7 +10,9 @@ import java.util.List;
  */
 public enum RedisChannel {
     //
-    TEST_CHANNEL("cc-channel","测试用频道","cc-boot-demo");
+    TEST_CHANNEL("cc-channel","测试用频道","cc-boot-demo"),
+    TEST_CHANNEL02("cc-channel-02","测试用频道2","cc-boot-demo"),
+    ;
 
     private String value;
     private String label;
@@ -50,7 +53,7 @@ public enum RedisChannel {
         RedisChannel[] channelArrays= RedisChannel.values();
         List<String> list=new ArrayList<>(channelArrays.length);
         for(int i=0;i<channelArrays.length;i++){
-            if(channelArrays[i].getProjectBelong().contains(",cc-boot-demo")){
+            if(channelArrays[i].getProjectBelong().contains("cc-boot-demo")){
                 list.add(channelArrays[i].getValue());
             }
         }
@@ -58,5 +61,8 @@ public enum RedisChannel {
         return list.toArray(array);
     }
 
+    public static void main(String[] args) {
+        System.out.println(Arrays.toString(getAllPsNeedSubChannels()));
+    }
 
 }

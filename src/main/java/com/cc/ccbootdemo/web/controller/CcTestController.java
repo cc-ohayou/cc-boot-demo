@@ -2,6 +2,8 @@ package com.cc.ccbootdemo.web.controller;
 
 import com.cc.ccbootdemo.core.service.CityService;
 import com.cc.ccbootdemo.core.service.UserService;
+import com.cc.ccbootdemo.facade.domain.bizobject.Manga;
+import com.cc.ccbootdemo.facade.domain.bizobject.param.SearchBaseParam;
 import com.cc.ccbootdemo.facade.domain.common.exception.ParamException;
 import com.cc.ccbootdemo.facade.domain.common.param.MQProducerParam;
 import com.cc.ccbootdemo.facade.domain.dataobject.City;
@@ -22,7 +24,7 @@ import java.util.List;
  * @DATE Created on 2018/4/22/022 16:34.
  */
 @Controller
-@RequestMapping(value="/cc")
+@RequestMapping(value="/{ver}/cc")
 public class CcTestController extends BaseController{
 
     private  City defaultCity=new City();
@@ -99,6 +101,12 @@ public class CcTestController extends BaseController{
     @RequestMapping(value = "/getDownloadUrl")
     public String getDownloadUrl() {
         return userService.getDownloadUrl();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/getMangaList")
+    public List<Manga> getMangaList(SearchBaseParam param) {
+        return userService.getMangaList(param);
     }
 
 }

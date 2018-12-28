@@ -6,7 +6,9 @@ package com.cc.ccbootdemo.facade.domain.common.enums.redis;
  * @DATE Created on 2018/12/17 15:14.
  */
 public enum RedisKeyEnum {
-  DOWNLOAD_URL_APK("cc-str-apk-download-url","apk下载地址",RedisType.STRING,BizType.COMMON)
+  DOWNLOAD_URL_APK("cc-str-apk-download-url","apk下载地址",RedisType.STRING,BizType.COMMON),
+  BOOK_LIST("cc-str-book-list","图书列表测试数据",RedisType.STRING,BizType.COMMON),
+  MANGA_LIST("cc-str-manga-list","动漫列表测试数据",RedisType.STRING,BizType.COMMON),
     ;
 
 

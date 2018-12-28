@@ -1,15 +1,20 @@
 package com.cc.ccbootdemo.core.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.cc.ccbootdemo.core.common.settings.SettingsEnum;
 import com.cc.ccbootdemo.core.common.settings.SettingsHolder;
 import com.cc.ccbootdemo.core.manager.MqManager;
 import com.cc.ccbootdemo.core.manager.RedisManager;
 import com.cc.ccbootdemo.core.manager.UserManager;
 import com.cc.ccbootdemo.core.service.UserService;
+import com.cc.ccbootdemo.facade.domain.bizobject.Manga;
+import com.cc.ccbootdemo.facade.domain.bizobject.param.SearchBaseParam;
 import com.cc.ccbootdemo.facade.domain.bizobject.strgy.StrgyBiz;
 import com.cc.ccbootdemo.facade.domain.common.constants.RedisConstants;
+import com.cc.ccbootdemo.facade.domain.common.enums.redis.RedisKeyEnum;
 import com.cc.ccbootdemo.facade.domain.common.param.MQProducerParam;
 import com.cc.ccbootdemo.facade.domain.common.util.AssertUtil;
+import com.cc.ccbootdemo.facade.domain.common.util.log.MyMarker;
 import com.cc.ccbootdemo.facade.domain.dataobject.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,5 +76,16 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService{
     @Override
     public String getDownloadUrl() {
         return SettingsHolder.getProperty(SettingsEnum.DOWNLOAD_URL_APK);
+    }
+
+    @Override
+    public List<Manga> getMangaList(SearchBaseParam param) {
+        List list= Collections.EMPTY_LIST;
+        try{
+            list= JSON.parseArray( redisManager.get(RedisKeyEnum.MANGA_LIST.getValue()),Manga.class);
+        }catch(Exception e){
+           logger.error(MyMarker.getInstance("cc-test"), "!!!getMangaList json转换失败",e);
+        }
+        return  list ;
     }
 }

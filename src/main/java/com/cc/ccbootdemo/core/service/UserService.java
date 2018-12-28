@@ -1,5 +1,7 @@
 package com.cc.ccbootdemo.core.service;
 
+import com.cc.ccbootdemo.facade.domain.bizobject.Manga;
+import com.cc.ccbootdemo.facade.domain.bizobject.param.SearchBaseParam;
 import com.cc.ccbootdemo.facade.domain.common.param.MQProducerParam;
 import com.cc.ccbootdemo.facade.domain.dataobject.User;
 
@@ -22,4 +24,6 @@ public interface UserService {
     String  produce(MQProducerParam param);
 
     String getDownloadUrl();
+
+    List<Manga> getMangaList(SearchBaseParam param);
 }
