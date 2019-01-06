@@ -32,6 +32,7 @@ public class ExceptionInterceptor implements HandlerInterceptor {
             String value = request.getHeader(key);
             headerInfoMap.put(key, value);
         }
+        System.err.println(Thread.currentThread().getName());
         /*headerInfoMap.put("ip", HttpUtil.getIpAddress(request));
 
         HeaderInfo info=new HeaderInfo();
@@ -78,6 +79,7 @@ public class ExceptionInterceptor implements HandlerInterceptor {
             }
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(apiResponse);
+            response.reset();
             response.setContentType("application/json;charset=UTF-8");
             response.setHeader("Pragma", "No-cache");
             response.setHeader("Cache-Control", "no-cache");

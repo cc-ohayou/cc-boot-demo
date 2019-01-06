@@ -2,10 +2,9 @@ package com.cc.ccbootdemo.web.aop;
 
 import com.cc.ccbootdemo.facade.domain.common.exception.BusinessException;
 import com.cc.ccbootdemo.facade.domain.common.exception.ParamException;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,6 +90,37 @@ public abstract class MethodLogAspect {
 
         return result;
     }
+
+    @Pointcut("execution(* com.cc.ccspace.service..*.*(..))")
+    public void pointCut(){}
+
+    @Before("pointCut()")
+    public void doBefore(JoinPoint joinPoint){
+        System.out.println("AOP Before pointCut  Advice...");
+    }
+
+    @After("pointCut()")
+    public void doAfter(JoinPoint joinPoint){
+        System.out.println("AOP After pointCut Advice...");
+    }
+
+    @AfterReturning(pointcut="pointCut()",returning="returnVal")
+    public void afterReturn(JoinPoint joinPoint,Object returnVal){
+        System.out.println("AOP AfterReturning pointCut Advice:" + returnVal);
+    }
+
+    /**
+     * @description :Spring AOP的环绕通知会影响到AfterThrowing通知的运行,
+     * 不要同时使用!同时使用也没啥意义
+     * @author CF create on 2018/12/4 11:26
+     */
+    /*@AfterThrowing(pointcut="pointCut()",throwing="error")
+    public void afterThrowing(JoinPoint joinPoint,Throwable error){
+        System.out.println("AOP AfterThrowing pointCut Advice..." + error);
+        System.out.println("AfterThrowing...");
+    }*/
+
+
 
     private void recordlog(MethodSignature joinPointObject, String methodName, Object[] args, long startTime, Object result, long endTime) {
         String logString = extractLog(joinPointObject, result, args, methodName, startTime, endTime);

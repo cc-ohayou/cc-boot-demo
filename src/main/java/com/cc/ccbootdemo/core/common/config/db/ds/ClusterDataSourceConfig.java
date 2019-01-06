@@ -2,6 +2,7 @@ package com.cc.ccbootdemo.core.common.config.db.ds;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.cc.ccbootdemo.core.common.properties.resource.TestLoadResource;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -13,7 +14,8 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import tk.mybatis.spring.annotation.MapperScan;
 
 import javax.sql.DataSource;
-
+import java.util.Properties;
+@Slf4j
 @Configuration
 @ConditionalOnBean(TestLoadResource.class)
 // 扫描 Mapper 接口并容器管理
@@ -29,11 +31,16 @@ public class ClusterDataSourceConfig {
     @Bean(name = "clusterDataSource")
     public DataSource clusterDataSource() {
         DruidDataSource dataSource = new DruidDataSource();
-        TestLoadResource.loadProperties();
-        dataSource.setDriverClassName(TestLoadResource.property.getProperty("clusterDriver"));
-        dataSource.setUrl(TestLoadResource.property.getProperty("clusterUrl"));
-        dataSource.setUsername(TestLoadResource.property.getProperty("clusterName"));
-        dataSource.setPassword(TestLoadResource.property.getProperty("clusterPwd"));
+        Properties property = TestLoadResource.propertyJdbc;
+        if (property.isEmpty()) {
+            TestLoadResource.loadProperties();
+        }
+        property=TestLoadResource.propertyJdbc;
+        log.info("Properties="+property);
+        dataSource.setDriverClassName(property.getProperty("clusterDriver"));
+        dataSource.setUrl(property.getProperty("clusterUrl"));
+        dataSource.setUsername(property.getProperty("clusterName"));
+        dataSource.setPassword(property.getProperty("clusterPwd"));
 
         return dataSource;
     }

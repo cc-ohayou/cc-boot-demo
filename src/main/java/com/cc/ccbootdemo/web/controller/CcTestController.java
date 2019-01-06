@@ -2,7 +2,10 @@ package com.cc.ccbootdemo.web.controller;
 
 import com.cc.ccbootdemo.core.service.CityService;
 import com.cc.ccbootdemo.core.service.UserService;
+import com.cc.ccbootdemo.facade.domain.bizobject.Manga;
+import com.cc.ccbootdemo.facade.domain.bizobject.param.SearchBaseParam;
 import com.cc.ccbootdemo.facade.domain.common.exception.ParamException;
+import com.cc.ccbootdemo.facade.domain.common.param.MQProducerParam;
 import com.cc.ccbootdemo.facade.domain.dataobject.City;
 import com.cc.ccbootdemo.facade.domain.dataobject.User;
 import org.slf4j.Logger;
@@ -11,20 +14,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.jar.Pack200;
 
 /**
  * @AUTHOR CF
  * @DATE Created on 2018/4/22/022 16:34.
  */
 @Controller
-@RequestMapping(value="/cc")
+@RequestMapping(value="/{ver}/cc")
 public class CcTestController extends BaseController{
 
     private  City defaultCity=new City();
@@ -35,6 +35,7 @@ public class CcTestController extends BaseController{
     CityService cityService;
     @Resource
     UserService userService;
+
     @ResponseBody
     @RequestMapping(value="/city/list")
     public List<City> getCityList(City city){
@@ -49,7 +50,7 @@ public class CcTestController extends BaseController{
         return USER_LIST_PATH_NAME;
     }
 
-    @RequestMapping(value = "/api/city", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/city")
     public String findAllCity(Model model) {
         List<City> cityList = cityService.getCityList(defaultCity);
         model.addAttribute("cityList", cityList);
@@ -59,11 +60,7 @@ public class CcTestController extends BaseController{
     public String addCity(Model model,City city) {
         logger.info("city is "+city);
         if(city!=null){
-            try{
                 cityService.addCity(city);
-            }catch(Exception e){
-                e.printStackTrace();
-            }
         }
         city=defaultCity;
         List<City> cityList = cityService.getCityList(city);
@@ -73,28 +70,43 @@ public class CcTestController extends BaseController{
     @RequestMapping(value = "/add/user")
     public String addUser(ModelMap model,User user) {
         logger.info("user is "+user);
-        if(user!=null){
-            try{
-                userService.addUser(user);
-            }catch(Exception e){
-                e.printStackTrace();
-            }
+        if(user!=null) {
+            userService.addUser(user);
         }
         List<User> list = userService.getUserList(user);
         model.addAttribute("userList", list);
         return USER_LIST_PATH_NAME;
     }
-    @ResponseBody
+
     @RequestMapping(value = "/get/userList")
     public List<User> getUser(User user) {
         return userService.getUserList(user);
     }
-    @ResponseBody
+
     @RequestMapping(value = "/exce/test")
     public Object exception(User user) {
         User u=null;
         throw new ParamException("test custom exception ");
 //        return u.getCity();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/rocketmq/produce")
+    public Object produceRQMsg(MQProducerParam param) {
+           userService.produce(param);
+        return "OK";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/getDownloadUrl")
+    public String getDownloadUrl() {
+        return userService.getDownloadUrl();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/getMangaList")
+    public List<Manga> getMangaList(SearchBaseParam param) {
+        return userService.getMangaList(param);
     }
 
 }

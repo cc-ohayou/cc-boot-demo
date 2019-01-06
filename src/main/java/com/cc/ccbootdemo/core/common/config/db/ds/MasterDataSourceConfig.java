@@ -2,6 +2,7 @@ package com.cc.ccbootdemo.core.common.config.db.ds;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.cc.ccbootdemo.core.common.properties.resource.TestLoadResource;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -15,10 +16,13 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import javax.sql.DataSource;
+import java.util.Properties;
 
+// 扫描 Mapper 接口并容器管理
+
+@Slf4j
 @Configuration
 @ConditionalOnBean(TestLoadResource.class)
-// 扫描 Mapper 接口并容器管理
 @MapperScan(basePackages = MasterDataSourceConfig.PACKAGE, sqlSessionFactoryRef = "masterSqlSessionFactory")
 public class MasterDataSourceConfig {
 
@@ -42,18 +46,31 @@ public class MasterDataSourceConfig {
    @Bean
    @ConfigurationProperties(prefix = "mybatis.configuration")
    public org.apache.ibatis.session.Configuration  globalConfiguration(){
+       org.apache.ibatis.session.Configuration conf= new org.apache.ibatis.session.Configuration();
+       //启用缓存
+       conf.setCacheEnabled(true);
+       //驼峰命名
+       conf.setMapUnderscoreToCamelCase(true);
+       //允许JDBC支持生成主键，如果设置为true的话，这个键强制被使用
+       conf.setUseGeneratedKeys(true);
        return  new org.apache.ibatis.session.Configuration();
    }
     @Bean(name = "masterDataSource")
     @Primary
     public DataSource masterDataSource() {
         DruidDataSource dataSource = new DruidDataSource();
-        TestLoadResource.loadProperties();
-        System.err.println("TestLoadResource.property="+TestLoadResource.property);
-        dataSource.setDriverClassName(TestLoadResource.property.getProperty("masterDriver"));
-        dataSource.setUrl(TestLoadResource.property.getProperty("masterUrl"));
-        dataSource.setUsername(TestLoadResource.property.getProperty("masterName"));
-        dataSource.setPassword(TestLoadResource.property.getProperty("masterPwd"));
+        Properties p = TestLoadResource.propertyJdbc;
+        if (p.isEmpty()) {
+            TestLoadResource.loadProperties();
+        }
+
+
+        p=TestLoadResource.propertyJdbc;
+        log.info("Properties="+p);
+        dataSource.setDriverClassName(p.getProperty("masterDriver"));
+        dataSource.setUrl(p.getProperty("masterUrl"));
+        dataSource.setUsername(p.getProperty("masterName"));
+        dataSource.setPassword(p.getProperty("masterPwd"));
 
         return dataSource;
     }

@@ -7,6 +7,7 @@
 	<artifactId>cc-boot-demo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
+	<!--<packaging>war</packaging>-->
 
 	<name>cc-boot-demo</name>
 	<description>Demo project for Spring Boot</description>
@@ -47,19 +48,13 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-         <!--<exclusions>
-			 <exclusion>
-				 <groupId>org.springframework.boot</groupId>
-				 <artifactId>spring-boot-starter-tomcat</artifactId>
-		     </exclusion>
-			</exclusions>-->
+
 		</dependency>
 		<!--<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
 			<scope>provided</scope>
-		</dependency>
--->
+		</dependency>-->
 		<!-- Spring Boot aop 依赖 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -133,6 +128,12 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>${mysql-connector}</version>
 		</dependency>
+		<!-- druid数据源依赖-->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+			<version>${druid}</version>
+		</dependency>
 		<!-- Spring Boot logback日志 依赖 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -166,12 +167,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-freemarker</artifactId>
 		</dependency>
-        <!-- druid数据源依赖-->
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>druid</artifactId>
-			<version>${druid}</version>
-		</dependency>
+
 <!--  jedis依赖-->
 		<dependency>
 			<groupId>redis.clients</groupId>
@@ -239,6 +235,31 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>${commons-lang3.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>com.alibaba.rocketmq</groupId>
+			<artifactId>rocketmq-client</artifactId>
+			<version>3.2.6</version>
+		</dependency>
+<!-- 文件上传依赖-->
+		<dependency>
+		<groupId>commons-io</groupId>
+		<artifactId>commons-io</artifactId>
+		<version>2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.3.3</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-jasper</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
     </dependencies>
 
 <repositories>
@@ -250,19 +271,11 @@
 
 	<build>
 		<plugins>
-
-
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<executable>true</executable>
-					<mainClass>com.cc.ccbootdemo.CcBootDemoApplication</mainClass>
-				</configuration>
 			</plugin>
 		</plugins>
-
-
 	</build>
 
 
