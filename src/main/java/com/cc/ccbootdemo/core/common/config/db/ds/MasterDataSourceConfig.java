@@ -18,7 +18,6 @@ import javax.sql.DataSource;
 
 @Configuration
 @ConditionalOnBean(TestLoadResource.class)
-
 // 扫描 Mapper 接口并容器管理
 @MapperScan(basePackages = MasterDataSourceConfig.PACKAGE, sqlSessionFactoryRef = "masterSqlSessionFactory")
 public class MasterDataSourceConfig {
@@ -49,6 +48,8 @@ public class MasterDataSourceConfig {
     @Primary
     public DataSource masterDataSource() {
         DruidDataSource dataSource = new DruidDataSource();
+        TestLoadResource.loadProperties();
+        System.err.println("TestLoadResource.property="+TestLoadResource.property);
         dataSource.setDriverClassName(TestLoadResource.property.getProperty("masterDriver"));
         dataSource.setUrl(TestLoadResource.property.getProperty("masterUrl"));
         dataSource.setUsername(TestLoadResource.property.getProperty("masterName"));

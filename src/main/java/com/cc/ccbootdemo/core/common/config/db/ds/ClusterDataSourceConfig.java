@@ -29,6 +29,7 @@ public class ClusterDataSourceConfig {
     @Bean(name = "clusterDataSource")
     public DataSource clusterDataSource() {
         DruidDataSource dataSource = new DruidDataSource();
+        TestLoadResource.loadProperties();
         dataSource.setDriverClassName(TestLoadResource.property.getProperty("clusterDriver"));
         dataSource.setUrl(TestLoadResource.property.getProperty("clusterUrl"));
         dataSource.setUsername(TestLoadResource.property.getProperty("clusterName"));

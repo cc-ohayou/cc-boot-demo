@@ -13,6 +13,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -54,7 +55,7 @@ public class CcTestController extends BaseController{
         model.addAttribute("cityList", cityList);
         return "cityList";
     }
-    @RequestMapping(value = "/add/city", method = RequestMethod.GET)
+    @RequestMapping(value = "/add/city")
     public String addCity(Model model,City city) {
         logger.info("city is "+city);
         if(city!=null){
@@ -69,7 +70,7 @@ public class CcTestController extends BaseController{
         model.addAttribute("cityList", cityList);
         return "cityList";
     }
-    @RequestMapping(value = "/add/user", method = RequestMethod.GET)
+    @RequestMapping(value = "/add/user")
     public String addUser(ModelMap model,User user) {
         logger.info("user is "+user);
         if(user!=null){
@@ -83,13 +84,13 @@ public class CcTestController extends BaseController{
         model.addAttribute("userList", list);
         return USER_LIST_PATH_NAME;
     }
-
-    @RequestMapping(value = "/get/userList", method = RequestMethod.GET)
+    @ResponseBody
+    @RequestMapping(value = "/get/userList")
     public List<User> getUser(User user) {
         return userService.getUserList(user);
     }
-
-    @RequestMapping(value = "/exce/test", method = RequestMethod.GET)
+    @ResponseBody
+    @RequestMapping(value = "/exce/test")
     public Object exception(User user) {
         User u=null;
         throw new ParamException("test custom exception ");

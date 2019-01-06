@@ -5,7 +5,6 @@ import com.cc.ccbootdemo.facade.domain.common.exception.BusinessException;
 import com.cc.ccbootdemo.facade.domain.common.exception.ParamException;
 import com.cc.ccbootdemo.web.aop.ApiResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.HandlerInterceptor;

@@ -47,7 +47,19 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+         <!--<exclusions>
+			 <exclusion>
+				 <groupId>org.springframework.boot</groupId>
+				 <artifactId>spring-boot-starter-tomcat</artifactId>
+		     </exclusion>
+			</exclusions>-->
 		</dependency>
+		<!--<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+		</dependency>
+-->
 		<!-- Spring Boot aop 依赖 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -238,11 +250,19 @@
 
 	<build>
 		<plugins>
+
+
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<executable>true</executable>
+					<mainClass>com.cc.ccbootdemo.CcBootDemoApplication</mainClass>
+				</configuration>
 			</plugin>
 		</plugins>
+
+
 	</build>
 
 
