@@ -2,6 +2,7 @@ package com.cc.ccbootdemo.core.manager.impl;
 
 import com.cc.ccbootdemo.core.manager.UserManager;
 import com.cc.ccbootdemo.core.mapper.master.UserMapper;
+import com.cc.ccbootdemo.facade.domain.bizobject.UserInfo;
 import com.cc.ccbootdemo.facade.domain.bizobject.strgy.StrgyBiz;
 import com.cc.ccbootdemo.facade.domain.dataobject.User;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ public class UserManagerImpl implements UserManager{
     @Resource
     UserMapper userMapper;
     @Override
-    public List<User> getAllUserList(User params) {
+    public List<UserInfo> getAllUserList(User params) {
         return userMapper.getAllUserList();
     }
 
@@ -31,5 +32,15 @@ public class UserManagerImpl implements UserManager{
     @Override
     public List<StrgyBiz> getStrgyList(Set<String> uids) {
         return null;
+    }
+
+    @Override
+    public UserInfo getUserInfo(String phone) {
+        return userMapper.findByPhone(phone);
+    }
+
+    @Override
+    public int updateUserInfoSelective(UserInfo pojo) {
+        return userMapper.updateUserInfoSelective(pojo);
     }
 }

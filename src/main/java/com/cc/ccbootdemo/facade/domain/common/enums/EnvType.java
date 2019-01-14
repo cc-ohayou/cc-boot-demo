@@ -1,13 +1,13 @@
-package com.cc.ccbootdemo.facade.domain.common.enums.redis;
+package com.cc.ccbootdemo.facade.domain.common.enums;
 
 /**
  * @AUTHOR CF
- * @DATE Created on 2018/12/17 15:26.
+ * @DATE Created on 2019/1/11 10:06.
  */
-public enum BizType {
-
-    COMMON("commo", "测试用common"),
-    USER("user", "人员相关"),
+public enum EnvType {
+    SIT("sit", "sit环境"),
+    DEV("dev", "dev环境"),
+    PROD("prod", "prod环境"),
 
     ;
 
@@ -16,7 +16,7 @@ public enum BizType {
     private String label;
 
 
-    BizType(String value, String label) {
+    EnvType(String value, String label) {
         this.value = value;
         this.label = label;
     }

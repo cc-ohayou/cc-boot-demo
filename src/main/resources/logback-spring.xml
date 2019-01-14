@@ -1,4 +1,4 @@
-<?xml version="1.0" ?>
+<?xml version="1.0"  encoding="UTF-8"?>
 <!-- ====================================== -->
 <!-- logback 配置文件 ，刷新配置文件间隔 -->
 <!-- ====================================== -->
@@ -20,7 +20,7 @@
     <property name="appid" value="log"/>
     <!---->
     <property name="LOG_HOME" value="/logs/ccboot"/>
-    <property name="loggingCharset" value="utf-8"/>
+    <property name="loggingCharset" value="UTF-8"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <!-- encoder 默认配置为 PatternLayoutEncoder -->

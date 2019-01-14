@@ -791,6 +791,91 @@ public class RedisManagerImpl extends RedisConstants implements RedisManager {
         }
         return exists;
     }
+
+    @Override
+    public List hscan(String key, ScanParams params, Jedis jedis) {
+        List list = new ArrayList();
+        boolean closeFlag = false;
+        try {
+            if (jedis == null) {
+                jedis = getJedis();
+                closeFlag = true;
+            }
+            if (null == jedis) {
+                return list;
+            }
+            getHscanAllData(key, params, jedis, list);
+
+        } catch (Exception e) {
+            logger.error("redis hscan failed, key=" + key);
+        } finally {
+            if (jedis != null && closeFlag) {
+                jedis.close();
+            }
+        }
+        return list;
+    }
+
+
+    @Override
+    public List<String> lrange(String key, int start,int end, Jedis jedis) {
+        List list = new ArrayList();
+        boolean closeFlag = false;
+        try {
+            if (jedis == null) {
+                jedis = getJedis();
+                closeFlag = true;
+            }
+            if (null == jedis) {
+                return list;
+            }
+            list=jedis.lrange(key,start,end);
+        } catch (Exception e) {
+            logger.error("redis lrange failed, key=" + key);
+        } finally {
+            if (jedis != null && closeFlag) {
+                jedis.close();
+            }
+        }
+        return list;
+    }
+
+    @Override
+    public long llen(String key, Jedis jedis) {
+        boolean closeFlag = false;
+        try {
+            if (jedis == null) {
+                jedis = getJedis();
+                closeFlag = true;
+            }
+            if (null == jedis) {
+                return 0L;
+            }
+            return jedis.llen(key);
+        } catch (Exception e) {
+            logger.error("redis llen failed, key=" + key);
+        } finally {
+            if (jedis != null && closeFlag) {
+                jedis.close();
+            }
+        }
+        return 0L;
+    }
+
+    /**
+     * @description 扫描结束获取到的result的cursor会变为0
+     * @author CF create on 2018/11/20 17:04
+     */
+    private void getHscanAllData(String key, ScanParams params, Jedis jedis, List list) {
+        ScanResult result;
+        String cursor = "0";
+        do {
+            result = jedis.hscan(key, cursor, params);
+            list.addAll(result.getResult());
+            cursor = result.getStringCursor();
+        } while (!("0".equals(cursor)));
+    }
+
     /**
      * @description 简单校验ip ua信息是否为空和ip是否在白名单
      * @author CF create on 2018/3/26 15:58
@@ -931,318 +1016,7 @@ public class RedisManagerImpl extends RedisConstants implements RedisManager {
 //        Jedis sentinelJedis = getJedisBySentinelPool();
 //        System.out.println(sentinelJedis.get("cc"));
 
-        String str="[{\n" +
-                "    \"area\": \"中国大陆\",\n" +
-                "    \"arealimit\": 316,\n" +
-                "    \"attention\": 137743,\n" +
-                "    \"bangumi_id\": 0,\n" +
-                "    \"nowEpisode\": \"21\",\n" +
-                "    \"cover\": \"http://i0.hdslb.com/bfs/bangumi/ac7a5aa48472786d9f16a248590a610f3319ef7a.jpg\",\n" +
-                "    \"danmaku_count\": 161249,\n" +
-                "    \"ep_id\": 259665,\n" +
-                "    \"favorites\": 137743,\n" +
-                "    \"is_finish\": 0,\n" +
-                "    \"lastupdate\": 1545972000,\n" +
-                "    \"lastupdate_at\": \"2018-12-28 12:40:00\",\n" +
-                "    \"isNew\": true,\n" +
-                "    \"play_count\": 6929133,\n" +
-                "    \"pub_time\": \"\",\n" +
-                "    \"season_id\": 23695,\n" +
-                "    \"season_status\": 2,\n" +
-                "    \"spid\": 0,\n" +
-                "    \"coverImage\": \"http://i0.hdslb.com/bfs/bangumi/0c85a95abe82e3af8b4659a6cf4584c0ea27cfec.jpg\",\n" +
-                "    \"title\": \"峡谷重案组\",\n" +
-                "    \"viewRank\": 0,\n" +
-                "    \"weekday\": 5\n" +
-                "  },\n" +
-                "  {\n" +
-                "    \"area\": \"中国大陆\",\n" +
-                "    \"arealimit\": 316,\n" +
-                "    \"attention\": 5074458,\n" +
-                "    \"bangumi_id\": 0,\n" +
-                "    \"nowEpisode\": \"南国总集篇（五）\",\n" +
-                "    \"cover\": \"http://i0.hdslb.com/bfs/bangumi/cbb20ee03e97a9f3ad2e1506a10fd1271f1c584a.jpg\",\n" +
-                "    \"danmaku_count\": 8330441,\n" +
-                "    \"ep_id\": 259577,\n" +
-                "    \"favorites\": 5074458,\n" +
-                "    \"is_finish\": 0,\n" +
-                "    \"lastupdate\": 1545966000,\n" +
-                "    \"lastupdate_at\": \"2018-12-28 11:00:00\",\n" +
-                "    \"isNew\": true,\n" +
-                "    \"play_count\": 419107034,\n" +
-                "    \"pub_time\": \"\",\n" +
-                "    \"season_id\": 2543,\n" +
-                "    \"season_status\": 2,\n" +
-                "    \"spid\": 0,\n" +
-                "    \"coverImage\": \"http://i0.hdslb.com/bfs/bangumi/d97d43b12e7c698369bbe8af3c029b24216a6a66.jpg\",\n" +
-                "    \"title\": \"狐妖小红娘\",\n" +
-                "    \"viewRank\": 0,\n" +
-                "    \"weekday\": 5\n" +
-                "  },\n" +
-                "  {\n" +
-                "    \"area\": \"中国大陆\",\n" +
-                "    \"arealimit\": 316,\n" +
-                "    \"attention\": 227002,\n" +
-                "    \"bangumi_id\": 0,\n" +
-                "    \"nowEpisode\": \"5\",\n" +
-                "    \"cover\": \"http://i0.hdslb.com/bfs/bangumi/1fba6095a44aa1fa6e19adb7b50e58a288be623c.jpg\",\n" +
-                "    \"danmaku_count\": 74327,\n" +
-                "    \"ep_id\": 259620,\n" +
-                "    \"favorites\": 227002,\n" +
-                "    \"is_finish\": 0,\n" +
-                "    \"lastupdate\": 1545962400,\n" +
-                "    \"lastupdate_at\": \"2018-12-28 10:00:00\",\n" +
-                "    \"isNew\": true,\n" +
-                "    \"play_count\": 3184418,\n" +
-                "    \"pub_time\": \"\",\n" +
-                "    \"season_id\": 25567,\n" +
-                "    \"season_status\": 2,\n" +
-                "    \"spid\": 0,\n" +
-                "    \"coverImage\": \"http://i0.hdslb.com/bfs/bangumi/5b363116e010b8ce4e273d2243753173c31a5697.jpg\",\n" +
-                "    \"title\": \"通灵妃\",\n" +
-                "    \"viewRank\": 0,\n" +
-                "    \"weekday\": 5\n" +
-                "  },\n" +
-                "  {\n" +
-                "    \"area\": \"中国大陆\",\n" +
-                "    \"arealimit\": 316,\n" +
-                "    \"attention\": 736241,\n" +
-                "    \"bangumi_id\": 0,\n" +
-                "    \"nowEpisode\": \"总集篇9\",\n" +
-                "    \"cover\": \"http://i0.hdslb.com/bfs/bangumi/1fb653e1e9a825ef1487216c834d3f72c647a8aa.jpg\",\n" +
-                "    \"danmaku_count\": 523487,\n" +
-                "    \"ep_id\": 259464,\n" +
-                "    \"favorites\": 736241,\n" +
-                "    \"is_finish\": 0,\n" +
-                "    \"lastupdate\": 1545962400,\n" +
-                "    \"lastupdate_at\": \"2018-12-28 10:00:00\",\n" +
-                "    \"isNew\": true,\n" +
-                "    \"play_count\": 23586741,\n" +
-                "    \"pub_time\": \"\",\n" +
-                "    \"season_id\": 24438,\n" +
-                "    \"season_status\": 2,\n" +
-                "    \"spid\": 0,\n" +
-                "    \"coverImage\": \"http://i0.hdslb.com/bfs/bangumi/0a09c5fc3b66bfe52b335d62b5af9d4748697a7d.jpg\",\n" +
-                "    \"title\": \"小绿和小蓝\",\n" +
-                "    \"viewRank\": 0,\n" +
-                "    \"weekday\": -1\n" +
-                "  },\n" +
-                "  {\n" +
-                "    \"area\": \"中国大陆\",\n" +
-                "    \"arealimit\": 317,\n" +
-                "    \"attention\": 631349,\n" +
-                "    \"bangumi_id\": 0,\n" +
-                "    \"nowEpisode\": \"110\",\n" +
-                "    \"cover\": \"http://i0.hdslb.com/bfs/bangumi/8386e389b3d72850a1dedf8bdc83ae252fd11ebe.jpg\",\n" +
-                "    \"danmaku_count\": 769601,\n" +
-                "    \"ep_id\": 258810,\n" +
-                "    \"favorites\": 631349,\n" +
-                "    \"is_finish\": 0,\n" +
-                "    \"lastupdate\": 1545962400,\n" +
-                "    \"lastupdate_at\": \"2018-12-28 10:00:00\",\n" +
-                "    \"isNew\": true,\n" +
-                "    \"play_count\": 73317543,\n" +
-                "    \"pub_time\": \"\",\n" +
-                "    \"season_id\": 6159,\n" +
-                "    \"season_status\": 13,\n" +
-                "    \"spid\": 0,\n" +
-                "    \"coverImage\": \"http://i0.hdslb.com/bfs/bangumi/78216ddad76505257a76ea5ee92902bdf1b8fb10.jpg\",\n" +
-                "    \"title\": \"妖神记\",\n" +
-                "    \"viewRank\": 0,\n" +
-                "    \"weekday\": 2\n" +
-                "  },\n" +
-                "  {\n" +
-                "    \"area\": \"中国大陆\",\n" +
-                "    \"arealimit\": 317,\n" +
-                "    \"attention\": 352150,\n" +
-                "    \"bangumi_id\": 0,\n" +
-                "    \"nowEpisode\": \"11\",\n" +
-                "    \"cover\": \"http://i0.hdslb.com/bfs/bangumi/8f19c704a6516bab4716931db10621c1b6c6e4bf.jpg\",\n" +
-                "    \"danmaku_count\": 105072,\n" +
-                "    \"ep_id\": 258700,\n" +
-                "    \"favorites\": 352150,\n" +
-                "    \"is_finish\": 0,\n" +
-                "    \"lastupdate\": 1545883200,\n" +
-                "    \"lastupdate_at\": \"2018-12-27 12:00:00\",\n" +
-                "    \"isNew\": false,\n" +
-                "    \"play_count\": 8263731,\n" +
-                "    \"pub_time\": \"\",\n" +
-                "    \"season_id\": 25823,\n" +
-                "    \"season_status\": 13,\n" +
-                "    \"spid\": 0,\n" +
-                "    \"coverImage\": \"http://i0.hdslb.com/bfs/bangumi/67a851a5cd87fef2ddd6f9bd6cf691781a1d8b95.jpg\",\n" +
-                "    \"title\": \"画江湖之不良人 第三季\",\n" +
-                "    \"viewRank\": 0,\n" +
-                "    \"weekday\": 4\n" +
-                "  },\n" +
-                "  {\n" +
-                "    \"area\": \"中国大陆\",\n" +
-                "    \"arealimit\": 316,\n" +
-                "    \"attention\": 12083,\n" +
-                "    \"bangumi_id\": 0,\n" +
-                "    \"nowEpisode\": \"4\",\n" +
-                "    \"cover\": \"http://i0.hdslb.com/bfs/bangumi/8df12fc092928ba57069eb16e077f9d719f345e5.jpg\",\n" +
-                "    \"danmaku_count\": 10022,\n" +
-                "    \"ep_id\": 258686,\n" +
-                "    \"favorites\": 12083,\n" +
-                "    \"is_finish\": 0,\n" +
-                "    \"lastupdate\": 1545876000,\n" +
-                "    \"lastupdate_at\": \"2018-12-27 10:00:00\",\n" +
-                "    \"isNew\": false,\n" +
-                "    \"play_count\": 486760,\n" +
-                "    \"pub_time\": \"\",\n" +
-                "    \"season_id\": 26176,\n" +
-                "    \"season_status\": 2,\n" +
-                "    \"spid\": 0,\n" +
-                "    \"coverImage\": \"http://i0.hdslb.com/bfs/bangumi/c96b4daa6f3f1925184bc7835a6a26ee573d6970.jpg\",\n" +
-                "    \"title\": \"通灵妃 河南话版\",\n" +
-                "    \"viewRank\": 0,\n" +
-                "    \"weekday\": 4\n" +
-                "  },\n" +
-                "  {\n" +
-                "    \"area\": \"中国大陆\",\n" +
-                "    \"arealimit\": 316,\n" +
-                "    \"attention\": 151420,\n" +
-                "    \"bangumi_id\": 0,\n" +
-                "    \"nowEpisode\": \"10\",\n" +
-                "    \"cover\": \"http://i0.hdslb.com/bfs/bangumi/57dc8fdf8373f8c1facfc2911d50be1cfc6da18a.jpg\",\n" +
-                "    \"danmaku_count\": 26706,\n" +
-                "    \"ep_id\": 258689,\n" +
-                "    \"favorites\": 151420,\n" +
-                "    \"is_finish\": 0,\n" +
-                "    \"lastupdate\": 1545876000,\n" +
-                "    \"lastupdate_at\": \"2018-12-27 10:00:00\",\n" +
-                "    \"isNew\": false,\n" +
-                "    \"play_count\": 2023158,\n" +
-                "    \"pub_time\": \"\",\n" +
-                "    \"season_id\": 24888,\n" +
-                "    \"season_status\": 2,\n" +
-                "    \"spid\": 0,\n" +
-                "    \"coverImage\": \"http://i0.hdslb.com/bfs/bangumi/ef2f039b71564cc469b2cac9d8f2879e1259a74f.jpg\",\n" +
-                "    \"title\": \"山河社稷图\",\n" +
-                "    \"viewRank\": 0,\n" +
-                "    \"weekday\": 4\n" +
-                "  },\n" +
-                "  {\n" +
-                "    \"area\": \"中国大陆\",\n" +
-                "    \"arealimit\": 317,\n" +
-                "    \"attention\": 91054,\n" +
-                "    \"bangumi_id\": 0,\n" +
-                "    \"nowEpisode\": \"12\",\n" +
-                "    \"cover\": \"http://i0.hdslb.com/bfs/bangumi/853afc1e8cbba2f6395d4ae1bfbcd3d9b6beb27a.jpg\",\n" +
-                "    \"danmaku_count\": 11536,\n" +
-                "    \"ep_id\": 258667,\n" +
-                "    \"favorites\": 91054,\n" +
-                "    \"is_finish\": 1,\n" +
-                "    \"lastupdate\": 1545796800,\n" +
-                "    \"lastupdate_at\": \"2018-12-26 12:00:00\",\n" +
-                "    \"isNew\": false,\n" +
-                "    \"play_count\": 1086310,\n" +
-                "    \"pub_time\": \"\",\n" +
-                "    \"season_id\": 25588,\n" +
-                "    \"season_status\": 2,\n" +
-                "    \"spid\": 0,\n" +
-                "    \"coverImage\": \"http://i0.hdslb.com/bfs/bangumi/bd0d3fd43676a87853a9490c4fe5a6c070d23e1b.jpg\",\n" +
-                "    \"title\": \"战斗吧歌姬 第一季\",\n" +
-                "    \"viewRank\": 0,\n" +
-                "    \"weekday\": 3\n" +
-                "  },\n" +
-                "  {\n" +
-                "    \"area\": \"中国大陆\",\n" +
-                "    \"arealimit\": 317,\n" +
-                "    \"attention\": 9328,\n" +
-                "    \"bangumi_id\": 0,\n" +
-                "    \"nowEpisode\": \"4\",\n" +
-                "    \"cover\": \"http://i0.hdslb.com/bfs/bangumi/ca07e1b35d71278a6c1506f93a30a326171af628.jpg\",\n" +
-                "    \"danmaku_count\": 7179,\n" +
-                "    \"ep_id\": 258671,\n" +
-                "    \"favorites\": 9328,\n" +
-                "    \"is_finish\": 0,\n" +
-                "    \"lastupdate\": 1545789600,\n" +
-                "    \"lastupdate_at\": \"2018-12-26 10:00:00\",\n" +
-                "    \"isNew\": false,\n" +
-                "    \"play_count\": 528594,\n" +
-                "    \"pub_time\": \"\",\n" +
-                "    \"season_id\": 26177,\n" +
-                "    \"season_status\": 2,\n" +
-                "    \"spid\": 0,\n" +
-                "    \"coverImage\": \"http://i0.hdslb.com/bfs/bangumi/c96b4daa6f3f1925184bc7835a6a26ee573d6970.jpg\",\n" +
-                "    \"title\": \"通灵妃 东北话版\",\n" +
-                "    \"viewRank\": 0,\n" +
-                "    \"weekday\": 3\n" +
-                "  },\n" +
-                "  {\n" +
-                "    \"area\": \"中国大陆\",\n" +
-                "    \"arealimit\": 317,\n" +
-                "    \"attention\": 197291,\n" +
-                "    \"bangumi_id\": 0,\n" +
-                "    \"nowEpisode\": \"9\",\n" +
-                "    \"cover\": \"http://i0.hdslb.com/bfs/bangumi/49809d0b8a29403a2794d2b6bf1b75f5ced2fd09.jpg\",\n" +
-                "    \"danmaku_count\": 45358,\n" +
-                "    \"ep_id\": 258959,\n" +
-                "    \"favorites\": 197291,\n" +
-                "    \"is_finish\": 0,\n" +
-                "    \"lastupdate\": 1545789600,\n" +
-                "    \"lastupdate_at\": \"2018-12-26 10:00:00\",\n" +
-                "    \"isNew\": false,\n" +
-                "    \"play_count\": 1765086,\n" +
-                "    \"pub_time\": \"\",\n" +
-                "    \"season_id\": 24710,\n" +
-                "    \"season_status\": 13,\n" +
-                "    \"spid\": 0,\n" +
-                "    \"coverImage\": \"http://i0.hdslb.com/bfs/bangumi/0ed1b9a1f20cc7e7638dc13dbac7dc2a553a3274.jpg\",\n" +
-                "    \"title\": \"我是江小白 第二季\",\n" +
-                "    \"viewRank\": 0,\n" +
-                "    \"weekday\": 3\n" +
-                "  },\n" +
-                "  {\n" +
-                "    \"area\": \"中国大陆\",\n" +
-                "    \"arealimit\": 316,\n" +
-                "    \"attention\": 352222,\n" +
-                "    \"bangumi_id\": 0,\n" +
-                "    \"nowEpisode\": \"10\",\n" +
-                "    \"cover\": \"http://i0.hdslb.com/bfs/bangumi/e0bded09ccbefa5667c0697741842dbdd03e5d72.jpg\",\n" +
-                "    \"danmaku_count\": 23329,\n" +
-                "    \"ep_id\": 257438,\n" +
-                "    \"favorites\": 352222,\n" +
-                "    \"is_finish\": 0,\n" +
-                "    \"lastupdate\": 1545789600,\n" +
-                "    \"lastupdate_at\": \"2018-12-26 10:00:00\",\n" +
-                "    \"isNew\": false,\n" +
-                "    \"play_count\": 5255148,\n" +
-                "    \"pub_time\": \"\",\n" +
-                "    \"season_id\": 24638,\n" +
-                "    \"season_status\": 13,\n" +
-                "    \"spid\": 0,\n" +
-                "    \"coverImage\": \"http://i0.hdslb.com/bfs/bangumi/4426ee9a3e8a628d361ef68de91567d092930be9.jpg\",\n" +
-                "    \"title\": \"我家大师兄脑子有坑 特别篇\",\n" +
-                "    \"viewRank\": 0,\n" +
-                "    \"weekday\": 3\n" +
-                "  },\n" +
-                "  {\n" +
-                "    \"area\": \"中国大陆\",\n" +
-                "    \"arealimit\": 316,\n" +
-                "    \"attention\": 162055,\n" +
-                "    \"bangumi_id\": 0,\n" +
-                "    \"nowEpisode\": \"3\",\n" +
-                "    \"cover\": \"http://i0.hdslb.com/bfs/bangumi/6cd0e3278712e04aef36723e44a805c432bc5c61.jpg\",\n" +
-                "    \"danmaku_count\": 17657,\n" +
-                "    \"ep_id\": 259015,\n" +
-                "    \"favorites\": 162055,\n" +
-                "    \"is_finish\": 0,\n" +
-                "    \"lastupdate\": 1545789600,\n" +
-                "    \"lastupdate_at\": \"2018-12-26 10:00:00\",\n" +
-                "    \"isNew\": false,\n" +
-                "    \"play_count\": 1001878,\n" +
-                "    \"pub_time\": \"\",\n" +
-                "    \"season_id\": 24608,\n" +
-                "    \"season_status\": 13,\n" +
-                "    \"spid\": 0,\n" +
-                "    \"coverImage\": \"http://i0.hdslb.com/bfs/bangumi/100366a97d34dd5e5c92d160e26d027ccec9b640.jpg\",\n" +
-                "    \"title\": \"少年歌行\",\n" +
-                "    \"viewRank\": 0,\n" +
-                "    \"weekday\": 3\n" +
-                "  }]";
+        String str="";
 
         jedis.set(RedisKeyEnum.MANGA_LIST.getValue(),str);
         List<Manga> list = JSON.parseArray( jedis.get(RedisKeyEnum.MANGA_LIST.getValue()),Manga.class) ;

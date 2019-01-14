@@ -1,8 +1,7 @@
 package com.cc.ccbootdemo.core.mapper.master;
 
-import com.cc.ccbootdemo.facade.domain.dataobject.City;
+import com.cc.ccbootdemo.facade.domain.bizobject.UserInfo;
 import com.cc.ccbootdemo.facade.domain.dataobject.User;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -19,7 +18,15 @@ public interface UserMapper extends tk.mybatis.mapper.common.Mapper<User>{
      *
      * @param realName 城市名
      */
-    List<User> findByName(@Param("userName") String realName);
+    UserInfo findByName(@Param("userName") String realName);
 
-    List<User> getAllUserList();
+    UserInfo findByPhone(@Param("phone") String phone);
+
+    List<UserInfo> getAllUserList();
+
+    /**
+     * @description
+     * @author CF create on 2019/1/14 11:58
+     */
+    int updateUserInfoSelective(@Param("pojo") UserInfo pojo);
 }

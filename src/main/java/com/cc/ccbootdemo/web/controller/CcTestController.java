@@ -2,19 +2,28 @@ package com.cc.ccbootdemo.web.controller;
 
 import com.cc.ccbootdemo.core.service.CityService;
 import com.cc.ccbootdemo.core.service.UserService;
+import com.cc.ccbootdemo.facade.domain.bizobject.CustomProperties;
 import com.cc.ccbootdemo.facade.domain.bizobject.Manga;
+import com.cc.ccbootdemo.facade.domain.bizobject.OperateBiz;
+import com.cc.ccbootdemo.facade.domain.bizobject.UserInfo;
+import com.cc.ccbootdemo.facade.domain.bizobject.param.LoginParam;
+import com.cc.ccbootdemo.facade.domain.bizobject.param.OperListQueryParam;
 import com.cc.ccbootdemo.facade.domain.bizobject.param.SearchBaseParam;
 import com.cc.ccbootdemo.facade.domain.common.exception.ParamException;
 import com.cc.ccbootdemo.facade.domain.common.param.MQProducerParam;
+import com.cc.ccbootdemo.facade.domain.common.util.PsPage;
 import com.cc.ccbootdemo.facade.domain.dataobject.City;
 import com.cc.ccbootdemo.facade.domain.dataobject.User;
+import com.cc.ccbootdemo.web.holder.HeaderInfoHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -73,13 +82,13 @@ public class CcTestController extends BaseController{
         if(user!=null) {
             userService.addUser(user);
         }
-        List<User> list = userService.getUserList(user);
+        List<UserInfo> list = userService.getUserList(user);
         model.addAttribute("userList", list);
         return USER_LIST_PATH_NAME;
     }
 
     @RequestMapping(value = "/get/userList")
-    public List<User> getUser(User user) {
+    public List<UserInfo> getUser(User user) {
         return userService.getUserList(user);
     }
 
@@ -107,6 +116,44 @@ public class CcTestController extends BaseController{
     @RequestMapping(value = "/getMangaList")
     public List<Manga> getMangaList(SearchBaseParam param) {
         return userService.getMangaList(param);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/getCustomProperties")
+    public CustomProperties getCustomProperties(SearchBaseParam param) {
+        return userService.getCustomProperties(param);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/getOperateList")
+    public PsPage<OperateBiz> getOperateList(OperListQueryParam param) {
+        return userService.getOperateList(param);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/user/login")
+    public UserInfo login(LoginParam param) {
+        return userService.login(param);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/update/userInfo")
+    public String udpateUserInfo(UserInfo param) {
+        param.setUid(HeaderInfoHolder.getUserId());
+        userService.updateUserInfo(param);
+        return "OK";
+    }
+
+    /**
+     * 修改头像
+     */
+    @ResponseBody
+    @RequestMapping(value = "/modify/headImg")
+    public String updateHeadImg(@RequestParam("file") MultipartFile file) throws Exception {
+        return userService.updateHeadImg(HeaderInfoHolder.getUserId(), file);
     }
 
 }

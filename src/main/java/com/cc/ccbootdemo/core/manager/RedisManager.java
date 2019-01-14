@@ -4,6 +4,7 @@ package com.cc.ccbootdemo.core.manager;
 import com.cc.ccbootdemo.facade.domain.ThreadLocals.BaseLockSign;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPubSub;
+import redis.clients.jedis.ScanParams;
 
 import java.util.List;
 import java.util.Map;
@@ -208,4 +209,23 @@ public interface RedisManager {
      * @author CF create on 2018/7/9 12:21
      */
     boolean exists(String key,Jedis jedis);
-}
+
+    /**
+     * @description 遍历获取hash key中的所有元素
+     * @author CF create on 2019/1/11 10:17
+     */
+     List hscan(String key, ScanParams params, Jedis jedis) ;
+
+    /**
+     * @description 遍历list元素
+     * @author CF create on 2019/1/11 10:20
+     */
+     List<String>  lrange(String key, int start,int end, Jedis jedis) ;
+
+    /**
+     * @description 获取列表总数
+     * @author CF create on 2019/1/11 10:42
+     */
+    long  llen(String key, Jedis jedis) ;
+
+    }

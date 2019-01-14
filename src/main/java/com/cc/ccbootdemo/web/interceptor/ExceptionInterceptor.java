@@ -3,7 +3,10 @@ package com.cc.ccbootdemo.web.interceptor;
 
 import com.cc.ccbootdemo.facade.domain.common.exception.BusinessException;
 import com.cc.ccbootdemo.facade.domain.common.exception.ParamException;
+import com.cc.ccbootdemo.facade.domain.common.util.BeanUtil;
 import com.cc.ccbootdemo.web.aop.ApiResponse;
+import com.cc.ccbootdemo.web.holder.HeaderInfo;
+import com.cc.ccbootdemo.web.holder.HeaderInfoHolder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,8 +35,8 @@ public class ExceptionInterceptor implements HandlerInterceptor {
             String value = request.getHeader(key);
             headerInfoMap.put(key, value);
         }
-        System.err.println(Thread.currentThread().getName());
-        /*headerInfoMap.put("ip", HttpUtil.getIpAddress(request));
+//        System.err.println(Thread.currentThread().getName());
+//        headerInfoMap.put("ip", HttpUtil.getIpAddress(request));
 
         HeaderInfo info=new HeaderInfo();
         try {
@@ -41,7 +44,7 @@ public class ExceptionInterceptor implements HandlerInterceptor {
             HeaderInfoHolder.setHeaderInfo(info);
         } catch (Exception e) {
             log.error("Header map transfer to bean error!",e);
-        }*/
+        }
         return true;
     }
 
@@ -79,7 +82,7 @@ public class ExceptionInterceptor implements HandlerInterceptor {
             }
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(apiResponse);
-            response.reset();
+//            response.reset();
             response.setContentType("application/json;charset=UTF-8");
             response.setHeader("Pragma", "No-cache");
             response.setHeader("Cache-Control", "no-cache");

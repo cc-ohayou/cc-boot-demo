@@ -51,6 +51,9 @@ public class MyWebMvcConfig implements WebMvcConfigurer {
         // 中文乱码解决方案
         List<MediaType> mediaTypes = new ArrayList<>();
         mediaTypes.add(MediaType.APPLICATION_JSON_UTF8);//设定json格式且编码为UTF-8
+        //设定支持form数据 文件等 否则上传文件会报错 Required request part 'file' is not present
+        mediaTypes.add(MediaType.MULTIPART_FORM_DATA);
+//        mediaTypes.add(MediaType.MULTIPART_FORM_DATA_VALUE);//设定json格式且编码为UTF-8
         fastJsonHttpMessageConverter.setSupportedMediaTypes(mediaTypes);
 
         //规则赋予转换对象

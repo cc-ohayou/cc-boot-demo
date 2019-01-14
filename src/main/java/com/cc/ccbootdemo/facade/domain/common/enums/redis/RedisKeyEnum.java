@@ -9,6 +9,8 @@ public enum RedisKeyEnum {
   DOWNLOAD_URL_APK("cc-str-apk-download-url","apk下载地址",RedisType.STRING,BizType.COMMON),
   BOOK_LIST("cc-str-book-list","图书列表测试数据",RedisType.STRING,BizType.COMMON),
   MANGA_LIST("cc-str-manga-list","动漫列表测试数据",RedisType.STRING,BizType.COMMON),
+  ETF_SIT_OPER_LIST("cc-list-sit-oper-list","操作列表测试数据",RedisType.LIST,BizType.COMMON),
+    USER_INFO("cc-hash-user-info-","登录人员数据",RedisType.HASH,BizType.USER),
     ;
 
 

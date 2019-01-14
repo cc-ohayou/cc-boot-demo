@@ -178,6 +178,10 @@ public class ConvertUtil {
             return phone.substring(0,3).concat("****").concat(phone.substring(7,11));
         }
 
+    public static  int hash(Object key) {
+        int h;
+        return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
+    }
 
     public static void main(String[] args) {
         htmlToText("<span><a href=\"javascript:alert(123);\">点点看</a></span>");

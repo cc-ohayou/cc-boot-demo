@@ -1,15 +1,17 @@
 package com.cc.ccbootdemo.core.service.impl;
 
-import com.alibaba.druid.util.StringUtils;
 import com.cc.ccbootdemo.core.manager.PushManager;
 import com.cc.ccbootdemo.core.mapper.master.PushConfigDOMapper;
 import com.cc.ccbootdemo.core.mapper.master.UserPushDOMapper;
 import com.cc.ccbootdemo.core.service.BaseService;
 import com.cc.ccbootdemo.facade.domain.bizobject.msg.PushMsgMap;
+import com.cc.ccbootdemo.facade.domain.bizobject.param.SearchBaseParam;
 import com.cc.ccbootdemo.facade.domain.common.exception.BusinessException;
 import com.cc.ccbootdemo.facade.domain.common.exception.ExceptionCode;
+import com.cc.ccbootdemo.facade.domain.common.util.PsPage;
 import com.cc.ccbootdemo.facade.domain.common.util.push.PushReq;
 import com.cc.ccbootdemo.facade.domain.dataobject.PushConfigDO;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -81,4 +83,26 @@ public class BaseServiceImpl implements BaseService{
         req.setMsgMap(msgMap);
         pushManager.geTuiPush(req,pushConfig);
     }
+
+    /**
+     * @description 初始化数据库分页查询请求参数
+     * @author CF create on 2017/7/13 16:23
+     */
+     void initOffsetSizeInfo(SearchBaseParam param, int totalCount) {
+        String pageSize = String.valueOf(param.getPageSize());
+        int size;
+        if (StringUtils.isEmpty(pageSize)) {
+            size = PsPage.DEFAULT_PAGE_SIZE;
+        } else {
+            size = Integer.parseInt(pageSize);
+        }
+        int currPage = param.getCurrPage();
+        int offset = (currPage - 1) * size;
+        offset = offset > 0 ? offset : 0;
+        offset = offset < totalCount ? offset : totalCount;
+        param.setOffset(offset);
+        param.setSize(size);
+    }
+
+
 }

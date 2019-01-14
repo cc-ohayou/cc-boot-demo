@@ -1,13 +1,13 @@
-package com.cc.ccbootdemo.facade.domain.common.enums.redis;
+package com.cc.ccbootdemo.facade.domain.common.enums;
 
 /**
  * @AUTHOR CF
- * @DATE Created on 2018/12/17 15:26.
+ * @DATE Created on 2019/1/10 10:46.
  */
-public enum BizType {
+public enum OperUrl {
 
-    COMMON("commo", "测试用common"),
-    USER("user", "人员相关"),
+    ETF_TASK_DEFER("v1/support/defer/manual", "etf递延用url"),
+    ETF_TASK_FORCE_SELL("v1/support/forceSell/manual", "etf递延用url"),
 
     ;
 
@@ -16,7 +16,7 @@ public enum BizType {
     private String label;
 
 
-    BizType(String value, String label) {
+    OperUrl(String value, String label) {
         this.value = value;
         this.label = label;
     }
