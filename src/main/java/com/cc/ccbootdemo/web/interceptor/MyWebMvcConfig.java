@@ -7,8 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.web.multipart.MultipartResolver;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -51,7 +49,6 @@ public class MyWebMvcConfig implements WebMvcConfigurer {
         // 中文乱码解决方案
         List<MediaType> mediaTypes = new ArrayList<>();
         mediaTypes.add(MediaType.APPLICATION_JSON_UTF8);//设定json格式且编码为UTF-8
-        //设定支持form数据 文件等 否则上传文件会报错 Required request part 'file' is not present
         mediaTypes.add(MediaType.MULTIPART_FORM_DATA);
 //        mediaTypes.add(MediaType.MULTIPART_FORM_DATA_VALUE);//设定json格式且编码为UTF-8
         fastJsonHttpMessageConverter.setSupportedMediaTypes(mediaTypes);
@@ -68,8 +65,11 @@ public class MyWebMvcConfig implements WebMvcConfigurer {
         converters.add(fastJsonHttpMessageConverter());
     }
 
-
-    @Bean(name = "multipartResolver")
+    /**
+     * @description 不能配置这个bean spring-boot默认已经加载的有了  配置则报错Required request part 'file' is not present
+     * @author CF create on 2019/1/15 11:50
+     */
+   /* @Bean(name = "multipartResolver")
     public MultipartResolver multipartResolver() {
         CommonsMultipartResolver resolver = new CommonsMultipartResolver();
         resolver.setDefaultEncoding("UTF-8");
@@ -80,6 +80,6 @@ public class MyWebMvcConfig implements WebMvcConfigurer {
         resolver.setMaxUploadSize(50 * 1024 * 1024);
         return resolver;
 
-    }
+    }*/
 
 }

@@ -29,4 +29,10 @@ public interface UserMapper extends tk.mybatis.mapper.common.Mapper<User>{
      * @author CF create on 2019/1/14 11:58
      */
     int updateUserInfoSelective(@Param("pojo") UserInfo pojo);
+
+    /**
+     * @description
+     * @author CF create on 2019/1/15 14:06
+     */
+    UserInfo selectByUid(String userId);
 }

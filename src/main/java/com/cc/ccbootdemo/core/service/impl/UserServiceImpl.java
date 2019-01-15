@@ -145,6 +145,8 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService{
         if(userInfo==null||!param.getPwd().equals(userInfo.getPwd())){
             throw new BusinessException("用户名或密码不正确");
         }
+        String sid=userManager.addSession(userInfo.getUid(),"1001","android");
+        userInfo.setSid(sid);
         return userInfo;
     }
 
@@ -170,5 +172,11 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService{
         user.setHeadImage(headImage);
         userManager.updateUserInfoSelective(user);
         return headImage;
+    }
+
+    @Override
+    public UserInfo getUserInfoByUid(String userId) {
+        AssertUtil.isNullParamStr(userId,"用户id不可为空");
+        return userManager.getUserInfoByUid(userId);
     }
 }

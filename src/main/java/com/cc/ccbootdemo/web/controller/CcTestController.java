@@ -6,6 +6,7 @@ import com.cc.ccbootdemo.facade.domain.bizobject.CustomProperties;
 import com.cc.ccbootdemo.facade.domain.bizobject.Manga;
 import com.cc.ccbootdemo.facade.domain.bizobject.OperateBiz;
 import com.cc.ccbootdemo.facade.domain.bizobject.UserInfo;
+import com.cc.ccbootdemo.facade.domain.bizobject.param.HeaderParam;
 import com.cc.ccbootdemo.facade.domain.bizobject.param.LoginParam;
 import com.cc.ccbootdemo.facade.domain.bizobject.param.OperListQueryParam;
 import com.cc.ccbootdemo.facade.domain.bizobject.param.SearchBaseParam;
@@ -138,6 +139,14 @@ public class CcTestController extends BaseController{
     public UserInfo login(LoginParam param) {
         return userService.login(param);
     }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/user/info")
+    public UserInfo getUserInfoByUid(HeaderParam param) {
+        return userService.getUserInfoByUid(param.getUserId());
+    }
+
 
     @ResponseBody
     @RequestMapping(value = "/update/userInfo")

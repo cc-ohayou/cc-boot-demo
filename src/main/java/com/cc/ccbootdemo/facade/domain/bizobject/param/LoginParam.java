@@ -7,7 +7,7 @@ import lombok.Data;
  * @DATE Created on 2019/1/14 10:22.
  */
 @Data
-public class LoginParam {
+public class LoginParam extends HeaderParam{
     private String userName;
     private String mail;
     private String phone;

@@ -47,4 +47,6 @@ public interface UserService {
     int updateUserInfo(UserInfo param);
 
     String updateHeadImg(String userId, MultipartFile file);
+
+    UserInfo getUserInfoByUid(String userId);
 }

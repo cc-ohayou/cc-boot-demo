@@ -39,7 +39,14 @@
         from user
         where phone = #{phone}
     </select>
+    <select id="selectByUid" resultType="com.cc.ccbootdemo.facade.domain.bizobject.UserInfo">
 
+        select
+        <include refid="Base_Column_List" />
+        from user
+        where uid = #{parameter}
+
+    </select>
 
 
     <!--auto generated Code-->

@@ -2,7 +2,9 @@ package com.cc.ccbootdemo.core.manager;
 
 import com.cc.ccbootdemo.facade.domain.bizobject.UserInfo;
 import com.cc.ccbootdemo.facade.domain.bizobject.strgy.StrgyBiz;
+import com.cc.ccbootdemo.facade.domain.dataobject.SessionDO;
 import com.cc.ccbootdemo.facade.domain.dataobject.User;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 import java.util.Set;
@@ -20,4 +22,17 @@ public interface UserManager {
     UserInfo getUserInfo(String userName);
 
     int updateUserInfoSelective(UserInfo pojo);
-}
+
+    UserInfo getUserInfoByUid(String userId);
+
+    SessionDO getUserSession(SessionDO param);
+
+    void updateSessionByExample(SessionDO sessionDO, Example example);
+
+    /**
+     * @description
+     * @author CF create on 2019/1/15 14:41
+     */
+    String addSession(String uid,String mid,String source) ;
+
+    }
