@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -26,7 +27,18 @@ public class ClusterDataSourceConfig {
     static final String PACKAGE = "com.cc.ccbootdemo.core.mapper.cluster";
     private static final String MAPPER_LOCATION = "classpath:mapper/cluster/*.xml";
 
-
+    @Bean
+    @ConfigurationProperties(prefix = "mybatis.configuration")
+    public org.apache.ibatis.session.Configuration globalConfiguration() {
+        org.apache.ibatis.session.Configuration conf = new org.apache.ibatis.session.Configuration();
+        //启用缓存
+        conf.setCacheEnabled(true);
+        //驼峰命名
+        conf.setMapUnderscoreToCamelCase(true);
+        //允许JDBC支持生成主键，如果设置为true的话，这个键强制被使用
+        conf.setUseGeneratedKeys(true);
+        return conf;
+    }
 
     @Bean(name = "clusterDataSource")
     public DataSource clusterDataSource() {
@@ -51,12 +63,15 @@ public class ClusterDataSourceConfig {
     }
 
     @Bean(name = "clusterSqlSessionFactory")
-    public SqlSessionFactory clusterSqlSessionFactory(@Qualifier("clusterDataSource") DataSource clusterDataSource)
+    public SqlSessionFactory clusterSqlSessionFactory(@Qualifier("clusterDataSource") DataSource clusterDataSource,
+                                                      org.apache.ibatis.session.Configuration config)
             throws Exception {
         final SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
         sessionFactory.setDataSource(clusterDataSource);
         sessionFactory.setMapperLocations(new PathMatchingResourcePatternResolver()
                 .getResources(ClusterDataSourceConfig.MAPPER_LOCATION));
+        sessionFactory.setConfiguration(config);
+
         return sessionFactory.getObject();
     }
 }
