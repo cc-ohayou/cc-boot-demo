@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cc.ccbootdemo.core.mapper.master.UserAttachDOMapper">
+
+<!--auto generated Code-->
+    <resultMap id="AllColumnMap" type="com.cc.ccbootdemo.facade.domain.dataobject.UserAttachDO">
+        <result column="main_bg_url" property="mainBgUrl"/>
+        <result column="head_lay_bg_img_url" property="headLayBgImgUrl"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="uid" property="uid"/>
+    </resultMap>
+
+<!--auto generated Code-->
+    <sql id="all_column">
+        main_bg_url,
+        head_lay_bg_img_url,
+        create_time,
+        update_time,
+        uid
+    </sql>
+
+
+
+<!--auto generated Code-->
+    <insert id="insertList">
+        INSERT INTO user_attach(
+        <include refid="all_column"/>
+        )VALUES
+        <foreach collection="pojos" item="pojo" index="index" separator=",">
+            (
+            #{pojo.mainBgUrl},
+            #{pojo.headLayBgImgUrl},
+            #{pojo.createTime},
+            #{pojo.updateTime},
+            #{pojo.uid}
+            )
+        </foreach>
+    </insert>
+
+<!--auto generated Code-->
+    <update id="updateSelective">
+        UPDATE user_attach
+        <set>
+            <if test="pojo.mainBgUrl != null"> main_bg_url = #{pojo.mainBgUrl}, </if>
+            <if test="pojo.headLayBgImgUrl != null"> head_lay_bg_img_url = #{pojo.headLayBgImgUrl}, </if>
+            <if test="pojo.createTime != null"> create_time = #{pojo.createTime}, </if>
+        </set>
+         WHERE uid = #{pojo.uid}
+    </update>
+
+
+</mapper>

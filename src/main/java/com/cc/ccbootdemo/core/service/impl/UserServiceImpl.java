@@ -3,9 +3,6 @@ package com.cc.ccbootdemo.core.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.cc.ccbootdemo.core.common.settings.SettingsEnum;
 import com.cc.ccbootdemo.core.common.settings.SettingsHolder;
-import com.cc.ccbootdemo.core.manager.MqManager;
-import com.cc.ccbootdemo.core.manager.RedisManager;
-import com.cc.ccbootdemo.core.manager.UserManager;
 import com.cc.ccbootdemo.core.service.UserService;
 import com.cc.ccbootdemo.facade.domain.bizobject.CustomProperties;
 import com.cc.ccbootdemo.facade.domain.bizobject.Manga;
@@ -25,12 +22,12 @@ import com.cc.ccbootdemo.facade.domain.common.util.PsPage;
 import com.cc.ccbootdemo.facade.domain.common.util.log.MyMarker;
 import com.cc.ccbootdemo.facade.domain.common.util.upyun.UploadUtil;
 import com.cc.ccbootdemo.facade.domain.dataobject.User;
+import com.cc.ccbootdemo.facade.domain.dataobject.UserAttachDO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
 import java.util.*;
 
 /**
@@ -40,12 +37,7 @@ import java.util.*;
 @Service
 public class UserServiceImpl extends BaseServiceImpl implements UserService{
     private Logger logger= LoggerFactory.getLogger(this.getClass());
-    @Resource
-    UserManager userManager;
-    @Resource
-    RedisManager  redisManager;
-    @Resource
-    MqManager mqManager;
+
 
     private CustomProperties customProperties=new CustomProperties();
 
@@ -178,5 +170,21 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService{
     public UserInfo getUserInfoByUid(String userId) {
         AssertUtil.isNullParamStr(userId,"用户id不可为空");
         return userManager.getUserInfoByUid(userId);
+    }
+
+    @Override
+    public String modifyBgImg(String userId, MultipartFile file) {
+        String bgImg ;
+        try {
+            bgImg = UploadUtil.upload("/user/bgImg/", file.getBytes(), userId);
+        } catch (Exception e) {
+            logger.error("上传mainBg失败!!!",e);
+            throw  new BusinessException("mainBg上传失败");
+        }
+        UserAttachDO user = new UserAttachDO();
+        user.setUid(userId);
+        user.setMainBgUrl(bgImg);
+        userManager.updateUserAttachInfoSelective(user);
+        return bgImg;
     }
 }

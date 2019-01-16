@@ -4,6 +4,7 @@ import com.cc.ccbootdemo.facade.domain.bizobject.UserInfo;
 import com.cc.ccbootdemo.facade.domain.bizobject.strgy.StrgyBiz;
 import com.cc.ccbootdemo.facade.domain.dataobject.SessionDO;
 import com.cc.ccbootdemo.facade.domain.dataobject.User;
+import com.cc.ccbootdemo.facade.domain.dataobject.UserAttachDO;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
@@ -35,4 +36,5 @@ public interface UserManager {
      */
     String addSession(String uid,String mid,String source) ;
 
-    }
+    void updateUserAttachInfoSelective(UserAttachDO user);
+}

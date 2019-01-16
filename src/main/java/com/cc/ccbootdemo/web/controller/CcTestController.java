@@ -169,4 +169,14 @@ public class CcTestController extends BaseController{
         return userService.updateHeadImg(HeaderInfoHolder.getUserId(), file);
     }
 
+    /**
+     * @description 更新首页背景图
+     * @author CF create on 2019/1/16 16:08
+     */
+    @ResponseBody
+    @RequestMapping(value = "/modify/bgImg")
+    public String modifyBgImg(@RequestParam("file") MultipartFile file) throws Exception {
+        return userService.modifyBgImg(HeaderInfoHolder.getUserId(), file);
+    }
+
 }

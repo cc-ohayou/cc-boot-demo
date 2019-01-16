@@ -1,5 +1,6 @@
 package com.cc.ccbootdemo.facade.domain.bizobject;
 
+import com.cc.ccbootdemo.facade.domain.dataobject.UserAttachDO;
 import lombok.Data;
 
 /**
@@ -7,7 +8,7 @@ import lombok.Data;
  * @DATE Created on 2019/1/14 10:24.
  */
 @Data
-public class UserInfo {
+public class UserInfo extends UserAttachDO{
     /**
      * 昵称 可允许特殊符号 但要防止sql注入 可以允许表情
      */

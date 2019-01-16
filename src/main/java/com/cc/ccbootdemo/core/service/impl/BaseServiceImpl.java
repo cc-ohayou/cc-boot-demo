@@ -1,6 +1,9 @@
 package com.cc.ccbootdemo.core.service.impl;
 
+import com.cc.ccbootdemo.core.manager.MqManager;
 import com.cc.ccbootdemo.core.manager.PushManager;
+import com.cc.ccbootdemo.core.manager.RedisManager;
+import com.cc.ccbootdemo.core.manager.UserManager;
 import com.cc.ccbootdemo.core.mapper.master.PushConfigDOMapper;
 import com.cc.ccbootdemo.core.mapper.master.UserPushDOMapper;
 import com.cc.ccbootdemo.core.service.BaseService;
@@ -25,7 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @AUTHOR CF
  * @DATE Created on 2018/7/10 17:53.
  */
-@Service
+@Service("baseService")
 public class BaseServiceImpl implements BaseService{
 
     @Resource
@@ -34,6 +37,12 @@ public class BaseServiceImpl implements BaseService{
     UserPushDOMapper userPushMapper;
     @Resource
     PushManager pushManager;
+    @Resource
+    UserManager userManager;
+    @Resource
+    RedisManager redisManager;
+    @Resource
+    MqManager mqManager;
 
 
     private Logger logger= LoggerFactory.getLogger(this.getClass());

@@ -1,14 +1,39 @@
 
 --test01库
 CREATE TABLE `user` (
-  `id` bigint(30) NOT NULL AUTO_INCREMENT    COMMENT '用户ID',
-  `description` varchar(11)  DEFAULT NULL COMMENT '描述',
-  `user_name` varchar(11)  DEFAULT NULL COMMENT '注册用户名',
+  `uid` bigint(30) NOT NULL AUTO_INCREMENT COMMENT '用户ID',
+  `description` varchar(11) DEFAULT '' COMMENT '描述',
+  `user_name` varchar(11) DEFAULT '' COMMENT '注册用户名',
+  `nick_name` varchar(11) DEFAULT '' COMMENT '昵称',
+  `mail` varchar(20) DEFAULT '' COMMENT '邮箱',
+  `phone` varchar(11) DEFAULT '' COMMENT '电话',
+  `pwd` varchar(50) DEFAULT '' COMMENT '密码',
+  `head_image` varchar(500) NOT NULL DEFAULT '',
+  `create_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`uid`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
 
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
+CREATE TABLE `session` (
+  `session_id` varchar(30) NOT NULL COMMENT 'Session表ID',
+  `merchant_id` varchar(30) NOT NULL DEFAULT '1001' COMMENT '商户号,关联merchant_info表merchant_id',
+  `user_id` varchar(30) NOT NULL COMMENT '用户ID,关联user表user_id',
+  `sid` varchar(30) DEFAULT NULL COMMENT 'Session ID',
+  `expire_time` varchar(20) DEFAULT NULL COMMENT '失效时间',
+  `source` varchar(20) DEFAULT '' COMMENT '来源 web:web,ios:ios,android:android weixin:weixin',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`session_id`),
+  KEY `idx_sid_userid_merchantid` (`sid`,`user_id`,`merchant_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='登录Session表';
 
-
+CREATE TABLE `user_attach` (
+  `uid` bigint(30) NOT NULL AUTO_INCREMENT COMMENT '用户ID',
+  `main_bg_url` varchar(200) NOT NULL DEFAULT '' COMMENT '主页背景图url',
+  `create_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`uid`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='用户附属信息表';
 
 
 

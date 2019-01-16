@@ -2,12 +2,14 @@ package com.cc.ccbootdemo.core.manager.impl;
 
 import com.cc.ccbootdemo.core.manager.UserManager;
 import com.cc.ccbootdemo.core.mapper.master.SessionDOMapper;
+import com.cc.ccbootdemo.core.mapper.master.UserAttachDOMapper;
 import com.cc.ccbootdemo.core.mapper.master.UserMapper;
 import com.cc.ccbootdemo.facade.domain.bizobject.UserInfo;
 import com.cc.ccbootdemo.facade.domain.bizobject.strgy.StrgyBiz;
 import com.cc.ccbootdemo.facade.domain.common.util.IdGen;
 import com.cc.ccbootdemo.facade.domain.dataobject.SessionDO;
 import com.cc.ccbootdemo.facade.domain.dataobject.User;
+import com.cc.ccbootdemo.facade.domain.dataobject.UserAttachDO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -25,13 +27,17 @@ import java.util.Set;
  * @DATE Created on 2018/4/25 19:44.
  */
 @Component
-public class UserManagerImpl implements UserManager{
+public class UserManagerImpl extends BaseManagerImpl implements UserManager{
     public static final Integer SESSION_EXPIRED_DATE = 7;
     private static Logger logger= LoggerFactory.getLogger(UserManagerImpl.class);
+
     @Resource
     UserMapper userMapper;
     @Resource
     SessionDOMapper sessionDOMapper;
+
+    @Resource
+    UserAttachDOMapper userAttachDOMapper;
 
     @Override
     public List<UserInfo> getAllUserList(User params) {
@@ -99,6 +105,11 @@ public class UserManagerImpl implements UserManager{
         return sid;
     }
 
+    @Override
+    public void updateUserAttachInfoSelective(UserAttachDO userAttach) {
+           userAttachDOMapper.updateSelective(userAttach);
+    }
+
     private void setSession(String source, String sid, SessionDO sessionDO) {
         sessionDO.setSid(sid);
         sessionDO.setSource(source);
@@ -106,4 +117,7 @@ public class UserManagerImpl implements UserManager{
         Long expiredTime = LocalDateTime.now().plusDays(SESSION_EXPIRED_DATE).toInstant(ZoneOffset.of("+8")).toEpochMilli();
         sessionDO.setExpireTime(String.valueOf(expiredTime));
     }
+
+
+
 }

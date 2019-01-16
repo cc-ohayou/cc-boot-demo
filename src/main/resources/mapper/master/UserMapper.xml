@@ -18,7 +18,12 @@
     <parameterMap id="User" type="com.cc.ccbootdemo.facade.domain.dataobject.User"/>
 
     <sql id="Base_Column_List">
-        uid, user_name, description,nick_name,mail,pwd,head_image,create_time,update_time,phone
+        u.uid, u.user_name, u.description,u.nick_name,mail,pwd,head_image,create_time,update_time,phone
+    </sql>
+
+    <sql id="alas_Base_Column_List">
+        u.uid, u.user_name, u.description,u.nick_name,u.mail,u.pwd,u.head_image,u.create_time,
+        u.update_time,u.phone
     </sql>
 
     <select id="findByName" resultType="com.cc.ccbootdemo.facade.domain.bizobject.UserInfo" parameterType="java.lang.String">
@@ -42,9 +47,12 @@
     <select id="selectByUid" resultType="com.cc.ccbootdemo.facade.domain.bizobject.UserInfo">
 
         select
-        <include refid="Base_Column_List" />
-        from user
-        where uid = #{parameter}
+        ua.main_bg_url,
+        <include refid="alas_Base_Column_List" />
+        from user u,user_attach ua
+
+        where u.uid = #{parameter}
+        and  u.uid=ua.uid
 
     </select>
 

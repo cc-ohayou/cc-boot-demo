@@ -49,4 +49,6 @@ public interface UserService {
     String updateHeadImg(String userId, MultipartFile file);
 
     UserInfo getUserInfoByUid(String userId);
+
+    String modifyBgImg(String userId, MultipartFile file);
 }
