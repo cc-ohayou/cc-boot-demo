@@ -23,10 +23,16 @@ public class MyWebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(getExceptionInterceptor()).addPathPatterns("/**");
+        registry.addInterceptor(getSessionInterceptor()).addPathPatterns("/**");
     }
     @Bean
      public ExceptionInterceptor getExceptionInterceptor(){
         return new ExceptionInterceptor();
+    }
+
+    @Bean
+    public SessionInterceptor getSessionInterceptor(){
+        return new SessionInterceptor();
     }
 
      /**

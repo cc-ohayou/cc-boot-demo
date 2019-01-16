@@ -10,6 +10,7 @@ import com.cc.ccbootdemo.facade.domain.bizobject.param.HeaderParam;
 import com.cc.ccbootdemo.facade.domain.bizobject.param.LoginParam;
 import com.cc.ccbootdemo.facade.domain.bizobject.param.OperListQueryParam;
 import com.cc.ccbootdemo.facade.domain.bizobject.param.SearchBaseParam;
+import com.cc.ccbootdemo.facade.domain.common.annotation.InterceptRequired;
 import com.cc.ccbootdemo.facade.domain.common.exception.ParamException;
 import com.cc.ccbootdemo.facade.domain.common.param.MQProducerParam;
 import com.cc.ccbootdemo.facade.domain.common.util.PsPage;
@@ -107,33 +108,35 @@ public class CcTestController extends BaseController{
         return "OK";
     }
 
+    @InterceptRequired(required = false)
     @ResponseBody
     @RequestMapping(value = "/getDownloadUrl")
     public String getDownloadUrl() {
         return userService.getDownloadUrl();
     }
 
+    @InterceptRequired(required = false)
     @ResponseBody
     @RequestMapping(value = "/getMangaList")
     public List<Manga> getMangaList(SearchBaseParam param) {
         return userService.getMangaList(param);
     }
 
-
+    @InterceptRequired(required = false)
     @ResponseBody
     @RequestMapping(value = "/getCustomProperties")
     public CustomProperties getCustomProperties(SearchBaseParam param) {
         return userService.getCustomProperties(param);
     }
 
-
+    @InterceptRequired(required = false)
     @ResponseBody
     @RequestMapping(value = "/getOperateList")
     public PsPage<OperateBiz> getOperateList(OperListQueryParam param) {
         return userService.getOperateList(param);
     }
 
-
+    @InterceptRequired(required = false)
     @ResponseBody
     @RequestMapping(value = "/user/login")
     public UserInfo login(LoginParam param) {
@@ -144,7 +147,8 @@ public class CcTestController extends BaseController{
     @ResponseBody
     @RequestMapping(value = "/user/info")
     public UserInfo getUserInfoByUid(HeaderParam param) {
-        return userService.getUserInfoByUid(param.getUserId());
+
+        return userService.getUserInfoByUid(HeaderInfoHolder.getUserId());
     }
 
 
