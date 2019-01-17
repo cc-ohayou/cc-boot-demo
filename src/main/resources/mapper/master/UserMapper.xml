@@ -18,7 +18,7 @@
     <parameterMap id="User" type="com.cc.ccbootdemo.facade.domain.dataobject.User"/>
 
     <sql id="Base_Column_List">
-        u.uid, u.user_name, u.description,u.nick_name,mail,pwd,head_image,create_time,update_time,phone
+        uid, user_name, description,nick_name,mail,pwd,head_image,create_time,update_time,phone
     </sql>
 
     <sql id="alas_Base_Column_List">
