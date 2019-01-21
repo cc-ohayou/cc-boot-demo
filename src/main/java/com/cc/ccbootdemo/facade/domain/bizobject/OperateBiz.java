@@ -6,6 +6,7 @@ import com.cc.ccbootdemo.facade.domain.common.constants.OperUrlPrefix;
 import com.cc.ccbootdemo.facade.domain.common.enums.OperUrl;
 import com.cc.ccbootdemo.facade.domain.common.enums.redis.RedisKeyEnum;
 import com.cc.ccbootdemo.facade.domain.common.util.DateUtil;
+import com.cc.ccbootdemo.facade.domain.common.util.IdGen;
 import lombok.Data;
 import redis.clients.jedis.Jedis;
 
@@ -36,35 +37,38 @@ public class OperateBiz {
     private String updateTime;
 
     public static void main(String[] args) {
+        Jedis jedis = RedisManagerImpl.getJedis();
         OperateBiz operateBiz=new OperateBiz();
-        operateBiz.setOperId("001");
-        operateBiz.setType("定时任务");
-        operateBiz.setProject("ETF-TASK");
-        operateBiz.setDesc("递延操作 请求后执行的是14:00递延定时逻辑");
-        operateBiz.setOperName("递延");
-        operateBiz.setLabel("定时任务");
+        operateBiz.setOperId(String.valueOf(IdGen.genId()));
+//        operateBiz.setType("");
+        operateBiz.setProject("etf-server");
+        operateBiz.setDesc(OperUrl.INVESTOR_WARM_UP.getLabel());
+        operateBiz.setOperName("消息配置刷新");
+//        operateBiz.setLabel("消息配置");
         operateBiz.setEnvType("sit");
-        operateBiz.setUrl(OperUrlPrefix.ETF_SIT_TASK+ OperUrl.ETF_TASK_DEFER.getValue());
+        operateBiz.setUrl(OperUrlPrefix.ETF_SIT_SERVER+ OperUrl.CLEAR_SUB_CONFIG.getValue());
         operateBiz.setCreateTime(DateUtil.standardFormat(new Date()));
         operateBiz.setUpdateTime(operateBiz.getCreateTime());
 
-        OperateBiz operateBiz2=new OperateBiz();
-        operateBiz2.setOperId("002");
-        operateBiz2.setOperName("强平");
-        operateBiz2.setProject("ETF-TASK");
-        operateBiz2.setType("定时任务");
-        operateBiz2.setDesc("定时任务强平 点击后进行到期日强平逻辑操作");
-        operateBiz2.setLabel("定时任务");
-        operateBiz2.setEnvType("sit");
-        operateBiz2.setUrl(OperUrlPrefix.ETF_SIT_TASK+ OperUrl.ETF_TASK_FORCE_SELL.getValue());
-        operateBiz2.setCreateTime(DateUtil.standardFormat(new Date()));
-        operateBiz2.setUpdateTime(operateBiz.getCreateTime());
-        Jedis jedis = RedisManagerImpl.getJedis();
         String str= JSON.toJSONString(operateBiz);
         jedis.lpush(RedisKeyEnum.ETF_SIT_OPER_LIST.getValue(),str);
 
+        OperateBiz operateBiz2=new OperateBiz();
+        operateBiz2.setOperId("006");
+        operateBiz2.setOperName("消息订阅配置刷新");
+        operateBiz2.setProject("phoenix-ps");
+        operateBiz2.setType("配置");
+        operateBiz2.setDesc(OperUrl.CLEAR_SUB_CONFIG.getLabel());
+        operateBiz2.setLabel("消息配置");
+        operateBiz2.setEnvType("dev");
+        operateBiz2.setUrl(OperUrlPrefix.PS_DEV_SERVER+ OperUrl.CLEAR_SUB_CONFIG.getValue());
+        operateBiz2.setCreateTime(DateUtil.standardFormat(new Date()));
+        operateBiz2.setUpdateTime(operateBiz.getCreateTime());
+
+
+
         String str2= JSON.toJSONString(operateBiz2);
-        jedis.lpush(RedisKeyEnum.ETF_SIT_OPER_LIST.getValue(),str2);
+//        jedis.lpush(RedisKeyEnum.ETF_SIT_OPER_LIST.getValue(),str2);
 
       /*  for (int i = 0; i <23 ; i++) {
             if(i%2==0){

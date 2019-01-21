@@ -13,6 +13,7 @@ public class CustomProperties {
     private String updateSign;
     // dev  sit prod 三个环境  用于切换 请求url
     private String env;
+    private String loginBgUrl;
 
 
 }

@@ -96,6 +96,7 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService{
     public CustomProperties getCustomProperties(SearchBaseParam param) {
         customProperties.setDownLoadUrl(SettingsHolder.getProperty(SettingsEnum.DOWNLOAD_URL_APK));
         customProperties.setUpdateSign(SettingsHolder.getProperty(SettingsEnum.UPDATE_APP_SIGN));
+        customProperties.setLoginBgUrl(SettingsHolder.getProperty(SettingsEnum.LOGIN_BG_URL));
         return customProperties;
     }
 

@@ -23,7 +23,7 @@ public enum SettingsEnum {
     UPYUN_PWD("upyun-pwd","全部取自redis","" ),
     UPYUN_URL("upyun-url","全部取自redis","" ),
     UPYUN_BUCKET_NAME("upyun-bucket-name","全部取自redis","" ),
-    ;
+    LOGIN_BG_URL("login-bg-url", "登录页面背景图", "http://img.zcool.cn/community/017e605a86d239a8012045b37bf119.jpg" );
     private String value;
     private String label;
     //默认值必须以线上的作为标准 即便redis挂掉也不要影响正常使用
