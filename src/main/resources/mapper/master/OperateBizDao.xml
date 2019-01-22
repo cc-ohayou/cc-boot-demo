@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cc.ccbootdemo.core.mapper.master.OperateBizDao">
+
+<!--auto generated Code-->
+    <resultMap id="AllColumnMap" type="com.cc.ccbootdemo.facade.domain.dataobject.OperateBiz">
+        <result column="oper_id" property="operId"/>
+        <result column="oper_name" property="operName"/>
+        <result column="type" property="type"/>
+        <result column="project" property="project"/>
+        <result column="desc" property="desc"/>
+        <result column="label" property="label"/>
+        <result column="env_type" property="envType"/>
+        <result column="url" property="url"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+<!--auto generated Code-->
+    <sql id="all_column">
+        oper_id,
+        oper_name,
+        type,
+        project,
+        `desc`,
+        label,
+        env_type,
+        url,
+        create_time,
+        update_time
+    </sql>
+
+<!--auto generated Code-->
+    <insert id="insertSelectiveMy">
+        INSERT INTO operate_biz
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pojo.operId != null"> oper_id, </if>
+            <if test="pojo.operName != null"> oper_name, </if>
+            <if test="pojo.type != null"> type, </if>
+            <if test="pojo.project != null"> project, </if>
+            <if test="pojo.desc != null"> `desc`, </if>
+            <if test="pojo.label != null"> label, </if>
+            <if test="pojo.envType != null"> env_type, </if>
+            <if test="pojo.url != null"> url, </if>
+            <if test="pojo.createTime != null"> create_time, </if>
+            <if test="pojo.updateTime != null"> update_time, </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pojo.operId != null"> #{pojo.operId}, </if>
+            <if test="pojo.operName != null"> #{pojo.operName}, </if>
+            <if test="pojo.type != null"> #{pojo.type}, </if>
+            <if test="pojo.project != null"> #{pojo.project}, </if>
+            <if test="pojo.desc != null"> #{pojo.desc}, </if>
+            <if test="pojo.label != null"> #{pojo.label}, </if>
+            <if test="pojo.envType != null"> #{pojo.envType}, </if>
+            <if test="pojo.url != null"> #{pojo.url}, </if>
+            <if test="pojo.createTime != null"> #{pojo.createTime}, </if>
+            <if test="pojo.updateTime != null"> #{pojo.updateTime}, </if>
+        </trim>
+    </insert>
+
+<!--auto generated Code-->
+    <insert id="insertList">
+        INSERT INTO operate_biz(
+        <include refid="all_column"/>
+        )VALUES
+        <foreach collection="pojos" item="pojo" index="index" separator=",">
+            (
+            #{pojo.operId},
+            #{pojo.operName},
+            #{pojo.type},
+            #{pojo.project},
+            #{pojo.desc},
+            #{pojo.label},
+            #{pojo.envType},
+            #{pojo.url},
+            #{pojo.createTime},
+            #{pojo.updateTime}
+            )
+        </foreach>
+    </insert>
+
+<!--auto generated Code-->
+    <update id="update">
+        UPDATE operate_biz
+        <set>
+            <if test="pojo.operId != null"> oper_id = #{pojo.operId}, </if>
+            <if test="pojo.operName != null"> oper_name = #{pojo.operName}, </if>
+            <if test="pojo.type != null"> type = #{pojo.type}, </if>
+            <if test="pojo.project != null"> project = #{pojo.project}, </if>
+            <if test="pojo.desc != null"> `desc` = #{pojo.desc}, </if>
+            <if test="pojo.label != null"> label = #{pojo.label}, </if>
+            <if test="pojo.envType != null"> env_type = #{pojo.envType}, </if>
+            <if test="pojo.url != null"> url = #{pojo.url}, </if>
+            <if test="pojo.createTime != null"> create_time = #{pojo.createTime}, </if>
+        </set>
+         WHERE id = #{pojo.id}
+    </update>
+
+<!--auto generated Code-->
+    <select id="selectBySelective" resultMap="AllColumnMap">
+        SELECT <include refid="all_column"/>
+        FROM operate_biz
+        <where>
+            <if test="pojo.operId != null"> AND oper_id = #{pojo.operId} </if>
+            <if test="pojo.operName != null"> AND oper_name = #{pojo.operName} </if>
+            <if test="pojo.type != null"> AND type = #{pojo.type} </if>
+            <if test="pojo.project != null"> AND project = #{pojo.project} </if>
+            <if test="pojo.desc != null"> AND `desc` = #{pojo.desc} </if>
+            <if test="pojo.label != null"> AND label = #{pojo.label} </if>
+            <if test="pojo.envType != null"> AND env_type = #{pojo.envType} </if>
+            <if test="pojo.url != null"> AND url = #{pojo.url} </if>
+            <if test="pojo.createTime != null"> AND create_time = #{pojo.createTime} </if>
+            <if test="pojo.updateTime != null"> AND update_time = #{pojo.updateTime} </if>
+        </where>
+        LIMIT 1000 
+    </select>
+
+    <select id="getOperBizList"  resultMap="AllColumnMap">
+        SELECT <include refid="all_column"/>
+        FROM operate_biz
+        <where>
+            <if test="pojo.operName != null"> AND oper_name like  concat(concat('%',#{pojo.operName}),'%') </if>
+
+        </where>
+
+        order by update_time desc;
+        LIMIT #{pojo.offset},#{pojo.size}
+    </select>
+
+
+    <select id="getOperBizTotalCou" resultType="long">
+        SELECT count(0)
+        FROM operate_biz
+        <where>
+            <if test="pojo.operName != null"> AND oper_name like  concat(concat('%',#{pojo.operName}),'%') </if>
+            <!--<if test="pojo.type != null"> AND type = #{pojo.type} </if>
+            <if test="pojo.project != null"> AND project = #{pojo.project} </if>
+            <if test="pojo.desc != null"> AND `desc` = #{pojo.desc} </if>
+            <if test="pojo.label != null"> AND label = #{pojo.label} </if>
+            <if test="pojo.envType != null"> AND env_type = #{pojo.envType} </if>
+            <if test="pojo.url != null"> AND url = #{pojo.url} </if>
+            <if test="pojo.createTime != null"> AND create_time = #{pojo.createTime} </if>
+            <if test="pojo.updateTime != null"> AND update_time = #{pojo.updateTime} </if>-->
+        </where>
+
+    </select>
+
+
+</mapper>

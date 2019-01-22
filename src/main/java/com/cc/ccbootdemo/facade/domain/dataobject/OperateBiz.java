@@ -1,4 +1,4 @@
-package com.cc.ccbootdemo.facade.domain.bizobject;
+package com.cc.ccbootdemo.facade.domain.dataobject;
 
 import com.alibaba.fastjson.JSON;
 import com.cc.ccbootdemo.core.manager.impl.RedisManagerImpl;

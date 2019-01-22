@@ -4,7 +4,7 @@ import com.cc.ccbootdemo.core.service.CityService;
 import com.cc.ccbootdemo.core.service.UserService;
 import com.cc.ccbootdemo.facade.domain.bizobject.CustomProperties;
 import com.cc.ccbootdemo.facade.domain.bizobject.Manga;
-import com.cc.ccbootdemo.facade.domain.bizobject.OperateBiz;
+import com.cc.ccbootdemo.facade.domain.dataobject.OperateBiz;
 import com.cc.ccbootdemo.facade.domain.bizobject.UserInfo;
 import com.cc.ccbootdemo.facade.domain.bizobject.param.HeaderParam;
 import com.cc.ccbootdemo.facade.domain.bizobject.param.LoginParam;

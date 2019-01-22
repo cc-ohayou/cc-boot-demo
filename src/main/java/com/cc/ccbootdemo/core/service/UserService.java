@@ -2,7 +2,7 @@ package com.cc.ccbootdemo.core.service;
 
 import com.cc.ccbootdemo.facade.domain.bizobject.CustomProperties;
 import com.cc.ccbootdemo.facade.domain.bizobject.Manga;
-import com.cc.ccbootdemo.facade.domain.bizobject.OperateBiz;
+import com.cc.ccbootdemo.facade.domain.dataobject.OperateBiz;
 import com.cc.ccbootdemo.facade.domain.bizobject.UserInfo;
 import com.cc.ccbootdemo.facade.domain.bizobject.param.LoginParam;
 import com.cc.ccbootdemo.facade.domain.bizobject.param.OperListQueryParam;
@@ -51,4 +51,6 @@ public interface UserService {
     UserInfo getUserInfoByUid(String userId);
 
     String modifyBgImg(String userId, MultipartFile file);
+
+    void initOperList();
 }

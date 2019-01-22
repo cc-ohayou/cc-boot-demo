@@ -2,10 +2,10 @@ package com.cc.ccbootdemo;
 
 import com.cc.ccbootdemo.core.common.properties.BaseProperties;
 import com.cc.ccbootdemo.core.common.properties.DemoProperty;
-import com.cc.ccbootdemo.core.service.MailService;
-import com.cc.ccbootdemo.facade.domain.common.dataobject.mail.MailInfo;
 import com.cc.ccbootdemo.core.common.properties.resource.BaseResourceProperties;
-import com.cc.ccbootdemo.web.controller.CcTestController;
+import com.cc.ccbootdemo.core.service.MailService;
+import com.cc.ccbootdemo.core.service.UserService;
+import com.cc.ccbootdemo.facade.domain.common.dataobject.mail.MailInfo;
 import com.cc.ccbootdemo.web.controller.HelloController;
 import com.cc.core.DemoPropertyCustomized;
 import org.junit.Before;
@@ -53,6 +53,8 @@ public class CcBootDemoApplicationTests {
 
     @Resource
 	MailService mailService;
+	@Resource
+	UserService userService;
 	private MockMvc mvc;
 	private MockMvc ccMvc;
 
@@ -127,6 +129,17 @@ public class CcBootDemoApplicationTests {
 		try {
 			mailService.sendMail(info);
 		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+	}
+
+
+	@Test
+	public void initOperBizList(){
+
+		try {
+			userService.initOperList();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

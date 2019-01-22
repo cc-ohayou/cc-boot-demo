@@ -6,7 +6,7 @@ import com.cc.ccbootdemo.core.common.settings.SettingsHolder;
 import com.cc.ccbootdemo.core.service.UserService;
 import com.cc.ccbootdemo.facade.domain.bizobject.CustomProperties;
 import com.cc.ccbootdemo.facade.domain.bizobject.Manga;
-import com.cc.ccbootdemo.facade.domain.bizobject.OperateBiz;
+import com.cc.ccbootdemo.facade.domain.dataobject.OperateBiz;
 import com.cc.ccbootdemo.facade.domain.bizobject.UserInfo;
 import com.cc.ccbootdemo.facade.domain.bizobject.param.LoginParam;
 import com.cc.ccbootdemo.facade.domain.bizobject.param.OperListQueryParam;
@@ -23,6 +23,7 @@ import com.cc.ccbootdemo.facade.domain.common.util.log.MyMarker;
 import com.cc.ccbootdemo.facade.domain.common.util.upyun.UploadUtil;
 import com.cc.ccbootdemo.facade.domain.dataobject.User;
 import com.cc.ccbootdemo.facade.domain.dataobject.UserAttachDO;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -97,31 +98,60 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService{
         customProperties.setDownLoadUrl(SettingsHolder.getProperty(SettingsEnum.DOWNLOAD_URL_APK));
         customProperties.setUpdateSign(SettingsHolder.getProperty(SettingsEnum.UPDATE_APP_SIGN));
         customProperties.setLoginBgUrl(SettingsHolder.getProperty(SettingsEnum.LOGIN_BG_URL));
+        customProperties.setOperBizDetailBgUrl(SettingsHolder.getProperty(SettingsEnum.OPER_BIZ_DETAIL_BG_URL));
+
+        Map map= getOtherCustomProperties();
+        customProperties.setOtherProperties(map);
         return customProperties;
+    }
+
+    private Map getOtherCustomProperties() {
+        try{
+            String str=SettingsHolder.getProperty(SettingsEnum.OTHER_CUSTOM_PROPERTIES);
+            if(!StringUtils.isEmpty(str)) {
+                return JSON.parseObject(str, Map.class);
+            }
+        }catch(Exception e){
+            logger.error("getOtherCustomProperties parse error");
+        }
+        return Collections.EMPTY_MAP;
     }
 
     @Override
     public PsPage<OperateBiz> getOperateList(OperListQueryParam param) {
-        List<String> list= Collections.EMPTY_LIST;
+        List<OperateBiz> listBiz=Collections.EMPTY_LIST;
         long totalCou=0L;
         AssertUtil.isTrueParam(param.getCurrPage()<=0,"当前页不可为空");
         try{
-             totalCou=redisManager.llen(RedisKeyEnum.ETF_SIT_OPER_LIST.getValue(),null);
-
-            initOffsetSizeInfo(param, Math.toIntExact(totalCou));
+             totalCou= getOperBizTotalCou(param);
+             initOffsetSizeInfo(param, Math.toIntExact(totalCou));
         if(EnvType.SIT.getValue().equals(param.getEnvType())) {
 //            redis的lrange  右边end是包含自身的 所以需要减去1   0 10 会返回11调数据  第一页用0 9  第二页 10 19   起始位置要加上偏移量
-                list = redisManager.lrange(RedisKeyEnum.ETF_SIT_OPER_LIST.getValue(),param.getOffset(),param.getOffset()+param.getSize()-1,null);
+            listBiz = getOperListByParam(param);
 
         }
         }catch(Exception e){
             logger.error(MyMarker.getInstance("cc-test"), "!!!getOperateList json转换失败",e);
         }
-        List<OperateBiz> listBiz=new ArrayList<>();
-        for (int i = 0; i <list.size() ; i++) {
-            listBiz.add(JSON.parseObject(list.get(i),OperateBiz.class));
-        }
+
         return new PsPage<>(listBiz, Math.toIntExact(totalCou),param.getSize(),param.getCurrPage());
+    }
+
+    private List<OperateBiz> getOperListByParam(OperListQueryParam param) {
+//        List<String> list= redisManager.lrange(RedisKeyEnum.ETF_SIT_OPER_LIST.getValue(),param.getOffset(),param.getOffset()+param.getSize()-1,null);
+//        List<OperateBiz> listBiz=new ArrayList<>();
+
+        List<OperateBiz> listBiz= operateBizManager.getOperBizList(param);
+       /* for (int i = 0; i <list.size() ; i++) {
+            listBiz.add(JSON.parseObject(list.get(i),OperateBiz.class));
+        }*/
+
+        return listBiz;
+    }
+
+    private long getOperBizTotalCou(OperListQueryParam param) {
+//        return redisManager.llen(RedisKeyEnum.ETF_SIT_OPER_LIST.getValue(),null);
+        return operateBizManager.getOperBizTotalCou(param);
     }
 
     @Override
@@ -187,5 +217,16 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService{
         user.setMainBgUrl(bgImg);
         userManager.updateUserAttachInfoSelective(user);
         return bgImg;
+    }
+
+    @Override
+    public void initOperList() {
+        List<String> list= redisManager.lrange(RedisKeyEnum.ETF_SIT_OPER_LIST.getValue(),0,20,null);
+        List<OperateBiz> listBiz=new ArrayList<>();
+        for (int i = 0; i <list.size() ; i++) {
+            listBiz.add(JSON.parseObject(list.get(i),OperateBiz.class));
+        }
+        operateBizManager.insertList(listBiz);
+
     }
 }

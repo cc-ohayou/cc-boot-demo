@@ -1,9 +1,6 @@
 package com.cc.ccbootdemo.core.service.impl;
 
-import com.cc.ccbootdemo.core.manager.MqManager;
-import com.cc.ccbootdemo.core.manager.PushManager;
-import com.cc.ccbootdemo.core.manager.RedisManager;
-import com.cc.ccbootdemo.core.manager.UserManager;
+import com.cc.ccbootdemo.core.manager.*;
 import com.cc.ccbootdemo.core.mapper.master.PushConfigDOMapper;
 import com.cc.ccbootdemo.core.mapper.master.UserPushDOMapper;
 import com.cc.ccbootdemo.core.service.BaseService;
@@ -43,6 +40,8 @@ public class BaseServiceImpl implements BaseService{
     RedisManager redisManager;
     @Resource
     MqManager mqManager;
+    @Resource
+    OperateBizManager operateBizManager;
 
 
     private Logger logger= LoggerFactory.getLogger(this.getClass());

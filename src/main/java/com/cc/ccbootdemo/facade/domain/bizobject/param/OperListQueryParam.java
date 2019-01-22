@@ -12,4 +12,5 @@ import lombok.EqualsAndHashCode;
 public class OperListQueryParam extends SearchBaseParam{
 //    环境类型
     private String  envType;
+    private String  operName;
 }

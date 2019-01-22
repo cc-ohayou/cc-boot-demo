@@ -1,6 +1,9 @@
 package com.cc.ccbootdemo.facade.domain.bizobject;
 
 import lombok.Data;
+
+import java.util.Map;
+
 /**
      * @author  CF
      * @date   2019/1/7
@@ -14,6 +17,11 @@ public class CustomProperties {
     // dev  sit prod 三个环境  用于切换 请求url
     private String env;
     private String loginBgUrl;
+    private String operBizDetailBgUrl;
+
+    private Map otherProperties;
+
+
 
 
 }
