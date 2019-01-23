@@ -4,17 +4,14 @@ import com.cc.ccbootdemo.core.service.CityService;
 import com.cc.ccbootdemo.core.service.UserService;
 import com.cc.ccbootdemo.facade.domain.bizobject.CustomProperties;
 import com.cc.ccbootdemo.facade.domain.bizobject.Manga;
-import com.cc.ccbootdemo.facade.domain.dataobject.OperateBiz;
 import com.cc.ccbootdemo.facade.domain.bizobject.UserInfo;
-import com.cc.ccbootdemo.facade.domain.bizobject.param.HeaderParam;
-import com.cc.ccbootdemo.facade.domain.bizobject.param.LoginParam;
-import com.cc.ccbootdemo.facade.domain.bizobject.param.OperListQueryParam;
-import com.cc.ccbootdemo.facade.domain.bizobject.param.SearchBaseParam;
+import com.cc.ccbootdemo.facade.domain.bizobject.param.*;
 import com.cc.ccbootdemo.facade.domain.common.annotation.InterceptRequired;
 import com.cc.ccbootdemo.facade.domain.common.exception.ParamException;
 import com.cc.ccbootdemo.facade.domain.common.param.MQProducerParam;
 import com.cc.ccbootdemo.facade.domain.common.util.PsPage;
 import com.cc.ccbootdemo.facade.domain.dataobject.City;
+import com.cc.ccbootdemo.facade.domain.dataobject.OperateBiz;
 import com.cc.ccbootdemo.facade.domain.dataobject.User;
 import com.cc.ccbootdemo.web.holder.HeaderInfoHolder;
 import org.slf4j.Logger;
@@ -179,4 +176,11 @@ public class CcTestController extends BaseController{
         return userService.modifyBgImg(HeaderInfoHolder.getUserId(), file);
     }
 
+    @InterceptRequired(required = false)
+    @ResponseBody
+    @RequestMapping(value = "/register")
+    public String register(RegistParam param) throws Exception {
+         userService.regist(param);
+        return "OK";
+    }
 }

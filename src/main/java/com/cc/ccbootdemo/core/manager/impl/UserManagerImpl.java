@@ -46,7 +46,11 @@ public class UserManagerImpl extends BaseManagerImpl implements UserManager{
 
     @Override
     public int addUser(User params) {
-       return userMapper.insert(params);
+        userMapper.insertSelective(params);
+        UserAttachDO userAttach=new UserAttachDO();
+        userAttach.setUid(params.getUid());
+        return   userAttachDOMapper.insertSelective(userAttach);
+
     }
 
     @Override

@@ -125,7 +125,7 @@
 
         </where>
 
-        order by update_time desc;
+        order by update_time desc
         LIMIT #{pojo.offset},#{pojo.size}
     </select>
 

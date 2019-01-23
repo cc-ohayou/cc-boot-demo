@@ -6,6 +6,8 @@ import com.cc.ccbootdemo.core.common.settings.SettingsHolder;
 import com.cc.ccbootdemo.core.service.UserService;
 import com.cc.ccbootdemo.facade.domain.bizobject.CustomProperties;
 import com.cc.ccbootdemo.facade.domain.bizobject.Manga;
+import com.cc.ccbootdemo.facade.domain.bizobject.param.RegistParam;
+import com.cc.ccbootdemo.facade.domain.common.util.*;
 import com.cc.ccbootdemo.facade.domain.dataobject.OperateBiz;
 import com.cc.ccbootdemo.facade.domain.bizobject.UserInfo;
 import com.cc.ccbootdemo.facade.domain.bizobject.param.LoginParam;
@@ -17,8 +19,6 @@ import com.cc.ccbootdemo.facade.domain.common.enums.EnvType;
 import com.cc.ccbootdemo.facade.domain.common.enums.redis.RedisKeyEnum;
 import com.cc.ccbootdemo.facade.domain.common.exception.BusinessException;
 import com.cc.ccbootdemo.facade.domain.common.param.MQProducerParam;
-import com.cc.ccbootdemo.facade.domain.common.util.AssertUtil;
-import com.cc.ccbootdemo.facade.domain.common.util.PsPage;
 import com.cc.ccbootdemo.facade.domain.common.util.log.MyMarker;
 import com.cc.ccbootdemo.facade.domain.common.util.upyun.UploadUtil;
 import com.cc.ccbootdemo.facade.domain.dataobject.User;
@@ -227,6 +227,46 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService{
             listBiz.add(JSON.parseObject(list.get(i),OperateBiz.class));
         }
         operateBizManager.insertList(listBiz);
+
+    }
+
+    @Override
+    public void regist(RegistParam param) {
+        verifyParams(param);
+        String nickName=param.getNickName();
+        if(!StringUtils.isEmpty(param.getNickName())){
+            AssertUtil.isTrueParam( !RegUtil.nickNameCheck(param.getPwd()),"昵称长度需在10位以内,且不可含特殊字符");
+        }else{
+            nickName= RandomStringUtil.generateString(7);
+        }
+        User user=new User();
+        String uid= String.valueOf(IdGen.genId());
+        user.setUid(uid);
+
+        if(userManager.getUserInfo(param.getPhone())!=null){
+            throw new BusinessException("用户已存在！");
+        }
+
+        user.setNickName(nickName);
+        user.setPhone(param.getPhone());
+        user.setPwd(param.getPwd());
+        user.setMail(param.getMail());
+        userManager.addUser(user);
+
+
+//        userAttach.setAnswer(param.getAnswer());
+//        user.setCreateTime(new Date());
+    }
+
+    private void verifyParams(RegistParam param) {
+        AssertUtil.isNullParamStr(param.getPhone(),"手机号不可为空");
+        AssertUtil.isNullParamStr(param.getPwd(),"密码不可为空");
+//        AssertUtil.isNullParamStr(param.getAnswer(),"请输入问题答案");
+        AssertUtil.isTrueParam( !RegUtil.isPhoneValid(param.getPhone()),"非法手机号");
+//        AssertUtil.isTrueParam( !RegUtil.passwordCheck(param.getPwd()),"密码格式不符,6-16位必须包含数字和字母");
+
+
+
 
     }
 }

@@ -10,6 +10,7 @@ import com.cc.ccbootdemo.facade.domain.common.util.IdGen;
 import lombok.Data;
 import redis.clients.jedis.Jedis;
 
+import javax.persistence.Table;
 import java.util.Date;
 
 /**
@@ -17,6 +18,7 @@ import java.util.Date;
  * @DATE Created on 2019/1/10 10:40.
  */
 @Data
+@Table(name = "operate_biz")
 public class OperateBiz {
     private String operId;
     //操作简称 比如 递延

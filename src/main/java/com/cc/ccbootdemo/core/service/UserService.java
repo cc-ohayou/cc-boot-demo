@@ -2,6 +2,7 @@ package com.cc.ccbootdemo.core.service;
 
 import com.cc.ccbootdemo.facade.domain.bizobject.CustomProperties;
 import com.cc.ccbootdemo.facade.domain.bizobject.Manga;
+import com.cc.ccbootdemo.facade.domain.bizobject.param.RegistParam;
 import com.cc.ccbootdemo.facade.domain.dataobject.OperateBiz;
 import com.cc.ccbootdemo.facade.domain.bizobject.UserInfo;
 import com.cc.ccbootdemo.facade.domain.bizobject.param.LoginParam;
@@ -53,4 +54,10 @@ public interface UserService {
     String modifyBgImg(String userId, MultipartFile file);
 
     void initOperList();
+
+    /**
+     * @description
+     * @author CF create on 2019/1/23 10:24
+     */
+    void regist(RegistParam param);
 }
