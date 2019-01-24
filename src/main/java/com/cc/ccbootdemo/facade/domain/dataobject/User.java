@@ -31,6 +31,7 @@ public class User {
     private String phone;
     private String pwd;
     private String headImage;
+    private String salty;
     private String createTime;
     private String updateTime;
 

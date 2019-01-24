@@ -7,11 +7,11 @@ import java.util.regex.Pattern;
  * Created by huzhiyong on 2017/9/20.
  */
 public class RegUtil {
-    private  static Pattern regex = Pattern.compile("^(0|86|17951)?1[0-9]{10}$");
+    private  static Pattern regPhonePattern = Pattern.compile("^(0|86|17951)?1[0-9]{10}$");
     public static boolean isPhoneValid(String mobileNumber) {
         boolean flag = false;
         try {
-            Matcher matcher = regex.matcher(mobileNumber);
+            Matcher matcher = regPhonePattern.matcher(mobileNumber);
             flag = matcher.matches();
         } catch (Exception e) {
             flag = false;
@@ -77,8 +77,20 @@ public class RegUtil {
         return flag;
     }
 
+    static String regex = "^([\\w-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([\\w-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$";
+    private static  Pattern mailRegPattern=Pattern.compile(regex);
+
+    public static boolean mailCheckPass(String mail) {
+        Matcher m = mailRegPattern.matcher(mail);
+       return m.matches();
+    }
+
     //测试主方法
     public static void main(String[] args) {
         System.out.print(nickNameCheck("你好啊*/"));
+        System.out.print(mailCheckPass("22222estergdg"));
+        System.out.print(mailCheckPass("13758080693@163.com"));
     }
+
+
 }

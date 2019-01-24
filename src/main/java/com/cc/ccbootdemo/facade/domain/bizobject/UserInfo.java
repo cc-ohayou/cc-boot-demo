@@ -27,4 +27,5 @@ public class UserInfo extends UserAttachDO{
     private String createTime;
     private String updateTime;
     private String sid;
+    private String salty;
 }

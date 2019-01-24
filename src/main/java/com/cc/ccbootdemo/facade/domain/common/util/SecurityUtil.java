@@ -93,6 +93,39 @@ public class SecurityUtil {
         return "";
     }
 
+
+    public static String MD5(String pwd,String salt) {
+        try {
+            // 获得MD5摘要算法的 MessageDigest 对象
+            MessageDigest mdInst = MessageDigest.getInstance("MD5");
+            // 使用指定的字节更新摘要
+            mdInst.update((pwd+salt).getBytes("utf-8"));
+            // 获得密文
+            byte[] md = mdInst.digest();
+            // 把密文转换成十六进制的字符串形式
+            StringBuffer hexString = new StringBuffer();
+            // 字节数组转换为 十六进制 数
+            for (int i = 0; i < md.length; i++) {
+                String shaHex = Integer.toHexString(md[i] & 0xFF);
+                if (shaHex.length() < 2) {
+                    hexString.append(0);
+                }
+                hexString.append(shaHex);
+            }
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    public static boolean verify(String pwd,String salt,String dbPwd) {
+        return MD5(pwd,salt).equals(dbPwd);
+
+    }
+
     /**
      * 加密
      *
@@ -164,7 +197,11 @@ public class SecurityUtil {
 
     public static void main(String[] args) {
 //        System.out.println(SHA1(MD5("12345")));
-//        System.out.println(MD5("12345"));
-        System.out.println(SecurityUtil.MD5(SecurityUtil.MD5("123123ee") + "171531"));
+//        System.out.println(MD5("123123ee"));
+
+        System.out.println(verify("06879DB15BB834A105EDCF0F622EDD31","123123","5a1ba4e1582054efd80eeef6a062bed5"));
+        System.out.println(verify("06879DB15BB834A105EDCF0F622EDD31","hytzr2","309fa537a8a3d86881758260b1e22679"));
+
+//        System.out.println(SecurityUtil.MD5("06879DB15BB834A105EDCF0F622EDD31","123123"));
     }
 }

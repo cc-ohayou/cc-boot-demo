@@ -165,11 +165,13 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService{
         }
 */
         UserInfo userInfo=userManager.getUserInfo(param.getUserName());
-        if(userInfo==null||!param.getPwd().equals(userInfo.getPwd())){
+        if(userInfo==null||!SecurityUtil.verify(param.getPwd(),userInfo.getSalty(),userInfo.getPwd())){
             throw new BusinessException("用户名或密码不正确");
         }
         String sid=userManager.addSession(userInfo.getUid(),"1001","android");
         userInfo.setSid(sid);
+        userInfo.setSalty("");
+        userInfo.setPwd("");
         return userInfo;
     }
 
@@ -236,6 +238,9 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService{
         String nickName=param.getNickName();
         if(!StringUtils.isEmpty(param.getNickName())){
             AssertUtil.isTrueParam( !RegUtil.nickNameCheck(param.getPwd()),"昵称长度需在10位以内,且不可含特殊字符");
+            if(userManager.getUserInfo(param.getNickName())!=null){
+                throw new BusinessException("该昵称已被占用！");
+            }
         }else{
             nickName= RandomStringUtil.generateString(7);
         }
@@ -246,11 +251,16 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService{
         if(userManager.getUserInfo(param.getPhone())!=null){
             throw new BusinessException("用户已存在！");
         }
+        if(userManager.getUserInfo(param.getMail())!=null){
+            throw new BusinessException("用户已存在！");
+        }
+
 
         user.setNickName(nickName);
         user.setPhone(param.getPhone());
-        user.setPwd(param.getPwd());
         user.setMail(param.getMail());
+        user.setSalty(RandomStringUtil.generateString(6));
+        user.setPwd(SecurityUtil.MD5(param.getPwd(),user.getSalty()));
         userManager.addUser(user);
 
 
@@ -261,8 +271,10 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService{
     private void verifyParams(RegistParam param) {
         AssertUtil.isNullParamStr(param.getPhone(),"手机号不可为空");
         AssertUtil.isNullParamStr(param.getPwd(),"密码不可为空");
+        AssertUtil.isNullParamStr(param.getMail(),"邮箱不可为空");
 //        AssertUtil.isNullParamStr(param.getAnswer(),"请输入问题答案");
         AssertUtil.isTrueParam( !RegUtil.isPhoneValid(param.getPhone()),"非法手机号");
+        AssertUtil.isTrueParam( !RegUtil.mailCheckPass(param.getMail()),"非法邮箱");
 //        AssertUtil.isTrueParam( !RegUtil.passwordCheck(param.getPwd()),"密码格式不符,6-16位必须包含数字和字母");
 
 

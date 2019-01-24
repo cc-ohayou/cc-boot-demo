@@ -19,7 +19,7 @@ public enum SettingsEnum {
     ROCKETMQ_CONSUMER_NAME_SERVER("rocketmq-consumer-name-server","消费者mq服务地址","127.0.0.1:9876"),
     DOWNLOAD_URL_APK("cc-str-apk-download-url","apk下载地址","https://pkg.biligame.com/games/bh3_2.8.0_1_20181211_201637_b8c9b8.apk" ),
     UPDATE_APP_SIGN("update-cc-app-sign","默认为0 不更新  1 更新app","0" ),
-    UPYUN_ACCOUNT("upyun-username","默认为0 不更新  1 更新app","0" ),
+    UPYUN_ACCOUNT("upyun-username","又拍云用户名","0" ),
     UPYUN_PWD("upyun-pwd","全部取自redis","" ),
     UPYUN_URL("upyun-url","全部取自redis","" ),
     UPYUN_BUCKET_NAME("upyun-bucket-name","全部取自redis","" ),
