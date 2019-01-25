@@ -14,6 +14,7 @@
         <result column="url" property="url"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
+        <result column="role_code" property="roleCode"/>
     </resultMap>
 
 <!--auto generated Code-->
@@ -27,7 +28,8 @@
         env_type,
         url,
         create_time,
-        update_time
+        update_time,
+        role_code
     </sql>
 
 <!--auto generated Code-->
@@ -44,6 +46,7 @@
             <if test="pojo.url != null"> url, </if>
             <if test="pojo.createTime != null"> create_time, </if>
             <if test="pojo.updateTime != null"> update_time, </if>
+            <if test="pojo.roleCode != null"> role_code, </if>
         </trim>
         VALUES
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -57,6 +60,7 @@
             <if test="pojo.url != null"> #{pojo.url}, </if>
             <if test="pojo.createTime != null"> #{pojo.createTime}, </if>
             <if test="pojo.updateTime != null"> #{pojo.updateTime}, </if>
+            <if test="pojo.roleCode != null"> #{pojo.roleCode}, </if>
         </trim>
     </insert>
 
@@ -76,7 +80,8 @@
             #{pojo.envType},
             #{pojo.url},
             #{pojo.createTime},
-            #{pojo.updateTime}
+            #{pojo.updateTime},
+            #{pojo.roleCode}
             )
         </foreach>
     </insert>
@@ -94,6 +99,7 @@
             <if test="pojo.envType != null"> env_type = #{pojo.envType}, </if>
             <if test="pojo.url != null"> url = #{pojo.url}, </if>
             <if test="pojo.createTime != null"> create_time = #{pojo.createTime}, </if>
+            <if test="pojo.roleCode != null"> role_code = #{pojo.roleCode}, </if>
         </set>
          WHERE id = #{pojo.id}
     </update>
@@ -113,6 +119,7 @@
             <if test="pojo.url != null"> AND url = #{pojo.url} </if>
             <if test="pojo.createTime != null"> AND create_time = #{pojo.createTime} </if>
             <if test="pojo.updateTime != null"> AND update_time = #{pojo.updateTime} </if>
+            <if test="pojo.roleCode != null"> AND role_code = #{pojo.roleCode} </if>
         </where>
         LIMIT 1000 
     </select>

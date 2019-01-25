@@ -6,6 +6,7 @@
     <resultMap id="AllColumnMap" type="com.cc.ccbootdemo.facade.domain.dataobject.UserAttachDO">
         <result column="main_bg_url" property="mainBgUrl"/>
         <result column="head_lay_bg_img_url" property="headLayBgImgUrl"/>
+        <result column="role_codes" property="roleCodes"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
         <result column="uid" property="uid"/>
@@ -14,6 +15,7 @@
 <!--auto generated Code-->
     <sql id="all_column">
         main_bg_url,
+        role_codes,
         head_lay_bg_img_url,
         create_time,
         update_time,
@@ -30,6 +32,7 @@
         <foreach collection="pojos" item="pojo" index="index" separator=",">
             (
             #{pojo.mainBgUrl},
+            #{pojo.roleCodes,},
             #{pojo.headLayBgImgUrl},
             #{pojo.createTime},
             #{pojo.updateTime},
@@ -43,6 +46,7 @@
         UPDATE user_attach
         <set>
             <if test="pojo.mainBgUrl != null"> main_bg_url = #{pojo.mainBgUrl}, </if>
+            <if test="pojo.roleCodes != null"> role_codes = #{pojo.roleCodes}, </if>
             <if test="pojo.headLayBgImgUrl != null"> head_lay_bg_img_url = #{pojo.headLayBgImgUrl}, </if>
             <if test="pojo.createTime != null"> create_time = #{pojo.createTime}, </if>
         </set>

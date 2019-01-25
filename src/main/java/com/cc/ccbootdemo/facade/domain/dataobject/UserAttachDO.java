@@ -14,8 +14,8 @@ public class UserAttachDO {
     private String uid;
     private String mainBgUrl;
     private String headLayBgImgUrl;
-    private String answer;
-    private String question;
+
+    private String roleCodes;
 
     private String createTime;
     private String updateTime;

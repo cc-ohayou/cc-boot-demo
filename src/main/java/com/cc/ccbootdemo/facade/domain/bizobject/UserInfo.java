@@ -23,7 +23,6 @@ public class UserInfo extends UserAttachDO{
      */
     private String mail;
     private String headImage;
-    private String roleCode;
     private String createTime;
     private String updateTime;
     private String sid;

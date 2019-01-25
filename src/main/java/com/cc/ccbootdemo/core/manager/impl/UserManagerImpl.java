@@ -49,6 +49,7 @@ public class UserManagerImpl extends BaseManagerImpl implements UserManager{
         userMapper.insertSelective(params);
         UserAttachDO userAttach=new UserAttachDO();
         userAttach.setUid(params.getUid());
+        userAttach.setRoleCodes("001,");
         return   userAttachDOMapper.insertSelective(userAttach);
 
     }

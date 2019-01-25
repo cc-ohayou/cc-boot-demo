@@ -37,6 +37,10 @@ public class OperateBiz {
     private String url;
     private String createTime;
     private String updateTime;
+    /**
+     * 操作所需权限
+     */
+    private String roleCode;
 
     public static void main(String[] args) {
         Jedis jedis = RedisManagerImpl.getJedis();
