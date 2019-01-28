@@ -1,6 +1,7 @@
 package com.cc.ccbootdemo.facade.domain.common.util;
 
 
+import com.cc.ccbootdemo.facade.domain.common.exception.BusinessException;
 import com.cc.ccbootdemo.facade.domain.common.exception.ParamException;
 
 import java.util.List;
@@ -59,12 +60,20 @@ public class AssertUtil {
      * @description 判断业务引起的异常
      * @author CF create on 2017/6/26 16:04
      */
-    public static void isTrueBIZ(Boolean obj, String code, String msg) throws ParamException {
+    public static void isTrueBIZ(Boolean obj, String code, String msg) throws BusinessException {
         if (obj) {
-            throw new ParamException(code, msg);
+            throw new BusinessException(code, msg);
         }
 
     }
+
+    public static void isTrueBIZ(Boolean obj,  String msg) throws BusinessException {
+        if (obj) {
+            throw new BusinessException(BIZ_ERROR, msg);
+        }
+
+    }
+
     public static void isTrueParam(Boolean obj, String msg) throws ParamException {
         if (obj) {
             throw new ParamException(PARAM_ERROR, msg);

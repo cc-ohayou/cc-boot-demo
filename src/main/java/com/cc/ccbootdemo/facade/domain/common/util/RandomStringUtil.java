@@ -12,6 +12,7 @@ public class RandomStringUtil {
 
     public static final String ALLCHAR = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     public static final String ALLCHAR_LOWERCASE = "0123456789abcdefghijklmnopqrstuvwxyz";
+    public static final String ALL_NUM = "0123456789";
 
     /**
      * 返回一个定长的随机字符串(包含小写字母、数字)
@@ -24,6 +25,15 @@ public class RandomStringUtil {
         Random random = new Random();
         for (int i = 0; i < length; i++) {
             sb.append(ALLCHAR_LOWERCASE.charAt(random.nextInt(ALLCHAR_LOWERCASE.length())));
+        }
+        return sb.toString();
+    }
+
+    public static String generateNum(int length) {
+        StringBuffer sb = new StringBuffer();
+        Random random = new Random();
+        for (int i = 0; i < length; i++) {
+            sb.append(ALL_NUM.charAt(random.nextInt(ALL_NUM.length())));
         }
         return sb.toString();
     }

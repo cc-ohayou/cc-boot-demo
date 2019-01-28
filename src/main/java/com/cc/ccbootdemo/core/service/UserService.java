@@ -3,6 +3,7 @@ package com.cc.ccbootdemo.core.service;
 import com.cc.ccbootdemo.facade.domain.bizobject.CustomProperties;
 import com.cc.ccbootdemo.facade.domain.bizobject.Manga;
 import com.cc.ccbootdemo.facade.domain.bizobject.param.RegistParam;
+import com.cc.ccbootdemo.facade.domain.common.param.ResetPwdParam;
 import com.cc.ccbootdemo.facade.domain.dataobject.OperateBiz;
 import com.cc.ccbootdemo.facade.domain.bizobject.UserInfo;
 import com.cc.ccbootdemo.facade.domain.bizobject.param.LoginParam;
@@ -13,6 +14,7 @@ import com.cc.ccbootdemo.facade.domain.common.util.PsPage;
 import com.cc.ccbootdemo.facade.domain.dataobject.User;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.MessagingException;
 import java.util.List;
 
 /**
@@ -45,7 +47,7 @@ public interface UserService {
      * @description
      * @author CF create on 2019/1/14 11:58
      */
-    int updateUserInfo(UserInfo param);
+    int updateUserInfo(User param);
 
     String updateHeadImg(String userId, MultipartFile file);
 
@@ -60,4 +62,8 @@ public interface UserService {
      * @author CF create on 2019/1/23 10:24
      */
     void regist(RegistParam param);
+
+    void forgetPwd(String uid) throws MessagingException;
+
+    void resetPwd(ResetPwdParam resetParam);
 }

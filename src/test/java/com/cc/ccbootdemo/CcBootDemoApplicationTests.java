@@ -3,9 +3,11 @@ package com.cc.ccbootdemo;
 import com.cc.ccbootdemo.core.common.properties.BaseProperties;
 import com.cc.ccbootdemo.core.common.properties.DemoProperty;
 import com.cc.ccbootdemo.core.common.properties.resource.BaseResourceProperties;
+import com.cc.ccbootdemo.core.manager.RedisManager;
 import com.cc.ccbootdemo.core.service.MailService;
 import com.cc.ccbootdemo.core.service.UserService;
 import com.cc.ccbootdemo.facade.domain.common.dataobject.mail.MailInfo;
+import com.cc.ccbootdemo.facade.domain.common.util.RandomStringUtil;
 import com.cc.ccbootdemo.web.controller.HelloController;
 import com.cc.core.DemoPropertyCustomized;
 import org.junit.Before;
@@ -57,7 +59,8 @@ public class CcBootDemoApplicationTests {
 	UserService userService;
 	private MockMvc mvc;
 	private MockMvc ccMvc;
-
+    @Resource
+	RedisManager redisManager;
 	 /* mvc.perform(MockMvcRequestBuilders.get("/data/getMarkers")
 			  .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .param("lat", "123.123").param("lon", "456.456")
@@ -122,12 +125,15 @@ public class CcBootDemoApplicationTests {
 		MailInfo  info=new MailInfo();
 		//13758080693@163.com
 		String[] toMailAddresses={"ohayousekai@sina.com","840794748@qq.com"};
-		info.setContent(text);
-		info.setFrom("13758080693@163.com");
+		String verifyCode=RandomStringUtil.generateString(6);
+		info.setContent("您此次的验证码是："+ verifyCode);
+		info.setFrom("ohayousekai@sina.com");
 		info.setTo(toMailAddresses);
-		info.setSubject("smtp test mail send");
+		info.setSubject("您此次的验证码是："+ verifyCode);
+
 		try {
 			mailService.sendMail(info);
+//			redisManager.
 		} catch (MessagingException e) {
 			e.printStackTrace();
 		}

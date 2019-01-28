@@ -42,6 +42,8 @@ public class BaseServiceImpl implements BaseService{
     MqManager mqManager;
     @Resource
     OperateBizManager operateBizManager;
+    @Resource
+    MailManager mailManager;
 
 
     private Logger logger= LoggerFactory.getLogger(this.getClass());

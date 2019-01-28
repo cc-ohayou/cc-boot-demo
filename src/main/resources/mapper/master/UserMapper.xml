@@ -75,6 +75,23 @@
 
     </select>
 
+    <select id="selectUserInfoBySelective" resultType="com.cc.ccbootdemo.facade.domain.bizobject.UserInfo">
+        SELECT <include refid="Base_Column_List"/>
+        FROM user
+        <where >
+            1=1
+            <if test="pojo.userName != null">and user_name = #{pojo.userName} </if>
+            <if test="pojo.pwd != null">and pwd = #{pojo.pwd} </if>
+            <if test="pojo.nickName != null">and nick_name = #{pojo.nickName} </if>
+            <if test="pojo.description != null">and description = #{pojo.description} </if>
+            <if test="pojo.phone != null">and phone = #{pojo.phone} </if>
+            <if test="pojo.mail != null">and mail = #{pojo.mail} </if>
+            <if test="pojo.headImage != null">and head_image = #{pojo.headImage} </if>
+            <if test="pojo.createTime != null">and create_time = #{pojo.createTime} </if>
+            <if test="pojo.uid != null">and uid = #{pojo.uid} </if>
+        </where>
+        LIMIT 1000
+    </select>
 
     <!--auto generated Code-->
     <update id="updateUserInfoSelective">

@@ -49,7 +49,7 @@ public class UserManagerImpl extends BaseManagerImpl implements UserManager{
         userMapper.insertSelective(params);
         UserAttachDO userAttach=new UserAttachDO();
         userAttach.setUid(params.getUid());
-        userAttach.setRoleCodes("001,");
+        userAttach.setRoleCodes("000");
         return   userAttachDOMapper.insertSelective(userAttach);
 
     }
@@ -65,7 +65,7 @@ public class UserManagerImpl extends BaseManagerImpl implements UserManager{
     }
 
     @Override
-    public int updateUserInfoSelective(UserInfo pojo) {
+    public int updateUserInfoSelective(User pojo) {
         return userMapper.updateUserInfoSelective(pojo);
     }
 
@@ -113,6 +113,13 @@ public class UserManagerImpl extends BaseManagerImpl implements UserManager{
     @Override
     public void updateUserAttachInfoSelective(UserAttachDO userAttach) {
            userAttachDOMapper.updateSelective(userAttach);
+    }
+
+    @Override
+    public UserInfo getUserInfoByMail(String mail) {
+        User u=new User();
+        u.setMail(mail);
+        return userMapper.selectUserInfoBySelective(u);
     }
 
     private void setSession(String source, String sid, SessionDO sessionDO) {

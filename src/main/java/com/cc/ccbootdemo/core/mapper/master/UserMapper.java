@@ -28,11 +28,13 @@ public interface UserMapper extends tk.mybatis.mapper.common.Mapper<User>{
      * @description
      * @author CF create on 2019/1/14 11:58
      */
-    int updateUserInfoSelective(@Param("pojo") UserInfo pojo);
+    int updateUserInfoSelective(@Param("pojo") User pojo);
 
     /**
      * @description
      * @author CF create on 2019/1/15 14:06
      */
     UserInfo selectByUid(String userId);
+
+    UserInfo selectUserInfoBySelective(@Param("pojo") User pojo);
 }

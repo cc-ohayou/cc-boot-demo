@@ -22,7 +22,7 @@ public interface UserManager {
 
     UserInfo getUserInfo(String userName);
 
-    int updateUserInfoSelective(UserInfo pojo);
+    int updateUserInfoSelective(User pojo);
 
     UserInfo getUserInfoByUid(String userId);
 
@@ -37,4 +37,6 @@ public interface UserManager {
     String addSession(String uid,String mid,String source) ;
 
     void updateUserAttachInfoSelective(UserAttachDO user);
+
+    UserInfo getUserInfoByMail(String mail);
 }

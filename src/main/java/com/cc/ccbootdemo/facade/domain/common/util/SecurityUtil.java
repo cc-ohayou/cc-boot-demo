@@ -197,11 +197,12 @@ public class SecurityUtil {
 
     public static void main(String[] args) {
 //        System.out.println(SHA1(MD5("12345")));
-//        System.out.println(MD5("123123ee"));
+        System.out.println(MD5("123123ee"));
+//        System.out.println(MD5("123123dd"));
 
         System.out.println(verify("06879db15bb834a105edcf0f622edd31","123123","5a1ba4e1582054efd80eeef6a062bed5"));
         System.out.println(verify("06879DB15BB834A105EDCF0F622EDD31","hytzr2","309fa537a8a3d86881758260b1e22679"));
-
-        System.out.println(SecurityUtil.MD5("06879db15bb834a105edcf0f622edd31","123123"));
+System.out.println( Math.toIntExact((System.currentTimeMillis() - 1548669875193L) / 60000));
+        System.out.println(SecurityUtil.MD5(MD5("123123dd"),"123123"));
     }
 }

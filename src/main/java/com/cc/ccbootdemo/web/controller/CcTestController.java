@@ -9,6 +9,7 @@ import com.cc.ccbootdemo.facade.domain.bizobject.param.*;
 import com.cc.ccbootdemo.facade.domain.common.annotation.InterceptRequired;
 import com.cc.ccbootdemo.facade.domain.common.exception.ParamException;
 import com.cc.ccbootdemo.facade.domain.common.param.MQProducerParam;
+import com.cc.ccbootdemo.facade.domain.common.param.ResetPwdParam;
 import com.cc.ccbootdemo.facade.domain.common.util.PsPage;
 import com.cc.ccbootdemo.facade.domain.dataobject.City;
 import com.cc.ccbootdemo.facade.domain.dataobject.OperateBiz;
@@ -151,7 +152,7 @@ public class CcTestController extends BaseController{
 
     @ResponseBody
     @RequestMapping(value = "/update/userInfo")
-    public String udpateUserInfo(UserInfo param) {
+    public String updateUserInfo(User param) {
         param.setUid(HeaderInfoHolder.getUserId());
         userService.updateUserInfo(param);
         return "OK";
@@ -183,4 +184,20 @@ public class CcTestController extends BaseController{
          userService.regist(param);
         return "OK";
     }
+
+    @InterceptRequired(required = false)
+    @ResponseBody
+    @RequestMapping(value = "/forget/pwd")
+    public String forgetPwd(String mail) throws Exception {
+        userService.forgetPwd(mail);
+        return "OK";
+    }
+    @InterceptRequired(required = false)
+    @ResponseBody
+    @RequestMapping(value = "/reset/pwd")
+    public String resetPwd(ResetPwdParam resetParam) throws Exception {
+        userService.resetPwd(resetParam);
+        return "OK";
+    }
+
 }

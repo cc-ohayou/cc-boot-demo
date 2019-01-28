@@ -6,21 +6,23 @@ import com.cc.ccbootdemo.core.common.settings.SettingsHolder;
 import com.cc.ccbootdemo.core.service.UserService;
 import com.cc.ccbootdemo.facade.domain.bizobject.CustomProperties;
 import com.cc.ccbootdemo.facade.domain.bizobject.Manga;
-import com.cc.ccbootdemo.facade.domain.bizobject.param.RegistParam;
-import com.cc.ccbootdemo.facade.domain.common.util.*;
-import com.cc.ccbootdemo.facade.domain.dataobject.OperateBiz;
 import com.cc.ccbootdemo.facade.domain.bizobject.UserInfo;
 import com.cc.ccbootdemo.facade.domain.bizobject.param.LoginParam;
 import com.cc.ccbootdemo.facade.domain.bizobject.param.OperListQueryParam;
+import com.cc.ccbootdemo.facade.domain.bizobject.param.RegistParam;
 import com.cc.ccbootdemo.facade.domain.bizobject.param.SearchBaseParam;
 import com.cc.ccbootdemo.facade.domain.bizobject.strgy.StrgyBiz;
 import com.cc.ccbootdemo.facade.domain.common.constants.RedisConstants;
+import com.cc.ccbootdemo.facade.domain.common.dataobject.mail.MailInfo;
 import com.cc.ccbootdemo.facade.domain.common.enums.EnvType;
 import com.cc.ccbootdemo.facade.domain.common.enums.redis.RedisKeyEnum;
 import com.cc.ccbootdemo.facade.domain.common.exception.BusinessException;
 import com.cc.ccbootdemo.facade.domain.common.param.MQProducerParam;
+import com.cc.ccbootdemo.facade.domain.common.param.ResetPwdParam;
+import com.cc.ccbootdemo.facade.domain.common.util.*;
 import com.cc.ccbootdemo.facade.domain.common.util.log.MyMarker;
 import com.cc.ccbootdemo.facade.domain.common.util.upyun.UploadUtil;
+import com.cc.ccbootdemo.facade.domain.dataobject.OperateBiz;
 import com.cc.ccbootdemo.facade.domain.dataobject.User;
 import com.cc.ccbootdemo.facade.domain.dataobject.UserAttachDO;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.MessagingException;
 import java.util.*;
 
 /**
@@ -176,7 +179,7 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService{
     }
 
     @Override
-    public int updateUserInfo(UserInfo pojo){
+    public int updateUserInfo(User pojo){
         AssertUtil.isNullParamStr(pojo.getUid(),"用户id不可为空");
         return userManager.updateUserInfoSelective(pojo);
     }
@@ -192,7 +195,7 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService{
             logger.error("上传头像失败!!!",e);
            throw  new BusinessException("头像上传失败");
         }
-        UserInfo user = new UserInfo();
+        User user = new User();
         user.setUid(userId);
         user.setHeadImage(headImage);
         userManager.updateUserInfoSelective(user);
@@ -278,7 +281,67 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService{
 //        AssertUtil.isTrueParam( !RegUtil.passwordCheck(param.getPwd()),"密码格式不符,6-16位必须包含数字和字母");
 
 
+    }
 
+    @Override
+    public void forgetPwd(String mail) {
+        AssertUtil.isNullParamStr(mail, "邮箱不可为空!");
+        AssertUtil.isTrueParam(!RegxUtil.isEmail(mail),"邮箱格式非法");
+        UserInfo info=userManager.getUserInfoByMail(mail);
+        AssertUtil.isTrueBIZ(info==null,"该邮箱尚未注册");
+        String verifyCode = RandomStringUtil.generateNum(6);
+        try {
+            mailManager.sendMail( organizeMailInfo(info, verifyCode));
+            assert info != null;
+            redisManager.hset(RedisKeyEnum.MAIL_RESET_PWD_VERIFY_CODE.getValue(),
+                    getMailPwdResetVerifyCodeKey(info, verifyCode), String.valueOf(System.currentTimeMillis()));
+        } catch (MessagingException e) {
+            logger.error("邮箱验证码发送失败",e);
+            throw new BusinessException("验证码发送失败");
+        }
+
+    }
+
+    private String getMailPwdResetVerifyCodeKey(UserInfo info, String verifyCode) {
+        return info.getUid()+"-"+verifyCode;
+    }
+
+    private MailInfo organizeMailInfo(UserInfo info, String verifyCode) {
+        MailInfo mailInfo=new MailInfo();
+        mailInfo.setSubject("您此次的验证码是："+verifyCode);
+        mailInfo.setTo(new String[]{info.getMail()});
+        mailInfo.setContent("您此次的验证码是："+verifyCode+",有效期15分钟，请尽快使用！");
+        return mailInfo;
+    }
+
+    @Override
+    public void resetPwd(ResetPwdParam resetParam) {
+        AssertUtil.isNullParamStr(resetParam.getMail(), "邮箱不可为空!");
+        AssertUtil.isNullParamStr(resetParam.getPwd(), "重置密码不可为空!");
+        AssertUtil.isNullParamStr(resetParam.getVerifyCode(), "验证码不可为空!");
+        AssertUtil.isTrueParam(!RegxUtil.isEmail(resetParam.getMail()),"邮箱格式非法!");
+//        AssertUtil.isTrueBIZ(!RegUtil.passwordCheck(resetParam.getPwd()),"密码格式非法!");
+        /*
+         1、邮箱校验
+         */
+        UserInfo info=userManager.getUserInfoByMail(resetParam.getMail());
+        AssertUtil.isTrueBIZ(info==null,"该邮箱尚未注册");
+        assert info != null;
+        /*
+         *2、 验证码校验
+         */
+        String createMills= redisManager.hget(RedisKeyEnum.MAIL_RESET_PWD_VERIFY_CODE.getValue(),
+                getMailPwdResetVerifyCodeKey(info, resetParam.getVerifyCode()));
+        AssertUtil.isTrueBIZ(StringUtils.isEmpty(createMills),"验证码错误");
+        int passMinute= Math.toIntExact((System.currentTimeMillis() - Long.parseLong(createMills)) / (60 * 1000));
+        AssertUtil.isTrueBIZ(passMinute>=15,"验证码已失效");
+        /*
+         * 3、修改密码
+         */
+        User u=new User();
+        u.setPwd(SecurityUtil.MD5(resetParam.getPwd(),info.getSalty()));
+        u.setUid(info.getUid());
+        userManager.updateUserInfoSelective(u);
 
     }
 }

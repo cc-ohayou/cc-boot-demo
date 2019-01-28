@@ -11,6 +11,7 @@ public enum RedisKeyEnum {
   MANGA_LIST("cc-str-manga-list","动漫列表测试数据",RedisType.STRING,BizType.COMMON),
   ETF_SIT_OPER_LIST("cc-list-sit-oper-list","操作列表测试数据",RedisType.LIST,BizType.COMMON),
     USER_INFO("cc-hash-user-info-","登录人员数据",RedisType.HASH,BizType.USER),
+    MAIL_RESET_PWD_VERIFY_CODE("cc-hash-reset-pwd-verify-code","找回密码验证码",RedisType.HASH,BizType.USER),
     ;
 
 
