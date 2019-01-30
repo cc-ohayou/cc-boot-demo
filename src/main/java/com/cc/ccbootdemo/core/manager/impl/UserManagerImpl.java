@@ -122,6 +122,14 @@ public class UserManagerImpl extends BaseManagerImpl implements UserManager{
         return userMapper.selectUserInfoBySelective(u);
     }
 
+    @Override
+    public void loginOut(String userId) {
+        SessionDO sessionDO = sessionDOMapper.queryByUserId(userId);
+        sessionDO.setSid(String.valueOf(IdGen.genId()));
+        sessionDO.setExpireTime(String.valueOf(System.currentTimeMillis()));
+        sessionDOMapper.updateByPrimaryKeySelective(sessionDO);
+    }
+
     private void setSession(String source, String sid, SessionDO sessionDO) {
         sessionDO.setSid(sid);
         sessionDO.setSource(source);

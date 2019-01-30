@@ -7,7 +7,7 @@ import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
 
-public interface OperateBizDao extends Mapper<OperateBiz> {
+public interface OperateBizDao extends     Mapper<OperateBiz> {
 
     int insertSelectiveMy(@Param("pojo") OperateBiz pojo);
 

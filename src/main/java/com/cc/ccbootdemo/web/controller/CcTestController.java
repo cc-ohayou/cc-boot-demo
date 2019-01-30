@@ -141,6 +141,13 @@ public class CcTestController extends BaseController{
         return userService.login(param);
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/user/loginOut")
+    public String loginOut() {
+         userService.loginOut(HeaderInfoHolder.getUserId());
+         return "ok";
+    }
+
 
     @ResponseBody
     @RequestMapping(value = "/user/info")

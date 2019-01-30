@@ -31,8 +31,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.mail.MessagingException;
 import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 /**
  * @AUTHOR CF
@@ -291,14 +293,22 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService{
         AssertUtil.isTrueBIZ(info==null,"该邮箱尚未注册");
         String verifyCode = RandomStringUtil.generateNum(6);
         try {
-            mailManager.sendMail( organizeMailInfo(info, verifyCode));
-            assert info != null;
-            redisManager.hset(RedisKeyEnum.MAIL_RESET_PWD_VERIFY_CODE.getValue(),
-                    getMailPwdResetVerifyCodeKey(info, verifyCode), String.valueOf(System.currentTimeMillis()));
-        } catch (MessagingException e) {
-            logger.error("邮箱验证码发送失败",e);
+            RetryUtil.execute(new Callable<Boolean>() {
+                @Override
+                public Boolean call() throws Exception {
+                    mailManager.sendMail( organizeMailInfo(info, verifyCode));
+                    assert info != null;
+                    redisManager.hset(RedisKeyEnum.MAIL_RESET_PWD_VERIFY_CODE.getValue(),
+                            getMailPwdResetVerifyCodeKey(info, verifyCode), String.valueOf(System.currentTimeMillis()));
+                    return true;
+                }
+            },2000,1000,1000);
+        } catch (ExecutionException |InterruptedException e) {
             throw new BusinessException("验证码发送失败");
+        } catch (TimeoutException e) {
+            throw new BusinessException("验证码发送失败(请求超时)!");
         }
+
 
     }
 
@@ -332,8 +342,13 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService{
          */
         String createMills= redisManager.hget(RedisKeyEnum.MAIL_RESET_PWD_VERIFY_CODE.getValue(),
                 getMailPwdResetVerifyCodeKey(info, resetParam.getVerifyCode()));
+//      用后即删除
+        redisManager.hdel(RedisKeyEnum.MAIL_RESET_PWD_VERIFY_CODE.getValue(),
+                getMailPwdResetVerifyCodeKey(info, resetParam.getVerifyCode()));
         AssertUtil.isTrueBIZ(StringUtils.isEmpty(createMills),"验证码错误");
+
         int passMinute= Math.toIntExact((System.currentTimeMillis() - Long.parseLong(createMills)) / (60 * 1000));
+
         AssertUtil.isTrueBIZ(passMinute>=15,"验证码已失效");
         /*
          * 3、修改密码
@@ -343,5 +358,10 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService{
         u.setUid(info.getUid());
         userManager.updateUserInfoSelective(u);
 
+    }
+
+    @Override
+    public void loginOut(String userId) {
+        userManager.loginOut(userId);
     }
 }

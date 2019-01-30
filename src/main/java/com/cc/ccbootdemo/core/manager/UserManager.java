@@ -39,4 +39,6 @@ public interface UserManager {
     void updateUserAttachInfoSelective(UserAttachDO user);
 
     UserInfo getUserInfoByMail(String mail);
+
+    void loginOut(String userId);
 }

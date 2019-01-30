@@ -41,6 +41,7 @@ public class OperateBiz {
      * 操作所需权限
      */
     private String roleCode;
+    private String reqParamStr;
 
     public static void main(String[] args) {
         Jedis jedis = RedisManagerImpl.getJedis();

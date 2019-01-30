@@ -39,6 +39,14 @@ public class OperateBizManagerImpl implements OperateBizManager {
         return operateBizDao.getOperBizList(param);
     }
 
+    @Override
+    public OperateBiz getOperBizByPrimary(String operId) {
+        OperateBiz biz=new OperateBiz();
+        biz.setOperId(operId);
+        List<OperateBiz> list=operateBizDao.selectBySelective(biz);
+        return list.isEmpty()?null:list.get(0);
+    }
+
     public int update(OperateBiz pojo){
         return operateBizDao.update(pojo);
     }

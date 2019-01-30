@@ -18,4 +18,7 @@ public interface OperateBizManager {
     long getOperBizTotalCou(OperListQueryParam param);
 
     List<OperateBiz> getOperBizList(OperListQueryParam param);
+
+    OperateBiz getOperBizByPrimary(String operId);
+
 }

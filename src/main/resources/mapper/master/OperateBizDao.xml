@@ -15,6 +15,7 @@
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
         <result column="role_code" property="roleCode"/>
+        <result column="req_param_str" property="reqParamStr"/>
     </resultMap>
 
 <!--auto generated Code-->
@@ -29,7 +30,8 @@
         url,
         create_time,
         update_time,
-        role_code
+        role_code,
+        req_param_str
     </sql>
 
 <!--auto generated Code-->
@@ -47,6 +49,7 @@
             <if test="pojo.createTime != null"> create_time, </if>
             <if test="pojo.updateTime != null"> update_time, </if>
             <if test="pojo.roleCode != null"> role_code, </if>
+            <if test="pojo.reqParamStr != null"> role_code, </if>
         </trim>
         VALUES
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -61,6 +64,7 @@
             <if test="pojo.createTime != null"> #{pojo.createTime}, </if>
             <if test="pojo.updateTime != null"> #{pojo.updateTime}, </if>
             <if test="pojo.roleCode != null"> #{pojo.roleCode}, </if>
+            <if test="pojo.reqParamStr != null"> #{pojo.roleCode}, </if>
         </trim>
     </insert>
 
@@ -82,6 +86,7 @@
             #{pojo.createTime},
             #{pojo.updateTime},
             #{pojo.roleCode}
+            #{pojo.reqParamStr}
             )
         </foreach>
     </insert>
@@ -100,6 +105,7 @@
             <if test="pojo.url != null"> url = #{pojo.url}, </if>
             <if test="pojo.createTime != null"> create_time = #{pojo.createTime}, </if>
             <if test="pojo.roleCode != null"> role_code = #{pojo.roleCode}, </if>
+            <if test="pojo.reqParamStr != null"> req_param_str = #{pojo.reqParamStr}, </if>
         </set>
          WHERE id = #{pojo.id}
     </update>
@@ -120,12 +126,23 @@
             <if test="pojo.createTime != null"> AND create_time = #{pojo.createTime} </if>
             <if test="pojo.updateTime != null"> AND update_time = #{pojo.updateTime} </if>
             <if test="pojo.roleCode != null"> AND role_code = #{pojo.roleCode} </if>
+            <if test="pojo.reqParamStr != null"> AND req_param_str = #{pojo.reqParamStr} </if>
         </where>
         LIMIT 1000 
     </select>
 
     <select id="getOperBizList"  resultMap="AllColumnMap">
-        SELECT <include refid="all_column"/>
+        SELECT
+        oper_id,
+        oper_name,
+        type,
+        project,
+        `desc`,
+        label,
+        env_type,
+        create_time,
+        update_time,
+        role_code
         FROM operate_biz
         <where>
             <if test="pojo.operName != null"> AND oper_name like  concat(concat('%',#{pojo.operName}),'%') </if>

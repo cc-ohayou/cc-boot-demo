@@ -66,4 +66,6 @@ public interface UserService {
     void forgetPwd(String uid) throws MessagingException;
 
     void resetPwd(ResetPwdParam resetParam);
+
+    void loginOut(String userId);
 }
