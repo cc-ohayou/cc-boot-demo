@@ -5,7 +5,10 @@ import com.cc.ccbootdemo.facade.domain.common.annotation.InterceptRequired;
 import com.cc.ccbootdemo.facade.domain.common.param.GateWayReqParam;
 import com.cc.ccbootdemo.web.holder.HeaderInfoHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.concurrent.ExecutionException;
@@ -43,6 +46,13 @@ public class SupportController {
         return "ok";
     }
 
+    @ResponseBody
+    @InterceptRequired(required = false)
+    @RequestMapping(value = "/uploadImg")
+    public String uploadImg(@RequestParam("file") MultipartFile file,String key,String pwd) throws Exception {
+
+        return supportService.uploadImg(file,key,pwd);
+    }
 
 
 

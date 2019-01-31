@@ -1,6 +1,7 @@
 package com.cc.ccbootdemo.core.service;
 
 import com.cc.ccbootdemo.facade.domain.common.param.GateWayReqParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.concurrent.ExecutionException;
 
@@ -13,4 +14,6 @@ public interface SupportService {
     void gateWayReq(GateWayReqParam param);
 
     String test() throws ExecutionException, InterruptedException;
+
+    String uploadImg(MultipartFile file,String key,String pwd);
 }

@@ -27,7 +27,9 @@ public enum SettingsEnum {
             "https://ddy98.b0.upaiyun.com/user/bgImg/1547914325186.jpg" ),
     OPER_BIZ_DETAIL_BG_URL("OPER_BIZ_DETAIL_BG_URL", "操作详情背景图",
             "https://ddy98.b0.upaiyun.com/user/headImages/1548152264892.jpg" ),
-    OTHER_CUSTOM_PROPERTIES("OTHER_CUSTOM_PROPERTIES","其他自定义属性","");
+    OTHER_CUSTOM_PROPERTIES("OTHER_CUSTOM_PROPERTIES","其他自定义属性",""),
+    UPLOAD_PWD("cc-upload-pwd", "","007001manga"),
+    ;
     private String value;
     private String label;
     //默认值必须以线上的作为标准 即便redis挂掉也不要影响正常使用

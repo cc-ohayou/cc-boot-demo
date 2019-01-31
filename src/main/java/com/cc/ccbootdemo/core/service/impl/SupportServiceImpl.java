@@ -1,13 +1,19 @@
 package com.cc.ccbootdemo.core.service.impl;
 
+import com.cc.ccbootdemo.core.common.settings.RedisChannel;
+import com.cc.ccbootdemo.core.common.settings.SettingsEnum;
+import com.cc.ccbootdemo.core.common.settings.SettingsHolder;
 import com.cc.ccbootdemo.core.service.SupportService;
 import com.cc.ccbootdemo.facade.domain.common.exception.BusinessException;
 import com.cc.ccbootdemo.facade.domain.common.param.GateWayReqParam;
 import com.cc.ccbootdemo.facade.domain.common.util.AssertUtil;
 import com.cc.ccbootdemo.facade.domain.common.util.RetryUtil;
+import com.cc.ccbootdemo.facade.domain.common.util.upyun.UploadUtil;
 import com.cc.ccbootdemo.facade.domain.dataobject.OperateBiz;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +46,7 @@ public class SupportServiceImpl extends BaseServiceImpl implements SupportServic
                     postReq(bizDetail);
                     return true;
                 }
-            },2000,1000,1000);
+            },2000,1000,0);
         } catch (ExecutionException |InterruptedException e) {
            throw new BusinessException("请求异常");
         } catch (TimeoutException e) {
@@ -103,6 +109,30 @@ public class SupportServiceImpl extends BaseServiceImpl implements SupportServic
 
 
         return "ok";
+    }
+
+    @Override
+    public String uploadImg(MultipartFile file,String key,String pwd) {
+        AssertUtil.isNullParamStr(pwd,"非法请求");
+        AssertUtil.isTrueParam(!pwd.equals(SettingsHolder.getProperty(SettingsEnum.UPLOAD_PWD)),"非法请求");
+        String bgImg ;
+        try {
+            bgImg = UploadUtil.upload("/user/bgImg/", file.getBytes(), "000000");
+        } catch (Exception e) {
+            log.error("uploadImg失败!!!",e);
+            throw  new BusinessException("uploadImg上传失败");
+        }
+        log.info("####uploadImg url="+bgImg);
+
+        if(!StringUtils.isEmpty(key)){
+            redisManager.hset(SettingsHolder.GLOBAL_SETTINGS, key,
+                    bgImg);
+            //通过发布命令动态更新全局配置中的值  或者直接更改本地缓存也可
+            redisManager.publish(RedisChannel.TEST_CHANNEL.getValue(), key);
+            log.info("uploadImg redis update success");
+        }
+
+        return bgImg;
     }
 
 

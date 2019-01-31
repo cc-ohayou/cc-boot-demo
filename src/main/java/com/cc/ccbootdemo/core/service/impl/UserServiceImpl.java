@@ -242,7 +242,7 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService{
         verifyParams(param);
         String nickName=param.getNickName();
         if(!StringUtils.isEmpty(param.getNickName())){
-            AssertUtil.isTrueParam( !RegUtil.nickNameCheck(param.getPwd()),"昵称长度需在10位以内,且不可含特殊字符");
+            AssertUtil.isTrueParam( !RegUtil.nickNameCheck(param.getNickName()),"昵称长度需在10位以内,且不可含特殊字符");
             if(userManager.getUserInfo(param.getNickName())!=null){
                 throw new BusinessException("该昵称已被占用！");
             }

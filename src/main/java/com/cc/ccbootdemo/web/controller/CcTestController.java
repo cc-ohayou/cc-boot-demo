@@ -189,7 +189,7 @@ public class CcTestController extends BaseController{
     @RequestMapping(value = "/register")
     public String register(RegistParam param) throws Exception {
          userService.regist(param);
-        return "OK";
+         return "OK";
     }
 
     @InterceptRequired(required = false)
