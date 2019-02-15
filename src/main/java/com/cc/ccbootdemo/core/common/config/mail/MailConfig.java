@@ -48,6 +48,7 @@ public class MailConfig {
         props.put("mail.smtp.ssl.enable",true);
         props.put("mail.smtp.ssl.socketFactory",sslSocketFactory);
         mailSender.setJavaMailProperties(props);
+
     }
 
 

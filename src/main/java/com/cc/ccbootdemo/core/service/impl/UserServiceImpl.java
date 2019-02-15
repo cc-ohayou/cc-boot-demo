@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.MessagingException;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -260,6 +261,7 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService{
             throw new BusinessException("用户已存在！");
         }
 
+        verifyMailValidity(param);
 
         user.setNickName(nickName);
         user.setPhone(param.getPhone());
@@ -273,6 +275,22 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService{
 //        user.setCreateTime(new Date());
     }
 
+    private void verifyMailValidity(final RegistParam param) {
+        boolean sendFlag=false;
+        try {
+
+            MailInfo mailInfo = new MailInfo();
+            mailInfo.setSubject("注册验证");
+            mailInfo.setTo(new String[]{param.getMail()});
+            mailInfo.setContent("注册验证邮件，可忽略");
+            mailManager.sendMail(mailInfo);
+            sendFlag = true;
+        } catch (MessagingException e) {
+            logger.error("####邮箱验证失败!",e);
+        }
+        AssertUtil.isTrueParam(!sendFlag,"无效邮箱");
+    }
+
     private void verifyParams(RegistParam param) {
         AssertUtil.isNullParamStr(param.getPhone(),"手机号不可为空");
         AssertUtil.isNullParamStr(param.getPwd(),"密码不可为空");
@@ -280,6 +298,7 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService{
 //        AssertUtil.isNullParamStr(param.getAnswer(),"请输入问题答案");
         AssertUtil.isTrueParam( !RegUtil.isPhoneValid(param.getPhone()),"非法手机号");
         AssertUtil.isTrueParam( !RegUtil.mailCheckPass(param.getMail()),"非法邮箱");
+
 //        AssertUtil.isTrueParam( !RegUtil.passwordCheck(param.getPwd()),"密码格式不符,6-16位必须包含数字和字母");
 
 
@@ -302,7 +321,7 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService{
                             getMailPwdResetVerifyCodeKey(info, verifyCode), String.valueOf(System.currentTimeMillis()));
                     return true;
                 }
-            },2000,1000,1000);
+            },2000,1000,0);
         } catch (ExecutionException |InterruptedException e) {
             throw new BusinessException("验证码发送失败");
         } catch (TimeoutException e) {

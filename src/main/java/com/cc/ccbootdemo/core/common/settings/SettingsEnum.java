@@ -29,6 +29,7 @@ public enum SettingsEnum {
             "https://ddy98.b0.upaiyun.com/user/headImages/1548152264892.jpg" ),
     OTHER_CUSTOM_PROPERTIES("OTHER_CUSTOM_PROPERTIES","其他自定义属性",""),
     UPLOAD_PWD("cc-upload-pwd", "","007001manga"),
+    DEFAULT_MAIL_USE_DOMAIN("default-mail-use-domain", "验证邮箱可用默认使用域名","www.baidu.com"),
     ;
     private String value;
     private String label;
