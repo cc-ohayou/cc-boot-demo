@@ -68,4 +68,6 @@ public interface UserService {
     void resetPwd(ResetPwdParam resetParam);
 
     void loginOut(String userId);
+
+    void sendEmail(String email);
 }

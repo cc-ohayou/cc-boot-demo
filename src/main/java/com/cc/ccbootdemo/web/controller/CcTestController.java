@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -205,6 +206,16 @@ public class CcTestController extends BaseController{
     public String resetPwd(ResetPwdParam resetParam) throws Exception {
         userService.resetPwd(resetParam);
         return "OK";
+    }
+
+
+    @InterceptRequired(required = false)
+    @ResponseBody
+    @RequestMapping(value = "/send/email")
+    public String sendEmail(String email,HttpServletResponse response) throws Exception {
+        userService.sendEmail(email);
+       return "success";
+
     }
 
 }

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.cc.ccbootdemo.core.manager.RedisManager;
 import com.cc.ccbootdemo.facade.domain.ThreadLocals.BaseLockSign;
 import com.cc.ccbootdemo.facade.domain.bizobject.Manga;
+import com.cc.ccbootdemo.facade.domain.common.constants.CommonConstants;
 import com.cc.ccbootdemo.facade.domain.common.constants.RedisConstants;
 import com.cc.ccbootdemo.facade.domain.common.enums.redis.RedisKeyEnum;
 import com.cc.ccbootdemo.facade.domain.common.util.DateUtil;
@@ -185,7 +186,7 @@ public class RedisManagerImpl extends RedisConstants implements RedisManager {
     private static void initSentinelPool() {
         FileInputStream in = null;//System.getenv("CC_RESOURCE");
         try {
-            in = new FileInputStream(new File(System.getenv("CC_RESOURCE_DIR") + "/cc_jedis.properties"));
+            in = new FileInputStream(new File(System.getenv(CommonConstants.GLOBAL_RESOURCES_DIR) + "/cc_jedis.properties"));
             Properties prop = new Properties();
             prop.load(in);
 
@@ -238,7 +239,7 @@ public class RedisManagerImpl extends RedisConstants implements RedisManager {
         }
         FileInputStream in = null;//System.getenv("CC_RESOURCE");
         try {
-            in = new FileInputStream(new File(System.getenv("CC_RESOURCE_DIR") + "/cc_jedis.properties"));
+            in = new FileInputStream(new File(System.getenv(CommonConstants.GLOBAL_RESOURCES_DIR) + "/cc_jedis.properties"));
             Properties prop = new Properties();
             prop.load(in);
             String ADDR = prop.getProperty("jedis.host").trim();

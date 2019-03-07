@@ -30,7 +30,8 @@ public enum SettingsEnum {
     OTHER_CUSTOM_PROPERTIES("OTHER_CUSTOM_PROPERTIES","其他自定义属性",""),
     UPLOAD_PWD("cc-upload-pwd", "","007001manga"),
     DEFAULT_MAIL_USE_DOMAIN("default-mail-use-domain", "验证邮箱可用默认使用域名","www.baidu.com"),
-    ;
+    UPLOAD_FILE_PATH("cc-file-uploadPath","文件上传路径","/opt/web/ccspace/space01/upload/" ),
+    UN_INTERCEPT_PATHS("cc-unIntercept-paths","不拦截路径","/v1/upload/uploadFiles," );
     private String value;
     private String label;
     //默认值必须以线上的作为标准 即便redis挂掉也不要影响正常使用

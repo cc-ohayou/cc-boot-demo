@@ -9,4 +9,7 @@ public class CommonConstants {
      * 个推推送相关配置
      */
     public static final String GETUI_host = "http://sdk.open.api.igexin.com/apiex.htm";
+
+    public static String GLOBAL_RESOURCES_DIR = "GLOBAL_RESOURCES_DIR";
+
 }

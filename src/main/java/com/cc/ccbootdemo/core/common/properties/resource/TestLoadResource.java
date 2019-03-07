@@ -1,5 +1,6 @@
 package com.cc.ccbootdemo.core.common.properties.resource;
 
+import com.cc.ccbootdemo.facade.domain.common.constants.CommonConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.EnvironmentAware;
@@ -24,7 +25,7 @@ public class TestLoadResource   implements EnvironmentAware{
     public static String globalDir;
     public static Properties propertyJdbc=new Properties();
     public static Properties propertyRedis = new Properties();
-    public static final String ENV_DIR="CC_RESOURCE_DIR";
+    public static final String ENV_DIR= CommonConstants.GLOBAL_RESOURCES_DIR;
 
     @Bean
     public TestLoadResource getResource(){

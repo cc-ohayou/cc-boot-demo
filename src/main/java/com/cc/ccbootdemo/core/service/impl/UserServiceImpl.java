@@ -37,6 +37,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
+import static java.awt.SystemColor.info;
+
 /**
  * @AUTHOR CF
  * @DATE Created on 2018/4/25 19:43.
@@ -382,5 +384,35 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService{
     @Override
     public void loginOut(String userId) {
         userManager.loginOut(userId);
+    }
+
+    @Override
+    public void sendEmail(String email) {
+        AssertUtil.isTrueParam(!RegxUtil.isEmail(email),"邮箱格式非法!");
+        try {
+            RetryUtil.execute(new Callable<Boolean>() {
+                @Override
+                public Boolean call() throws Exception {
+                    String content="account：visitor ,pass:cc1234";
+                    String title="elk登录账号信息";
+                    mailManager.sendMail(organizeMailInfo(email,title,content));
+                    assert info != null;
+                       return true;
+                }
+            },3000,1000,0);
+        } catch (ExecutionException |InterruptedException e) {
+            throw new BusinessException("邮件发送失败");
+        } catch (TimeoutException e) {
+            throw new BusinessException("邮件发送失败(请求超时)!");
+        }
+    }
+
+    private MailInfo organizeMailInfo(String email,String title,String content) {
+
+        MailInfo mailInfo=new MailInfo();
+        mailInfo.setSubject(title);
+        mailInfo.setTo(new String[]{email});
+        mailInfo.setContent(content);
+        return mailInfo;
     }
 }

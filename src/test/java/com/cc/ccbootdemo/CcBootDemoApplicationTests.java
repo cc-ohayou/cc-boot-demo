@@ -6,6 +6,7 @@ import com.cc.ccbootdemo.core.common.properties.resource.BaseResourceProperties;
 import com.cc.ccbootdemo.core.manager.RedisManager;
 import com.cc.ccbootdemo.core.service.MailService;
 import com.cc.ccbootdemo.core.service.UserService;
+import com.cc.ccbootdemo.facade.domain.common.constants.CommonConstants;
 import com.cc.ccbootdemo.facade.domain.common.dataobject.mail.MailInfo;
 import com.cc.ccbootdemo.facade.domain.common.util.RandomStringUtil;
 import com.cc.ccbootdemo.web.controller.HelloController;
@@ -116,7 +117,7 @@ public class CcBootDemoApplicationTests {
 	public void testResourceInject(){
 		System.out.println(baseResourceProperties);
 		System.out.println(baseResourceProperties);
-		System.out.println(System.getenv("CC_RESOURCE_DIR"));
+		System.out.println(System.getenv(CommonConstants.GLOBAL_RESOURCES_DIR));
 
 	}
     @Test

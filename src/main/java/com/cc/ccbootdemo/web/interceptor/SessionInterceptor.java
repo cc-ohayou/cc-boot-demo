@@ -2,6 +2,8 @@ package com.cc.ccbootdemo.web.interceptor;
 
 
 import com.alibaba.fastjson.JSON;
+import com.cc.ccbootdemo.core.common.settings.SettingsEnum;
+import com.cc.ccbootdemo.core.common.settings.SettingsHolder;
 import com.cc.ccbootdemo.core.manager.RedisManager;
 import com.cc.ccbootdemo.core.manager.UserManager;
 import com.cc.ccbootdemo.facade.domain.bizobject.BaseResult;
@@ -64,10 +66,10 @@ public class SessionInterceptor extends BaseInterceptor {
     /*    if (ipUaUrlLimitTrue((HandlerMethod) handler, request, response)) {
             return false;
         }*/
-        if (HandlerAnnotationUtil.annotationJudgePassed((HandlerMethod) handler)) {
+        String requestUri = request.getRequestURI();
+        if (HandlerAnnotationUtil.annotationJudgePassed((HandlerMethod) handler)||isUnInterceptPath(requestUri)) {
             return true;
         }
-        String requestUri = request.getRequestURI();
         String lastPath = requestUri.substring(requestUri.lastIndexOf("/"));
         logger.info(String.format("----收到请求:%s,请求方式:%s", requestUri, request.getMethod()));
         if (StringUtils.isEmpty(request.getHeader(HeaderKeys.SID))) {
@@ -88,7 +90,9 @@ public class SessionInterceptor extends BaseInterceptor {
         return true;
     }
 
-
+    private boolean isUnInterceptPath(String requestUri) {
+        return SettingsHolder.getProperty(SettingsEnum.UN_INTERCEPT_PATHS).contains(requestUri);
+    }
 
 
     //校验会话id  超时返回false  不存在返回false

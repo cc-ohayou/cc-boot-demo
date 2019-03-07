@@ -1,5 +1,6 @@
 package com.cc.ccbootdemo.core.common.properties;
 
+import com.cc.ccbootdemo.facade.domain.common.constants.CommonConstants;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -31,7 +32,7 @@ public class BaseProperties /*extends PropertyPlaceholderConfigurer*/ implements
 
     @Override
     public void setEnvironment(Environment environment) {
-        this.GLOBAL_DIR=environment.getProperty("CC_RESOURCE_DIR");
+        this.GLOBAL_DIR=environment.getProperty(CommonConstants.GLOBAL_RESOURCES_DIR);
     }
    /* @Override
     protected void processProperties(ConfigurableListableBeanFactory beanFactoryToProcess, Properties props)
