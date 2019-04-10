@@ -27,7 +27,7 @@ import java.util.*;
  * @AUTHOR CF
  * @DATE Created on 2017/8/6 22:46.
  */
-@Service
+@Service("uploadService")
 public class UploadServiceImpl extends BaseServiceImpl implements UploadService {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     @Resource
@@ -63,8 +63,8 @@ public class UploadServiceImpl extends BaseServiceImpl implements UploadService 
             for (MultipartFile file1 : files) {
                 if (!file1.isEmpty()) {
                     try {
-                        Map<String, Object> file = new HashMap<>();
-                        FileUploadUtil.saveFile(file1, file,basePath);
+//                        Map<String, Object> file = new HashMap<>();
+                        FileUploadUtil.saveFile(basePath,file1);
                     } catch (Exception e) {
                         logger.warn(" !!uploadFiles failed,fileName="+file1.getOriginalFilename(), e);
                     }
@@ -99,6 +99,7 @@ public class UploadServiceImpl extends BaseServiceImpl implements UploadService 
 
     @Override
     public String uploadVideo() {
+        System.err.println("multiply imply service method execute test 1 ");
         return null;
     }
 }

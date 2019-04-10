@@ -26,10 +26,7 @@ import org.springframework.web.multipart.support.StandardMultipartHttpServletReq
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -43,26 +40,30 @@ import java.util.Map;
 public class UploadController extends BaseController {
     private static Logger logger = LoggerFactory.getLogger(UploadController.class);
     @Resource
+//  (name="uploadTest")
     private UploadService uploadService;
+    @Resource(name="uploadTest")
+    private UploadService uploadServiceTest;
+
 
     /**
      * describe: 批量上传文件
      *
-     * @param
+     * @param files
      * @author CAI.F
      * @date: 日期:2017/4/12 时间:11:42
      */
     @InterceptRequired(required = false)
     @ResponseBody
     @RequestMapping(value = "/uploadFiles")
-    public Map<String, Object> uploadFiles( MultipartFile[] files) {
+    public Map<String, Object> uploadFiles( CommonsMultipartFile[] files) {
         return uploadService.uploadFiles(files);
     }
 
     /**
      *  describe: SSI组件上传图片
      *  利用spring的上传组件内进行文件上传
-     * @param
+     * @param request
      * @author CAI.F
      * @date: 日期:2017/8/6 时间:22:55
      *

@@ -1,6 +1,7 @@
 package com.cc.ccbootdemo.core.common.config.mq;
 
 import com.alibaba.rocketmq.client.producer.DefaultMQProducer;
+import com.alibaba.rocketmq.client.producer.TransactionMQProducer;
 import com.cc.ccbootdemo.core.common.settings.SettingsEnum;
 import com.cc.ccbootdemo.core.common.settings.SettingsHolder;
 import com.cc.ccbootdemo.core.common.settings.SettingsPubSubRelInit;
@@ -47,14 +48,15 @@ public class RocketMqProducerConfig {
     private Integer retryTimesWhenSendFailed;
 
     @Bean
-    public DefaultMQProducer getRocketMQProducer(){
+    public TransactionMQProducer getRocketMQProducer(){
         logger.info("default producer namesrvAddr= "+namesrvAddr);
         this.namesrvAddr= SettingsHolder.getProperty(SettingsEnum.ROCKETMQ_PRUDUCER_NAME_SERVER);
         logger.info("custom producer namesrvAddr= "+namesrvAddr);
         AssertUtil.isNullParamStr(this.groupName,"getRocketMQProducer failed producer groupName is empty");
         AssertUtil.isNullParamStr(this.namesrvAddr,"getRocketMQProducer failed producernamesrvAddr is empty");
-        DefaultMQProducer producer;
-        producer=new DefaultMQProducer(this.groupName);
+        TransactionMQProducer producer;
+//        producer=new DefaultMQProducer(this.groupName);
+        producer=new TransactionMQProducer(this.groupName);
         producer.setNamesrvAddr(this.namesrvAddr);
         //如果需要同一个jvm中不同的producer往不同的mq集群发送消息，需要设置不同的instanceName
 //        producer.setInstanceName(instanceName);

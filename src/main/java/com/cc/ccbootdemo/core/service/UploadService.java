@@ -11,7 +11,7 @@ import java.util.Map;
  * @AUTHOR CF
  * @DATE Created on 2017/8/6 22:46.
  */
-public interface UploadService {
+public interface  UploadService {
 /**  * describe: 上传图片
 	 * @author CAI.F
 	 * @date:  日期:2017/8/6 时间:22:48

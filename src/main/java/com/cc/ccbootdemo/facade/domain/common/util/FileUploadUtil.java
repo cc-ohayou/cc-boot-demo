@@ -4,6 +4,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import java.io.*;
 import java.util.Map;
@@ -25,28 +26,29 @@ public class FileUploadUtil {
     }
 
     public static Map<String, Object> saveFile(MultipartFile file, Map<String,Object> fileMess, String basePath) throws IOException {
-        String type = file.getContentType();
-        String savePath = FileUploadUtil.generateRandomPath(file.getOriginalFilename());
-        String filePath = basePath+ File.separator + type + savePath
-                + File.separator + file.getOriginalFilename();
+        String filePath = generateFilePath(file, basePath);
         File f = new File(filePath);
         /*
         File f = new File(filename); //不会马上创建文件
         FileOutputStream fos = new FileOutputStream(filename); //马上就创建文件了
         */
         boolean makFlag = false;
-        if (!f.exists() && !f.isDirectory()) {
-            makFlag = f.mkdirs();
-        } else {
-            //已经存在了同名的文件 名字更改或者直接就不上传 此处采用了上传 但也不会成功
-            file.transferTo(f);
+        if (!f.getParentFile().exists()) {
+            f.getParentFile().mkdirs();
         }
-        if (makFlag) {
-            file.transferTo(f);
-        }
+        file.transferTo(f);
+
         fileMess.put("name", file.getOriginalFilename());
         fileMess.put("url", filePath);
         return fileMess;
+    }
+
+    private static String generateFilePath(MultipartFile file, String basePath) {
+        String type = file.getContentType();
+        logger.info("file originalName="+file.getOriginalFilename());
+        String savePath = FileUploadUtil.generateRandomPath(file.getOriginalFilename());
+        return basePath+ File.separator + type + savePath
+                + File.separator ;
     }
 
     public static void writeFileToPath(String savePath, FileItem item) throws IOException {
@@ -67,6 +69,28 @@ public class FileUploadUtil {
         is.close();
         logger.info("upload success：savePath=" + savePath +File.separator + newFileName);
     }
+
+
+    public static void saveFile(String savePath, MultipartFile file) throws IOException {
+        String fileName = file.getOriginalFilename();
+        String filePath = generateFilePath(file, savePath);
+        String fileExt = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
+        String newFileName = System.currentTimeMillis() + "_" + new Random().nextInt(1000) + "." + fileExt;
+        File uploadedFile = new File(filePath, newFileName);
+        BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(uploadedFile));
+        BufferedInputStream is = new BufferedInputStream(file.getInputStream());
+        byte buf[] = new byte[1024];//可以修改 1024 以提高读取速度
+        int length;
+        while ((length = is.read(buf)) > 0) {
+            os.write(buf, 0, length);
+        }
+        //关闭流
+        os.flush();
+        os.close();
+        is.close();
+        logger.info("upload success：filePath=" + filePath +File.separator + newFileName);
+    }
+
     private static Pattern JS_Pattern=Pattern.compile("<script[\\s\\S]*?>[\\s\\S]*?<\\/script>", Pattern.CASE_INSENSITIVE);
     private static Pattern JS_Pattern2=Pattern.compile("<[^><]*script[^><]*> ", Pattern.CASE_INSENSITIVE);
     public static void main(String[] args) {
