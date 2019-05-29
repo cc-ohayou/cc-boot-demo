@@ -34,6 +34,7 @@ import java.util.Date;
 @Component
 public class SessionInterceptor extends BaseInterceptor {
     private static final int AUTH_FAIL =3001 ;
+    private static final int UN_KNOWN =9999 ;
     @Resource
     RedisManager redisManager;
     @Resource
@@ -66,12 +67,20 @@ public class SessionInterceptor extends BaseInterceptor {
     /*    if (ipUaUrlLimitTrue((HandlerMethod) handler, request, response)) {
             return false;
         }*/
+        HandlerMethod m=(HandlerMethod) handler;
+//        org.springframework.boot.autoconfigure.web.servlet.error.
+
         String requestUri = request.getRequestURI();
-        if (HandlerAnnotationUtil.annotationJudgePassed((HandlerMethod) handler)||isUnInterceptPath(requestUri)) {
-            return true;
-        }
         String lastPath = requestUri.substring(requestUri.lastIndexOf("/"));
         logger.info(String.format("----收到请求:%s,请求方式:%s", requestUri, request.getMethod()));
+        if (HandlerAnnotationUtil.annotationJudgePassed(m)||isUnInterceptPath(requestUri)) {
+            return true;
+        }
+        if("org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController".equals(m.getBeanType().getName())) {
+            returnErrorMessage(response,UN_KNOWN, "请求失败");
+            return false;
+        }
+
         if (StringUtils.isEmpty(request.getHeader(HeaderKeys.SID))) {
             returnErrorMessage(response,AUTH_FAIL, "会话id不可为空");
             return false;

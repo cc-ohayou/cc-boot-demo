@@ -200,9 +200,13 @@ public class RedisManagerImpl extends RedisConstants implements RedisManager {
             sentinels.add(sentinel01);
             sentinels.add(sentinel02);
             sentinels.add(sentinel03);
+            JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
+            jedisPoolConfig.setMaxTotal(10);
+            jedisPoolConfig.setMaxIdle(5);
+            jedisPoolConfig.setMinIdle(5);
 
             try {
-                jedisSentinelPool = new JedisSentinelPool(clusterName, sentinels, pass);
+                jedisSentinelPool = new JedisSentinelPool(clusterName, sentinels,jedisPoolConfig, 5000, pass);
 
             } catch (Exception e) {
                 logger.error("####Redis sentinel getResource Exception :", e);
@@ -1021,8 +1025,12 @@ public class RedisManagerImpl extends RedisConstants implements RedisManager {
 
         jedis.set(RedisKeyEnum.MANGA_LIST.getValue(),str);
         List<Manga> list = JSON.parseArray( jedis.get(RedisKeyEnum.MANGA_LIST.getValue()),Manga.class) ;
-        System.out.println(list.get(0).getArea());
-
+        list=new ArrayList<>();
+        Optional<List<Manga>> a= Optional.ofNullable(list);
+        assert a.isPresent();
+        //如果存在执行后面
+        a.ifPresent( u -> a.get().size());
+        System.out.println(a.orElse(null));
     }
 
     /**

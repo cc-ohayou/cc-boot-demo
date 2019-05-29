@@ -22,7 +22,7 @@ public class BookCglib implements MethodInterceptor{
         this.target = target;
     }
 
-    public Object getInstance(Object target ){
+    public Object getProxy(Object target ){
         this.target=target;
         Enhancer enhancer=new Enhancer();
         enhancer.setSuperclass(this.target.getClass());
@@ -41,7 +41,8 @@ public class BookCglib implements MethodInterceptor{
 
     public static void main(String[] args) {
         BookCglib cglib=new BookCglib();
-        Book bookCglib=(Book)cglib.getInstance(new Book());
+        Object o=cglib.getProxy(new Book());
+        Book bookCglib=(Book)o;
         bookCglib.addBook();
     }
 }

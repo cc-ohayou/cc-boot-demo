@@ -204,5 +204,6 @@ public class SecurityUtil {
         System.out.println(verify("06879DB15BB834A105EDCF0F622EDD31","hytzr2","309fa537a8a3d86881758260b1e22679"));
 System.out.println( Math.toIntExact((System.currentTimeMillis() - 1548669875193L) / 60000));
         System.out.println(SecurityUtil.MD5(MD5("123123dd"),"123123"));
+        System.out.println(SecurityUtil.MD5("cc1234"));
     }
 }

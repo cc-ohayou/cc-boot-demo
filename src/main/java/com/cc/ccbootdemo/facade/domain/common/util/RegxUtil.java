@@ -49,7 +49,7 @@ public class RegxUtil {
      * @param str
      * @return 如果是符合格式的字符串,返回 <b>true </b>,否则为 <b>false </b>
      */
-    public static boolean IsTelephone(String str) {
+    public static boolean isTelephone(String str) {
         String regex = "^(\\d{3,4}-)?\\d{6,8}$";
         return match(regex, str);
     }

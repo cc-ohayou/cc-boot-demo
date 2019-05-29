@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -138,7 +139,7 @@ public class CcTestController extends BaseController{
     @InterceptRequired(required = false)
     @ResponseBody
     @RequestMapping(value = "/user/login")
-    public UserInfo login(LoginParam param) {
+    public UserInfo login(@Valid LoginParam param) {
         return userService.login(param);
     }
 

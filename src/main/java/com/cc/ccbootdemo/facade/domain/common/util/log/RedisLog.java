@@ -2,6 +2,7 @@ package com.cc.ccbootdemo.facade.domain.common.util.log;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import redis.clients.jedis.Jedis;
 
 /**
  * @AUTHOR CF
@@ -14,5 +15,12 @@ public class RedisLog   extends BaseLog{
     @Override
     public Logger getLogger() {
         return this.logger;
+    }
+
+
+    public static void main(String[] args) {
+        Jedis jedis=new Jedis("47.96.130.48",6379);
+        jedis.auth("redis-dev-4");
+        System.out.println(jedis.get("cc"));
     }
 }
