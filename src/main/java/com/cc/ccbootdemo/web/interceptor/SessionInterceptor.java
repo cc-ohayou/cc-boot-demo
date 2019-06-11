@@ -67,7 +67,10 @@ public class SessionInterceptor extends BaseInterceptor {
     /*    if (ipUaUrlLimitTrue((HandlerMethod) handler, request, response)) {
             return false;
         }*/
-        HandlerMethod m=(HandlerMethod) handler;
+    if(!(handler instanceof HandlerMethod))  {
+        return true;
+    }
+    HandlerMethod m=(HandlerMethod) handler;
 //        org.springframework.boot.autoconfigure.web.servlet.error.
 
         String requestUri = request.getRequestURI();

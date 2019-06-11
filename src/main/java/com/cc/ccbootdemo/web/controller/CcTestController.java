@@ -10,6 +10,8 @@ import com.cc.ccbootdemo.facade.domain.common.annotation.InterceptRequired;
 import com.cc.ccbootdemo.facade.domain.common.exception.ParamException;
 import com.cc.ccbootdemo.facade.domain.common.param.MQProducerParam;
 import com.cc.ccbootdemo.facade.domain.common.param.ResetPwdParam;
+import com.cc.ccbootdemo.facade.domain.common.test.design.patterns.strategy.IOrderService;
+import com.cc.ccbootdemo.facade.domain.common.test.design.patterns.strategy.OrderDO;
 import com.cc.ccbootdemo.facade.domain.common.util.PsPage;
 import com.cc.ccbootdemo.facade.domain.dataobject.City;
 import com.cc.ccbootdemo.facade.domain.dataobject.OperateBiz;
@@ -46,6 +48,8 @@ public class CcTestController extends BaseController{
     CityService cityService;
     @Resource
     UserService userService;
+    @Resource
+    IOrderService  orderService;
 
     @ResponseBody
     @RequestMapping(value="/city/list")
@@ -216,6 +220,16 @@ public class CcTestController extends BaseController{
     public String sendEmail(String email,HttpServletResponse response) throws Exception {
         userService.sendEmail(email);
        return "success";
+
+    }
+
+
+    @InterceptRequired(required = false)
+    @ResponseBody
+    @RequestMapping(value = "/order/handle")
+    public String handleOrderDynamicTest(OrderDO orderDO) throws Exception {
+        return orderService.handleOrder(orderDO);
+
 
     }
 

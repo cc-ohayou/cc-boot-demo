@@ -1,13 +1,20 @@
 package com.cc.ccbootdemo;
 
+import com.cc.ccbootdemo.facade.domain.common.test.design.patterns.strategy.IOrderService;
+import com.cc.ccbootdemo.facade.domain.common.test.design.patterns.strategy.OrderDO;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
+import javax.annotation.Resource;
+import java.math.BigDecimal;
+
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.cc.core", "com.cc.ccbootdemo"})
+@ComponentScan(basePackages = {"com.cc.core", "com.cc.ccbootdemo","com.cc.ccbootdemo.facade.domain.common.test.design.patterns"})
 //@MapperScan(basePackages = "com.cc.ccbootdemo.core.mapper")
 //extends SpringBootServletInitializer
 public class CcBootDemoApplication {
@@ -33,5 +40,17 @@ public class CcBootDemoApplication {
 		// 注意这里要指向原先用main方法执行的Application启动类 EtfTaskApplication
 		return builder.sources(CcBootDemoApplication.class);
 	}*/
+  @Resource
+	IOrderService  orderService;
+	@Bean
+	public ApplicationRunner runner() {
+		return args -> {
 
+			OrderDO orderDO=new OrderDO();
+			orderDO.setCode("1001");
+			orderDO.setType("1");
+			orderDO.setPrice(BigDecimal.ONE);
+			System.out.println(orderService.handleOrder(orderDO));
+		};
+	}
 }

@@ -178,7 +178,7 @@
     <logger name="com.cc.ccbootdemo.core.mapper" level="DEBUG">
         <appender-ref ref="IBatis" />
     </logger>
-    <root level="INFO">
+    <root level="debug">
         <appender-ref ref="bizLog"/>
         <appender-ref ref="error-log"/>
         <appender-ref ref="exception-log"/>
