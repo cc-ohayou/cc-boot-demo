@@ -1,5 +1,6 @@
 package com.cc.ccbootdemo.web.aop;
 
+import com.cc.ccbootdemo.facade.domain.common.exception.BizException;
 import com.cc.ccbootdemo.facade.domain.common.exception.BusinessException;
 import com.cc.ccbootdemo.facade.domain.common.exception.ParamException;
 import org.aspectj.lang.JoinPoint;
@@ -74,16 +75,12 @@ public abstract class MethodLogAspect {
         try {
             result = joinPoint.proceed(args);
             recordlog(joinPointObject, methodName, args, startTime, result, System.nanoTime());
-        } catch (ParamException e) {
-            logger.warn("MethodLogAspect.around",e);
+        } catch (BizException e) {
+            logger.warn("BizException MethodLogAspect.around",e);
             recordlog(joinPointObject, methodName, args, startTime, result, System.nanoTime());
-            throw new ParamException(e.getMessage());
-        }catch (BusinessException e) {
-            logger.warn("MethodLogAspect.around", e);
-            recordlog(joinPointObject, methodName, args, startTime, result, System.nanoTime());
-            throw new BusinessException(e.getMessage());
+            throw new BizException(e.getErrorCode(),e.getMessage());
         }catch (Exception e) {
-            logger.error("MethodLogAspect.around", e);
+            logger.error("unexpected expection MethodLogAspect.around", e);
             recordlog(joinPointObject, methodName, args, startTime, result, System.nanoTime());
             throw new Exception(e);
         }

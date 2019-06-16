@@ -4,9 +4,9 @@ package com.cc.ccbootdemo.facade.domain.common.exception;
  * @AUTHOR CF
  * @DATE Created on 2017/10/1 16:01.
  */
-public class BizException extends Exception {
+public class BizException extends RuntimeException {
 
-
+    private Object data;
     private String errorCode;
     private String errorMessage;
 
@@ -24,5 +24,11 @@ public class BizException extends Exception {
         this.errorMessage = errorMessage;
     }
 
+    public Object getData() {
+        return data;
+    }
 
+    public void setData(Object data) {
+        this.data = data;
+    }
 }

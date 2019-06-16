@@ -8,6 +8,7 @@ import com.cc.ccbootdemo.web.aop.ApiResponse;
 import com.cc.ccbootdemo.web.holder.HeaderInfo;
 import com.cc.ccbootdemo.web.holder.HeaderInfoHolder;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -28,25 +29,11 @@ public class ExceptionInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws Exception {
 
-        Map headerInfoMap = new HashMap();
-        Enumeration headerNames = request.getHeaderNames();
-        while (headerNames.hasMoreElements()) {
-            String key = (String) headerNames.nextElement();
-            String value = request.getHeader(key);
-            headerInfoMap.put(key, value);
-        }
-//        System.err.println(Thread.currentThread().getName());
-//        headerInfoMap.put("ip", HttpUtil.getIpAddress(request));
-
-        HeaderInfo info=new HeaderInfo();
-        try {
-            info= BeanUtil.mapToObject(headerInfoMap,HeaderInfo.class);
-            HeaderInfoHolder.setHeaderInfo(info);
-        } catch (Exception e) {
-            log.error("Header map transfer to bean error!",e);
-        }
+//        setHeaderHolderInfo(request);
         return true;
     }
+
+
 
 
     @Override
@@ -59,7 +46,7 @@ public class ExceptionInterceptor implements HandlerInterceptor {
     public void afterCompletion(HttpServletRequest request,
                                 HttpServletResponse response, Object handler, Exception ex)
             throws Exception {
-        ApiResponse apiResponse = ApiResponse.error();
+       /* ApiResponse apiResponse = ApiResponse.error();
         if (ex != null) {
             if (null == ex.getMessage()) {
                 log.error(ex.toString());
@@ -78,7 +65,12 @@ public class ExceptionInterceptor implements HandlerInterceptor {
                 String errorMsg = ((ParamException) ex).getErrorMessage();
                 apiResponse.setCode(Integer.valueOf(errorCode)).setMsg(errorMsg);
             } else {
-                apiResponse.setCode(9999).setMsg("系统异常");
+                apiResponse .setCode(9999);
+                if (!StringUtils.isEmpty(ex.getMessage())) {
+                    apiResponse.setMsg(ex.getMessage());
+                } else {
+                    apiResponse.setMsg("系统异常");
+                }
             }
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(apiResponse);
@@ -91,6 +83,6 @@ public class ExceptionInterceptor implements HandlerInterceptor {
             out.print(json);
             out.flush();
             out.close();
-        }
+        }*/
     }
 }

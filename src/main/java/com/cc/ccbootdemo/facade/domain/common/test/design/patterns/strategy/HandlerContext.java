@@ -1,5 +1,7 @@
 package com.cc.ccbootdemo.facade.domain.common.test.design.patterns.strategy;
 
+import com.cc.ccbootdemo.facade.domain.common.exception.BusinessException;
+import com.cc.ccbootdemo.facade.domain.common.exception.ParamException;
 import com.cc.ccbootdemo.facade.domain.common.util.ClassScaner;
 import com.google.common.collect.Maps;
 import java.math.BigDecimal;
@@ -26,11 +28,11 @@ public   class HandlerContext {
            return (T)handlerMap.get(type);
        }
        if(strategyClazzMap.isEmpty()){
-           throw new IllegalStateException("HandlerContext strategyClazzMap init error  cannot be empty ");
+           throw new BusinessException("HandlerContext strategyClazzMap init error  cannot be empty ");
        }
        Class<T>  clazz=strategyClazzMap.get(type);
        if(clazz==null){
-           throw  new IllegalArgumentException("not found handler for type:"+type);
+           throw  new ParamException("not found handler for type:"+type);
        }
        T t = getInstanceByClazzType(clazz);
 

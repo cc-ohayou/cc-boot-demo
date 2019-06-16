@@ -22,7 +22,7 @@ public class MyWebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(getExceptionInterceptor()).addPathPatterns("/**");
+//        registry.addInterceptor(getExceptionInterceptor()).addPathPatterns("/**");
         registry.addInterceptor(getSessionInterceptor()).addPathPatterns("/**");
     }
     @Bean

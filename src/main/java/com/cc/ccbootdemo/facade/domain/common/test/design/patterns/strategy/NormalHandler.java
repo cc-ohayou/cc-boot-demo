@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 public class NormalHandler  extends AbstractHandler<OrderDO> {
 
 
+
     @Override
     public String handle(OrderDO orderDO) {
         return "handle normal order";

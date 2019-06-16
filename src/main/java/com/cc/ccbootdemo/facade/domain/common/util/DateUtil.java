@@ -1,7 +1,6 @@
 package com.cc.ccbootdemo.facade.domain.common.util;
 
 
-import com.cc.ccbootdemo.facade.domain.common.exception.BizException;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -515,7 +514,7 @@ public class DateUtil {
     }
 
 
-    public static void main(String[] args) throws ParseException, BizException {
+    public static void main(String[] args) throws ParseException {
   /*      DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date date = sdf.parse("2017-11" + "-06");
         Date date2 = sdf.parse("2017-10" + "-02");
