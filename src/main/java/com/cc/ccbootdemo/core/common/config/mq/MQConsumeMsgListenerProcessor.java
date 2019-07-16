@@ -20,8 +20,8 @@ import java.util.List;
  * @AUTHOR CF
  * @DATE Created on 2018/12/7 14:47.
  */
-@Component
-@ConditionalOnBean(SettingsPubSubRelInit.class)
+//@Component
+//@ConditionalOnBean(SettingsPubSubRelInit.class)
 public class MQConsumeMsgListenerProcessor implements MessageListenerConcurrently {
     private static final Logger logger = LoggerFactory.getLogger(MQConsumeMsgListenerProcessor.class);
 

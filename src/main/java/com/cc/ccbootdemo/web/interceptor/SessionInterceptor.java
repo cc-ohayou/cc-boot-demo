@@ -12,6 +12,8 @@ import com.cc.ccbootdemo.facade.domain.dataobject.SessionDO;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
+import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -27,14 +29,11 @@ import java.util.Date;
 
 /**
  * 只会拦截spring mvc注解的Controller
- *
- * @AUTHOR CF
- * @DATE Created on 2017/6/15 14:19.
  */
 @Component
 public class SessionInterceptor extends BaseInterceptor {
-    private static final int AUTH_FAIL =3001 ;
-    private static final int UN_KNOWN =9999 ;
+    private static final int AUTH_FAIL = 3001;
+    private static final int UN_KNOWN = 9999;
     @Resource
     RedisManager redisManager;
     @Resource
@@ -61,31 +60,42 @@ public class SessionInterceptor extends BaseInterceptor {
                              HttpServletResponse response, Object handler) throws Exception {
         request.setCharacterEncoding("utf-8");
         response.setCharacterEncoding("utf-8");
+
+        String jsonpCallBack = request.getParameter("callback");
+        if(StringUtils.isBlank(jsonpCallBack)){
+            response.setHeader("Content-type","application/json; charset=UTF-8");
+        }else{
+            response.setHeader("Content-type","application/javascript; charset=UTF-8");
+
+        }
+        if("true".equals(SettingsHolder.getProperty(SettingsEnum.NO_INTERCEPT_NEED_SIGN))){
+            return true;
+        }
         if (super.preHandle(request, response, handler)) {
             return true;
         }
     /*    if (ipUaUrlLimitTrue((HandlerMethod) handler, request, response)) {
             return false;
         }*/
-    if(!(handler instanceof HandlerMethod))  {
-        return true;
-    }
-    HandlerMethod m=(HandlerMethod) handler;
+        if (!(handler instanceof HandlerMethod)) {
+            return true;
+        }
+        HandlerMethod m = (HandlerMethod) handler;
 //        org.springframework.boot.autoconfigure.web.servlet.error.
 
         String requestUri = request.getRequestURI();
         String lastPath = requestUri.substring(requestUri.lastIndexOf("/"));
         logger.info(String.format("----收到请求:%s,请求方式:%s", requestUri, request.getMethod()));
-        if (HandlerAnnotationUtil.annotationJudgePassed(m)||isUnInterceptPath(requestUri)) {
+        if (HandlerAnnotationUtil.annotationJudgePassed(m) || isUnInterceptPath(requestUri)) {
             return true;
         }
-        if("org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController".equals(m.getBeanType().getName())) {
-            returnErrorMessage(response,UN_KNOWN, "请求失败");
+        if ("org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController".equals(m.getBeanType().getName())) {
+            returnErrorMessage(response, UN_KNOWN, "请求失败");
             return false;
         }
 
         if (StringUtils.isEmpty(request.getHeader(HeaderKeys.SID))) {
-            returnErrorMessage(response,AUTH_FAIL, "会话id不可为空");
+            returnErrorMessage(response, AUTH_FAIL, "会话id不可为空");
             return false;
         }
         boolean sessionValid = checkSessionId(request);
@@ -131,8 +141,7 @@ public class SessionInterceptor extends BaseInterceptor {
     }
 
     /**
-     * @description 更新会话时间
-     * @author CF create on 2017/11/30 15:45
+     *
      */
     private void updateSessionExpireTime(HttpServletRequest request) {
         String requestUri = request.getRequestURI();
@@ -169,12 +178,11 @@ public class SessionInterceptor extends BaseInterceptor {
     }
 
     /**
-     * @description 会话过期返回 true
-     * @author CF create on 2018/4/24 14:11
+     *
      */
     private boolean checkExpireTimePassed(String expireTime) {
         long currentTime = System.currentTimeMillis();
-        boolean result = Long.valueOf(expireTime) > currentTime ? true:false;
+        boolean result = Long.valueOf(expireTime) > currentTime ? true : false;
         if (result) {
             logger.info("== 当前时间秒戳：{}，过期时间：{}, 失效时间：{}== ", expireTime, currentTime, expireTime);
         }
@@ -208,8 +216,6 @@ public class SessionInterceptor extends BaseInterceptor {
     /**
      * @param
      * @return
-     * @description 返回错误信息
-     * @author CF create on 2017/7/12 16:05
      */
     private void returnErrorMessage(HttpServletResponse response, int code, String errorMessage) throws IOException {
         BaseResult rst = new BaseResult(code, null, errorMessage);

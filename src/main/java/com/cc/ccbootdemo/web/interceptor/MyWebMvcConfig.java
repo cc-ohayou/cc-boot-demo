@@ -22,7 +22,7 @@ public class MyWebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(getExceptionInterceptor()).addPathPatterns("/**");
+        registry.addInterceptor(getExceptionInterceptor()).addPathPatterns("/**");
         registry.addInterceptor(getSessionInterceptor()).addPathPatterns("/**");
     }
     @Bean
@@ -47,7 +47,7 @@ public class MyWebMvcConfig implements WebMvcConfigurer {
     @Bean
     public HttpMessageConverter fastJsonHttpMessageConverter(){
         //创建FastJson信息转换对象
-        FastJsonHttpMessageConverter fastJsonHttpMessageConverter = new FastJsonHttpMessageConverter();
+        FastJsonHttpMessageConverter fastJsonHttpMessageConverter = new FastJsonJsonpHttpMessageConverter();
 
         //创建Fastjosn对象并设定序列化规则
         FastJsonConfig fastJsonConfig = new FastJsonConfig();
@@ -56,6 +56,7 @@ public class MyWebMvcConfig implements WebMvcConfigurer {
         List<MediaType> mediaTypes = new ArrayList<>();
         mediaTypes.add(MediaType.APPLICATION_JSON_UTF8);//设定json格式且编码为UTF-8
         mediaTypes.add(MediaType.MULTIPART_FORM_DATA);
+        mediaTypes.add(MediaType.TEXT_HTML);
 //        mediaTypes.add(MediaType.MULTIPART_FORM_DATA_VALUE);//设定json格式且编码为UTF-8
         fastJsonHttpMessageConverter.setSupportedMediaTypes(mediaTypes);
 

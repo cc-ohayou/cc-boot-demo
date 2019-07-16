@@ -37,7 +37,10 @@ public class PushMsgJob implements SchedulingConfigurer {
         taskRegistrar.addTriggerTask(() -> {
 
             try {
-                userService.pushMsg();
+//                userService.pushMsg();
+
+
+
             } catch (Exception e) {
                 logger.error("cancelTradeJob-failed", e);
             }

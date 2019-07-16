@@ -19,9 +19,9 @@ import org.springframework.stereotype.Component;
  * @AUTHOR CF
  * @DATE Created on 2018/12/7 11:05.
  */
-@ConditionalOnBean(SettingsPubSubRelInit.class)
-@SpringBootConfiguration
-@Component
+//@ConditionalOnBean(SettingsPubSubRelInit.class)/**/
+//@SpringBootConfiguration
+//@Component
 public class RocketMqProducerConfig {
     public static final Logger logger = LoggerFactory.getLogger(RocketMqProducerConfig.class);
     /**

@@ -16,6 +16,7 @@ import com.cc.ccbootdemo.facade.domain.common.util.PsPage;
 import com.cc.ccbootdemo.facade.domain.dataobject.City;
 import com.cc.ccbootdemo.facade.domain.dataobject.OperateBiz;
 import com.cc.ccbootdemo.facade.domain.dataobject.User;
+import com.cc.ccbootdemo.web.aop.ApiResponse;
 import com.cc.ccbootdemo.web.holder.HeaderInfoHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -157,11 +158,10 @@ public class CcTestController extends BaseController{
 
     @ResponseBody
     @RequestMapping(value = "/user/info")
-    public UserInfo getUserInfoByUid(HeaderParam param) {
+    public UserInfo getUserInfoByUid() {
 
         return userService.getUserInfoByUid(HeaderInfoHolder.getUserId());
     }
-
 
     @ResponseBody
     @RequestMapping(value = "/update/userInfo")

@@ -138,3 +138,37 @@ INSERT INTO `user_attach` VALUES ('1090536356643016704', '', '2019-01-30 17:05:0
 INSERT INTO `user_attach` VALUES ('1090842274257637376', '', '2019-01-31 13:20:39', '2019-01-31 13:25:27', '001,');
 INSERT INTO `user_attach` VALUES ('1091165241709629440', 'https://ddy98.b0.upaiyun.com/user/bgImg/1548992537404.jpg', '2019-02-01 10:44:01', '2019-02-01 11:42:17', '000');
 INSERT INTO `user_attach` VALUES ('1097411124860227584', '', '2019-02-18 16:22:56', '2019-02-18 16:22:56', '000');
+
+
+
+
+
+
+
+
+
+
+
+
+CREATE TABLE `feed_sub` (
+  `id` bigint(30) NOT NULL DEFAULT 0 COMMENT 'operId',
+  `feed_id` varchar(50) NOT NULL DEFAULT '' COMMENT 'feed流id',
+  `uid` varchar(50) NOT NULL DEFAULT '' COMMENT '用户id 对应钉钉群的id 每个用户对应一个钉钉机器人',
+
+  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'createTime',
+  `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'updateTime',
+  PRIMARY KEY (`id`),
+  uk_uf(feedd_id,uid)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='feed订阅关系表';
+
+
+CREATE TABLE `feed_info` (
+  `id` bigint(30) NOT NULL DEFAULT '0' COMMENT 'operId',
+  `feed_id` varchar(50) NOT NULL DEFAULT '' COMMENT 'feed流id',
+  `uid` varchar(50) NOT NULL DEFAULT '' COMMENT '用户id 对应钉钉群的id 每个用户对应一个钉钉机器人',
+
+  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'createTime',
+  `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'updateTime',
+  PRIMARY KEY (`id`),
+  uk_uf(feedd_id,uid)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='operate_biz';

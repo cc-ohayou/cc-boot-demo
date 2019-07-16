@@ -22,6 +22,14 @@ public class ApiResponse implements Serializable {
         res.setData("");
         return res;
     }
+
+    public static ApiResponse success(Object data){
+        ApiResponse res= new ApiResponse();
+        res.setCode(0);
+        res.setMsg("请求成功");
+        res.setData(data);
+        return res;
+    }
     public static ApiResponse success(){
         ApiResponse res= new ApiResponse();
         res.setCode(0);

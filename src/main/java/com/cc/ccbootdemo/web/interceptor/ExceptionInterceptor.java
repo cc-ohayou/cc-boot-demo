@@ -1,14 +1,9 @@
 package com.cc.ccbootdemo.web.interceptor;
 
 
-import com.cc.ccbootdemo.facade.domain.common.exception.BusinessException;
-import com.cc.ccbootdemo.facade.domain.common.exception.ParamException;
 import com.cc.ccbootdemo.facade.domain.common.util.BeanUtil;
-import com.cc.ccbootdemo.web.aop.ApiResponse;
 import com.cc.ccbootdemo.web.holder.HeaderInfo;
 import com.cc.ccbootdemo.web.holder.HeaderInfoHolder;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -16,7 +11,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.PrintWriter;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,11 +23,29 @@ public class ExceptionInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws Exception {
 
-//        setHeaderHolderInfo(request);
+        setHeaderHolderInfo(request);
         return true;
     }
 
+    private void setHeaderHolderInfo(HttpServletRequest request) {
+        Map headerInfoMap = new HashMap();
+        Enumeration headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String key = (String) headerNames.nextElement();
+            String value = request.getHeader(key);
+            headerInfoMap.put(key, value);
+        }
+//        System.err.println(Thread.currentThread().getName());
+//        headerInfoMap.put("ip", HttpUtil.getIpAddress(request));
 
+        HeaderInfo info=new HeaderInfo();
+        try {
+            info= BeanUtil.mapToObject(headerInfoMap,HeaderInfo.class);
+            HeaderInfoHolder.setHeaderInfo(info);
+        } catch (Exception e) {
+            log.error("Header map transfer to bean error!",e);
+        }
+    }
 
 
     @Override

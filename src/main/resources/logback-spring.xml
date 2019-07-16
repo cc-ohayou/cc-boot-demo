@@ -19,7 +19,7 @@
     <property name="appname" value="ccboot"/>
     <property name="appid" value="log"/>
     <!---->
-    <property name="LOG_HOME" value="/logs/ccboot"/>
+    <property name="LOG_HOME" value="../logs/ccboot"/>
     <property name="loggingCharset" value="UTF-8"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">

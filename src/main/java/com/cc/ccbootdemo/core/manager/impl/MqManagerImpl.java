@@ -32,24 +32,23 @@ import java.util.concurrent.ScheduledExecutorService;
  */
 
 @Component
-public class MqManagerImpl implements MqManager{
+public class MqManagerImpl implements MqManager {
 
-    private Logger logger= LoggerFactory.getLogger(MqManagerImpl.class);
-    private SendResult defaultResult=new SendResult();
-    @Resource
-    MQProducer producer;
-    static List myList =new ArrayList<>();
+    private Logger logger = LoggerFactory.getLogger(MqManagerImpl.class);
+    private SendResult defaultResult = new SendResult();
+    //    @Resource
+//    MQProducer producer;
+    static List myList = new ArrayList<>();
 
 
     {
-        ExecutorService executorService= Executors.newFixedThreadPool(2);
-        ExecutorService executorService1= Executors.newCachedThreadPool();
-        ExecutorService executorService2= Executors.newSingleThreadExecutor();
-        ExecutorService executorService3= Executors.newSingleThreadScheduledExecutor();
-        ScheduledExecutorService scheduledExecutorService= Executors.newScheduledThreadPool(3);
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
+        ExecutorService executorService1 = Executors.newCachedThreadPool();
+        ExecutorService executorService2 = Executors.newSingleThreadExecutor();
+        ExecutorService executorService3 = Executors.newSingleThreadScheduledExecutor();
+        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(3);
 //        scheduledExecutorService;
-        ExecutorService executorService5= Executors.newWorkStealingPool();
-
+        ExecutorService executorService5 = Executors.newWorkStealingPool();
 
 
     }
@@ -59,10 +58,10 @@ public class MqManagerImpl implements MqManager{
         System.out.println(0x7fffffff);
         System.out.println((Integer.MAX_VALUE));
 
-       int [] a={1,233,32,45,25,6,100,34};
+        int[] a = {1, 233, 32, 45, 25, 6, 100, 34};
         Arrays.sort(a);
 
-        for (int i = 0; i <10000000 ; i++) {
+        for (int i = 0; i < 10000000; i++) {
             myList.add(i);
         }
 
@@ -78,49 +77,28 @@ public class MqManagerImpl implements MqManager{
     @Override
     public String produceMsg(MQProducerParam param) {
         Message msg = getMessage(param);
-        SendResult sendResult=defaultResult;
-        try {
+        SendResult sendResult = defaultResult;
+//        try {
+            logger.info("test ");
+//            producer.sendMessageInTransaction(msg,new MyLocalTransactionExecuterImpl(),"test");
+//
+//             sendResult =producer.send(msg, Long.parseLong(SettingsHolder.getProperty(SettingsEnum.ROCKETMQ_SEND_TIMEOUT)));
 
-            producer.sendMessageInTransaction(msg,new MyLocalTransactionExecuterImpl(),"test");
-
-             sendResult =producer.send(msg, Long.parseLong(SettingsHolder.getProperty(SettingsEnum.ROCKETMQ_SEND_TIMEOUT)));
-
-            logger.info("produceMsg sendResult="+ sendResult.toString());
-        } catch (MQClientException | InterruptedException | RemotingException | MQBrokerException e) {
-            logger.error("produceMsg error param=",param.toString(),e);
-        }
+            logger.info("produceMsg sendResult=" + sendResult.toString());
+//        } catch (MQClientException | InterruptedException | RemotingException | MQBrokerException e) {
+//            logger.error("produceMsg error param=", param.toString(), e);
+//        }
         return sendResult.getMsgId();
     }
 
     private Message getMessage(MQProducerParam param) {
-        Message msg=new Message();
+        Message msg = new Message();
         msg.setTags(param.getTags());
         msg.setTopic(param.getTopic());
         msg.setBody(param.getMessage().getBytes());
         return msg;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        MqManagerImpl mqManager = (MqManagerImpl) o;
-
-        if (logger != null ? !logger.equals(mqManager.logger) : mqManager.logger != null) return false;
-        if (defaultResult != null ? !defaultResult.equals(mqManager.defaultResult) : mqManager.defaultResult != null)
-            return false;
-        return producer != null ? producer.equals(mqManager.producer) : mqManager.producer == null;
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = logger != null ? logger.hashCode() : 0;
-        result = 31 * result + (defaultResult != null ? defaultResult.hashCode() : 0);
-        result = 31 * result + (producer != null ? producer.hashCode() : 0);
-        return result;
-    }
 }
 
 @Slf4j
