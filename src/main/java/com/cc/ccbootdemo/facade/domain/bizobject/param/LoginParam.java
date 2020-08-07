@@ -15,9 +15,9 @@ public class LoginParam extends HeaderParam{
     @NotNull
     private String userName;
     private String mail;
-    @IsMobile
+//    @IsMobile
     private String phone;
     @NotNull
-    @Length(min=6)
+//    @Length(min=6)
     private String pwd;
 }

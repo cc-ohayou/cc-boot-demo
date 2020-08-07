@@ -247,11 +247,13 @@ public class RedisManagerImpl extends RedisConstants implements RedisManager {
         }else{
             initMap.put(101,System.currentTimeMillis());
         }
-        FileInputStream in = null;//System.getenv("CC_RESOURCE");
+        FileInputStream in = null;
         try {
             in = new FileInputStream(new File(System.getenv(CommonConstants.GLOBAL_RESOURCES_DIR) + "/cc_jedis.properties"));
+            logger.info("GLOBAL_RESOURCES_DIR="+System.getenv(CommonConstants.GLOBAL_RESOURCES_DIR));
             Properties prop = new Properties();
             prop.load(in);
+            logger.info("GLOBAL_RESOURCES_DIR={}"+prop.toString());
             String ADDR = prop.getProperty("jedis.host").trim();
             int PORT = Integer.parseInt(prop.getProperty("jedis.port").trim());
             String AUTH = prop.getProperty("jedis.auth").trim();
@@ -699,21 +701,21 @@ public class RedisManagerImpl extends RedisConstants implements RedisManager {
         // 不是第一次设置该锁 ，也就是别人抢先了，但万一那人有什么情况
         // （倒霉的redis挂了且key的信息还没同步好 亿万分之一的几率 或者超时 太磨叽）总之锁又被释放了
         //  那别人就又有竞争机会了 继续进行下面的尝试
-        String currentValueStr = this.get(lockKey); //redis里的时间
-        if (currentValueStr != null && Long.parseLong(currentValueStr) < System.currentTimeMillis()) {
+        String oldExpireTimeStr = this.get(lockKey); //redis里的时间
+        if (oldExpireTimeStr != null && Long.parseLong(oldExpireTimeStr) < System.currentTimeMillis()) {
             //判断是否为空，不为空的情况下，如果被其他线程设置了值，则第二个条件判断是过不去的
             // lock is expired
             String newExpireTime = String.valueOf(System.currentTimeMillis() + expireMsecs);
             //竞态获取资格
             String oldValueStr = jedis.getSet(lockKey, newExpireTime);
             //获取上次的到期时间，并设置现在的锁到期时间，
-            if (oldValueStr != null && oldValueStr.equals(currentValueStr)) {
+            if (oldValueStr != null && oldValueStr.equals(oldExpireTimeStr)) {
                 return true;
             }
         }
         return false;
     }
-
+   static  final  String  delScrip="if redis.call('get',KEYS[1]) == ARGV[1] then return redis.call('del',KEYS[1]) else   return 0 end ";
     @Override
     public void unLock(String key, BaseLockSign lockThreadLocal) {
         //针对余额操作的分布式锁

@@ -9,6 +9,8 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static org.apache.commons.codec.digest.DigestUtils.sha1;
+
 public class UpYun {
 
     /** 默认的编码格式 */
@@ -794,7 +796,7 @@ public class UpYun {
     private String sign(HttpURLConnection conn, String uri, long length) {
         String sign = conn.getRequestMethod() + "&" + uri + "&"
                 + conn.getRequestProperty(DATE) + "&" + length + "&" + password;
-        return "UpYun " + userName + ":" + md5(sign);
+        return "UpYun " + userName + ":" + sha1(sign);
     }
 
     /**

@@ -19,7 +19,7 @@
     <property name="appname" value="ccboot"/>
     <property name="appid" value="log"/>
     <!---->
-    <property name="LOG_HOME" value="../logs/ccboot"/>
+    <property name="LOG_HOME" value="/logs/ccboot"/>
     <property name="loggingCharset" value="UTF-8"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
@@ -178,7 +178,7 @@
     <logger name="com.cc.ccbootdemo.core.mapper" level="DEBUG">
         <appender-ref ref="IBatis" />
     </logger>
-    <root level="debug">
+    <root level="info">
         <appender-ref ref="bizLog"/>
         <appender-ref ref="error-log"/>
         <appender-ref ref="exception-log"/>

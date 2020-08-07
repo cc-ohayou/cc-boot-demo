@@ -10,7 +10,9 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import java.util.List;
+
 import java.util.Random;
 
 public class UploadUtil {
@@ -19,13 +21,25 @@ public class UploadUtil {
     private static final String BUCKET_NAME = SettingsHolder.getProperty(SettingsEnum.UPYUN_BUCKET_NAME);
     private static final String OPERATOR_NAME = SettingsHolder.getProperty(SettingsEnum.UPYUN_ACCOUNT);
     private static final String OPERATOR_PWD = SettingsHolder.getProperty(SettingsEnum.UPYUN_PWD);
-    private static UpYun upyun ;
+    private static  com.UpYun upyun ;
     private static Logger logger= LoggerFactory.getLogger(UploadUtil.class);
     static{
-        upyun = new UpYun(BUCKET_NAME, OPERATOR_NAME, OPERATOR_PWD);
+//        upyun = new com.UpYun("cc-image-caoer", "caoer007", "RjZmwt9AeP5M7eBpBQ6TFpE0lRwlIWft");
+        upyun = new com.UpYun(BUCKET_NAME, OPERATOR_NAME, OPERATOR_PWD);
         logger.info("upyun init instance="+upyun);
     }
 
+    public static void main(String[] args) {
+        try {
+            String filePath = "/jiaqi/";
+
+            File file = new File("F:/BaiduYunDownload/sping/1431056326935.jpg");
+            upyun.setContentMD5(UpYun.md5(file));
+//            UploadUtil.upload("/user/bgImg/", file, "000000");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     private static String isSuccess(boolean result) {
         return result ? " 成功" : " 失败";
     }
@@ -63,7 +77,7 @@ public class UploadUtil {
     public static String randomImg(String path,String userId){
         String name="";
         try {
-            List<UpYun.FolderItem> items= upyun.readDir(path);
+            List<com.UpYun.FolderItem> items= upyun.readDir(path,new HashMap(2));
             logger.info("randomImg items size ="+items.size());
             if(CollectionUtils.isEmpty(items)){
                 logger.warn("!!!!randomImg generate failed size empty ,userId ="+userId);
@@ -80,7 +94,7 @@ public class UploadUtil {
     public static String randomImg(String path){
         String name="";
         try {
-            List<UpYun.FolderItem> items= upyun.readDir(path);
+            List<UpYun.FolderItem> items= upyun.readDir(path,new HashMap(2));
             logger.info("randomImg items size ="+items.size());
             if(CollectionUtils.isEmpty(items)){
                 logger.warn("!!!!randomImg generate failed size empty ");

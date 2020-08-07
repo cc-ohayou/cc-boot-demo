@@ -15,6 +15,7 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.http.server.ServletServerHttpResponse;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -110,9 +111,18 @@ public class ApiResponseAdvice  implements ResponseBodyAdvice<Object> {
 
         if (ex instanceof BizException) {
             return  dealBizExpection((BizException) ex, apiResponse);
+        }else if (ex instanceof BindException) {
+            return  dealBindExpection((BindException) ex, apiResponse);
         } else {
             return   dealUnExpectedException(ex, apiResponse);
         }
+    }
+
+    private Object dealBindExpection(BindException ex, ApiResponse apiResponse) {
+        BindException exception = ex;
+        apiResponse.setCode(Integer.valueOf(1001))
+                .setMsg(exception.getMessage());
+        return apiResponse;
     }
 
     private ApiResponse dealUnExpectedException(Exception ex, ApiResponse apiResponse) {
