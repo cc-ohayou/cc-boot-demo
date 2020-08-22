@@ -16,10 +16,10 @@
     <!-- 全局配置 -->
     <!-- ====================================== -->
     <statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener"/>
-    <property name="appname" value="ccboot"/>
+    <property name="appname" value="toilet"/>
     <property name="appid" value="log"/>
     <!---->
-    <property name="LOG_HOME" value="/logs/ccboot"/>
+    <property name="LOG_HOME" value="/logs/toilet"/>
     <property name="loggingCharset" value="UTF-8"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
@@ -175,7 +175,7 @@
     </appender>
 
 
-    <logger name="com.cc.ccbootdemo.core.mapper" level="DEBUG">
+    <logger name="com.qunhe.toilet.core.mapper" level="DEBUG">
         <appender-ref ref="IBatis" />
     </logger>
     <root level="info">

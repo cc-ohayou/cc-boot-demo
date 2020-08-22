@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.cc.ccbootdemo.core.mapper.master.UserAttachDOMapper">
+<mapper namespace="com.qunhe.toilet.core.mapper.master.UserAttachDOMapper">
 
 <!--auto generated Code-->
-    <resultMap id="AllColumnMap" type="com.cc.ccbootdemo.facade.domain.dataobject.UserAttachDO">
+    <resultMap id="AllColumnMap" type="com.qunhe.toilet.facade.domain.dataobject.UserAttachDO">
         <result column="main_bg_url" property="mainBgUrl"/>
         <result column="head_lay_bg_img_url" property="headLayBgImgUrl"/>
         <result column="role_codes" property="roleCodes"/>

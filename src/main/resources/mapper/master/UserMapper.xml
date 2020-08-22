@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.cc.ccbootdemo.core.mapper.master.UserMapper">
+<mapper namespace="com.qunhe.toilet.core.mapper.master.UserMapper">
 
-    <resultMap id="BaseResultMap" type="com.cc.ccbootdemo.facade.domain.dataobject.User">
+    <resultMap id="BaseResultMap" type="com.qunhe.toilet.facade.domain.dataobject.User">
         <result column="uid" property="uid"/>
         <result column="user_name" property="userName"/>
         <result column="phone" property="phone"/>
@@ -15,7 +15,7 @@
         <result column="update_time" property="updateTime"/>
         <result column="salty" property="salty"/>
     </resultMap>
-    <parameterMap id="User" type="com.cc.ccbootdemo.facade.domain.dataobject.User"/>
+    <parameterMap id="User" type="com.qunhe.toilet.facade.domain.dataobject.User"/>
 
     <sql id="Base_Column_List">
         uid, user_name, phone,description,nick_name,mail,pwd,head_image,create_time,
@@ -31,19 +31,19 @@
         u.update_time,u.phone
     </sql>
 
-    <select id="findByName" resultType="com.cc.ccbootdemo.facade.domain.bizobject.UserInfo" parameterType="java.lang.String">
+    <select id="findByName" resultType="com.qunhe.toilet.facade.domain.bizobject.UserInfo" parameterType="java.lang.String">
         select
         <include refid="Base_Column_List" />
         from user
         where user_name = #{userName}
     </select>
-    <select id="getAllUserList" resultType="com.cc.ccbootdemo.facade.domain.bizobject.UserInfo" >
+    <select id="getAllUserList" resultType="com.qunhe.toilet.facade.domain.bizobject.UserInfo" >
         select
         <include refid="Base_Column_List" />
         from user
        limit 0,10
     </select>
-    <select id="findByPhone" resultType="com.cc.ccbootdemo.facade.domain.bizobject.UserInfo" parameterType="java.lang.String">
+    <select id="findByPhone" resultType="com.qunhe.toilet.facade.domain.bizobject.UserInfo" parameterType="java.lang.String">
         select
         <include refid="Biz_Base_Column_List" />
         from user
@@ -62,7 +62,7 @@
         where
         mail = #{phone}
     </select>
-    <select id="selectByUid" resultType="com.cc.ccbootdemo.facade.domain.bizobject.UserInfo">
+    <select id="selectByUid" resultType="com.qunhe.toilet.facade.domain.bizobject.UserInfo">
 
         select
         ua.main_bg_url,
@@ -75,7 +75,7 @@
 
     </select>
 
-    <select id="selectUserInfoBySelective" resultType="com.cc.ccbootdemo.facade.domain.bizobject.UserInfo">
+    <select id="selectUserInfoBySelective" resultType="com.qunhe.toilet.facade.domain.bizobject.UserInfo">
         SELECT <include refid="Base_Column_List"/>
         FROM user
         <where >

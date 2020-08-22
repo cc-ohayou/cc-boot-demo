@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qunhe.toilet.core.mapper.master.ToiletPitInfoMapper">
+  <resultMap id="BaseResultMap" type="com.qunhe.toilet.facade.domain.dataobject.ToiletPitInfo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="deleted" jdbcType="TINYINT" property="deleted" />
+    <result column="use_state" jdbcType="TINYINT" property="useState" />
+    <result column="inconvenient_sign" jdbcType="TINYINT" property="inconvenientSign" />
+    <result column="toliet_type" jdbcType="VARCHAR" property="tolietType" />
+    <result column="building_no" jdbcType="BIGINT" property="buildingNo" />
+    <result column="floor_no" jdbcType="INTEGER" property="floorNo" />
+    <result column="room_no" jdbcType="INTEGER" property="roomNo" />
+    <result column="pit_position_no" jdbcType="INTEGER" property="pitPositionNo" />
+    <result column="available_status" jdbcType="VARCHAR" property="availableStatus" />
+    <result column="address_info" jdbcType="VARCHAR" property="addressInfo" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, create_time, update_time, deleted, use_state, inconvenient_sign, toliet_type, 
+    building_no, floor_no, room_no, pit_position_no, available_status, address_info, 
+    description
+  </sql>
+  <select id="selectByExample" parameterType="com.qunhe.toilet.facade.domain.dataobject.ToiletPitInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from toilet_pit_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from toilet_pit_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from toilet_pit_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qunhe.toilet.facade.domain.dataobject.ToiletPitInfoExample">
+    delete from toilet_pit_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.qunhe.toilet.facade.domain.dataobject.ToiletPitInfo" useGeneratedKeys="true">
+    insert into toilet_pit_info (create_time, update_time, deleted, 
+      use_state, inconvenient_sign, toliet_type, 
+      building_no, floor_no, room_no, 
+      pit_position_no, available_status, address_info, 
+      description)
+    values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=TINYINT}, 
+      #{useState,jdbcType=TINYINT}, #{inconvenientSign,jdbcType=TINYINT}, #{tolietType,jdbcType=VARCHAR}, 
+      #{buildingNo,jdbcType=BIGINT}, #{floorNo,jdbcType=INTEGER}, #{roomNo,jdbcType=INTEGER}, 
+      #{pitPositionNo,jdbcType=INTEGER}, #{availableStatus,jdbcType=VARCHAR}, #{addressInfo,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.qunhe.toilet.facade.domain.dataobject.ToiletPitInfo" useGeneratedKeys="true">
+    insert into toilet_pit_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="deleted != null">
+        deleted,
+      </if>
+      <if test="useState != null">
+        use_state,
+      </if>
+      <if test="inconvenientSign != null">
+        inconvenient_sign,
+      </if>
+      <if test="tolietType != null">
+        toliet_type,
+      </if>
+      <if test="buildingNo != null">
+        building_no,
+      </if>
+      <if test="floorNo != null">
+        floor_no,
+      </if>
+      <if test="roomNo != null">
+        room_no,
+      </if>
+      <if test="pitPositionNo != null">
+        pit_position_no,
+      </if>
+      <if test="availableStatus != null">
+        available_status,
+      </if>
+      <if test="addressInfo != null">
+        address_info,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null">
+        #{deleted,jdbcType=TINYINT},
+      </if>
+      <if test="useState != null">
+        #{useState,jdbcType=TINYINT},
+      </if>
+      <if test="inconvenientSign != null">
+        #{inconvenientSign,jdbcType=TINYINT},
+      </if>
+      <if test="tolietType != null">
+        #{tolietType,jdbcType=VARCHAR},
+      </if>
+      <if test="buildingNo != null">
+        #{buildingNo,jdbcType=BIGINT},
+      </if>
+      <if test="floorNo != null">
+        #{floorNo,jdbcType=INTEGER},
+      </if>
+      <if test="roomNo != null">
+        #{roomNo,jdbcType=INTEGER},
+      </if>
+      <if test="pitPositionNo != null">
+        #{pitPositionNo,jdbcType=INTEGER},
+      </if>
+      <if test="availableStatus != null">
+        #{availableStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="addressInfo != null">
+        #{addressInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qunhe.toilet.facade.domain.dataobject.ToiletPitInfoExample" resultType="java.lang.Long">
+    select count(*) from toilet_pit_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update toilet_pit_info
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.deleted != null">
+        deleted = #{record.deleted,jdbcType=TINYINT},
+      </if>
+      <if test="record.useState != null">
+        use_state = #{record.useState,jdbcType=TINYINT},
+      </if>
+      <if test="record.inconvenientSign != null">
+        inconvenient_sign = #{record.inconvenientSign,jdbcType=TINYINT},
+      </if>
+      <if test="record.tolietType != null">
+        toliet_type = #{record.tolietType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.buildingNo != null">
+        building_no = #{record.buildingNo,jdbcType=BIGINT},
+      </if>
+      <if test="record.floorNo != null">
+        floor_no = #{record.floorNo,jdbcType=INTEGER},
+      </if>
+      <if test="record.roomNo != null">
+        room_no = #{record.roomNo,jdbcType=INTEGER},
+      </if>
+      <if test="record.pitPositionNo != null">
+        pit_position_no = #{record.pitPositionNo,jdbcType=INTEGER},
+      </if>
+      <if test="record.availableStatus != null">
+        available_status = #{record.availableStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addressInfo != null">
+        address_info = #{record.addressInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.description != null">
+        description = #{record.description,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update toilet_pit_info
+    set id = #{record.id,jdbcType=BIGINT},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      deleted = #{record.deleted,jdbcType=TINYINT},
+      use_state = #{record.useState,jdbcType=TINYINT},
+      inconvenient_sign = #{record.inconvenientSign,jdbcType=TINYINT},
+      toliet_type = #{record.tolietType,jdbcType=VARCHAR},
+      building_no = #{record.buildingNo,jdbcType=BIGINT},
+      floor_no = #{record.floorNo,jdbcType=INTEGER},
+      room_no = #{record.roomNo,jdbcType=INTEGER},
+      pit_position_no = #{record.pitPositionNo,jdbcType=INTEGER},
+      available_status = #{record.availableStatus,jdbcType=VARCHAR},
+      address_info = #{record.addressInfo,jdbcType=VARCHAR},
+      description = #{record.description,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qunhe.toilet.facade.domain.dataobject.ToiletPitInfo">
+    update toilet_pit_info
+    <set>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null">
+        deleted = #{deleted,jdbcType=TINYINT},
+      </if>
+      <if test="useState != null">
+        use_state = #{useState,jdbcType=TINYINT},
+      </if>
+      <if test="inconvenientSign != null">
+        inconvenient_sign = #{inconvenientSign,jdbcType=TINYINT},
+      </if>
+      <if test="tolietType != null">
+        toliet_type = #{tolietType,jdbcType=VARCHAR},
+      </if>
+      <if test="buildingNo != null">
+        building_no = #{buildingNo,jdbcType=BIGINT},
+      </if>
+      <if test="floorNo != null">
+        floor_no = #{floorNo,jdbcType=INTEGER},
+      </if>
+      <if test="roomNo != null">
+        room_no = #{roomNo,jdbcType=INTEGER},
+      </if>
+      <if test="pitPositionNo != null">
+        pit_position_no = #{pitPositionNo,jdbcType=INTEGER},
+      </if>
+      <if test="availableStatus != null">
+        available_status = #{availableStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="addressInfo != null">
+        address_info = #{addressInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qunhe.toilet.facade.domain.dataobject.ToiletPitInfo">
+    update toilet_pit_info
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      deleted = #{deleted,jdbcType=TINYINT},
+      use_state = #{useState,jdbcType=TINYINT},
+      inconvenient_sign = #{inconvenientSign,jdbcType=TINYINT},
+      toliet_type = #{tolietType,jdbcType=VARCHAR},
+      building_no = #{buildingNo,jdbcType=BIGINT},
+      floor_no = #{floorNo,jdbcType=INTEGER},
+      room_no = #{roomNo,jdbcType=INTEGER},
+      pit_position_no = #{pitPositionNo,jdbcType=INTEGER},
+      available_status = #{availableStatus,jdbcType=VARCHAR},
+      address_info = #{addressInfo,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

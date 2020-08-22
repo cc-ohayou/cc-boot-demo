@@ -1,1 +1,1 @@
-org.springframework.boot.SpringApplicationRunListener=\com.cc.ccbootdemo.web.listener.CCDemoApplicationRunListener
+org.springframework.boot.SpringApplicationRunListener=\com.qunhe.toilet.web.listener.CCDemoApplicationRunListener
